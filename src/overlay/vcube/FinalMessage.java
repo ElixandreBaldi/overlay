@@ -11,7 +11,17 @@ import peersim.core.*;
  * @author elixandrebaldi
  */
 public class FinalMessage {
+    private int hopCounter;    
+    
     private Node sender;
+
+    FinalMessage(Node sender, int hopCounter) {
+        this.hopCounter = hopCounter;
+    }
+    
+    public int getHopCounter() {
+        return hopCounter;
+    }
 
     public Node getSender() {
         return sender;

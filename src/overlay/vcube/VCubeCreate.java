@@ -5,8 +5,10 @@
  */
 package overlay.vcube;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import peersim.config.Configuration;
+import peersim.core.CommonState;
 import peersim.core.Control;
 import peersim.core.Network;
 import peersim.core.Node;
@@ -21,14 +23,19 @@ public class VCubeCreate implements Control {
     
     private final String PAR_PROT = "protocol";
     
+    private final String PAR_IDLENGTH = "idLength";
+    
     private TableCis cis;        
 
     private int nCluster;
     
     private int networkSize;
     
+    private int idLength;
+    
     public VCubeCreate(String prefix) {
         this.pid = Configuration.getPid(prefix +"."+ PAR_PROT);
+        this.idLength = Configuration.getInt(prefix + "." + PAR_IDLENGTH);
     }
     
     public boolean execute() {        
@@ -39,8 +46,8 @@ public class VCubeCreate implements Control {
             Node node = (Node) Network.get(i);
             VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);  
             vcp.setNeighbor(this.defineNeighbor(i));
-            System.out.println("Index: "+i);
-            vcp.printNeighbor();
+            vcp.setVCubeId(new BigInteger(idLength, CommonState.r));
+            vcp.setCurrentId(i);
         }                        
         return false;
     }

@@ -5,10 +5,12 @@
  */
 package overlay.vcube;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import peersim.config.Configuration;
 import peersim.core.Node;
 import peersim.edsim.EDProtocol;
+import peersim.transport.Transport;
 
 /**
  *
@@ -17,6 +19,10 @@ import peersim.edsim.EDProtocol;
 public class VCubeProtocol implements EDProtocol {
     
     private final String PAR_TRANSPORT = "transport";
+    
+    private BigInteger vcubeId;
+    
+    private int currentId;
     
     private String prefix;
     
@@ -40,7 +46,24 @@ public class VCubeProtocol implements EDProtocol {
         if(event.getClass() == FinalMessage.class) {
             FinalMessage message = (FinalMessage) event;
             Node sender = message.getSender();
-            System.out.println("Nodo "+node.getIndex()+" recebemos mensagem de nodo "+sender);
+            //System.out.println("******Nodo "+node.getIndex()+" recebemos mensagem de nodo "+sender);
+        } else if(event.getClass() == LookUpMessage.class) {
+            LookUpMessage message = (LookUpMessage) event;
+            message.increaseHop();
+            BigInteger target = message.getTarget();
+            
+            Transport t = (Transport) node.getProtocol(p.tid);
+            Node sender = message.getSender();
+            
+            if(target != ((VCubeProtocol) node.getProtocol(pid)).getVCubeId()) { //não chegou no alvo
+                //System.out.println("sender: "+sender.getIndex());
+                for(int i = 0; i < neighbor.size(); i++) {
+                    t.send(message.getSender(), neighbor.get(i), message, pid);                    
+                }                                
+            } else { //chegou no alvo, fazer envio de confirmação de entrega                
+                System.out.println("Nodo "+this.currentId+" recebeu mensagem de nodo "+sender.getIndex());
+                t.send(node, sender, new FinalMessage(node, message.getHopCounter()), pid);
+            }
         }
     }
     
@@ -55,6 +78,24 @@ public class VCubeProtocol implements EDProtocol {
     public void setNeighbor(ArrayList<Node> neighbor) {
         this.neighbor = neighbor;
     }
+
+    public BigInteger getVCubeId() {
+        return vcubeId;
+    }
+
+    public void setVCubeId(BigInteger vcubeId) {
+        this.vcubeId = vcubeId;
+    }
+
+    public int getCurrentId() {
+        return currentId;
+    }
+
+    public void setCurrentId(int currentId) {
+        this.currentId = currentId;
+    }
+    
+    
     
     public void printNeighbor() {        
         for(int i = 0; i < neighbor.size(); i++) {
