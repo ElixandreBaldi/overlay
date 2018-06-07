@@ -17,6 +17,7 @@ public class FinalMessage {
 
     FinalMessage(Node sender, int hopCounter) {
         this.hopCounter = hopCounter;
+        this.sender = sender;
     }
     
     public int getHopCounter() {

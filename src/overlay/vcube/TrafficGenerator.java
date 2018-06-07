@@ -27,18 +27,18 @@ public class TrafficGenerator implements Control {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);
     }
     
-    public boolean execute() {
+    public boolean execute() {        
+        System.out.println("oi");
         int size = Network.size();
-        Node sender, target;
-        int i = 0;
-        
-        do{
-            i++;
+        Node sender, target;        
+        do{            
             sender = Network.get(CommonState.r.nextInt(size));
             target = Network.get(CommonState.r.nextInt(size));
         } while(sender == null || sender.isUp() == false || target == null || target.isUp() == false);        
+        
         LookUpMessage message = new LookUpMessage(sender, ((VCubeProtocol) target.getProtocol(pid)).getVCubeId());
-        EDSimulator.add(10, message, sender, pid);
+        EDSimulator.add(10, message, sender, pid);                        
+        
         return false;
     }
 }
