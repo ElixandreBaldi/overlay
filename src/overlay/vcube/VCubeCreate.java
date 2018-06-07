@@ -34,7 +34,7 @@ public class VCubeCreate implements Control {
     public boolean execute() {        
         this.networkSize = Network.size();
         this.nCluster = (int) Math.ceil(Math.log(networkSize) / Math.log(2));        
-        this.cis = new TableCis(nCluster, networkSize);             
+        this.cis = new TableCis(nCluster, networkSize); 
         for(int i = 0; i < this.networkSize; i++) {
             Node node = (Node) Network.get(i);
             VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);  

@@ -6,6 +6,7 @@
 package overlay.vcube;
 
 import java.util.ArrayList;
+import peersim.core.Network;
 import peersim.core.Node;
 
 /**
@@ -13,29 +14,29 @@ import peersim.core.Node;
  * @author elixandrebaldi
  */
 public class CellCis {
-    private ArrayList<Node> cell;       
+    private ArrayList<Integer> cell;       
     
     public CellCis() {
-        this.cell = new ArrayList<Node>();
+        this.cell = new ArrayList<Integer>();
     }
     
-    public ArrayList<Node> getCell() {
+    public ArrayList<Integer> getCell() {
         return this.cell;
     }
     
     public void print() {
         int size = this.cell.size();
         for(int i = 0; i < size; i++) {
-            int index = this.cell.get(i).getIndex();
+            int index = this.cell.get(i);
             System.out.print(""+index);
             if(i < size - 1) System.out.print(", ");
         }
     }        
 
-    int getIndexFirstNodeUp() {                        
+    public int getIndexFirstNodeUp() {                        
         for(int i = 0; i < cell.size(); i++) {            
-            if(cell.get(i).isUp()) {                
-                return cell.get(i).getIndex();
+            if(Network.get(cell.get(i)).isUp()) {                
+                return cell.get(i);
             }
         }
         return -1;

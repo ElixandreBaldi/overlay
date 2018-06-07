@@ -48,7 +48,7 @@ public class TableCis {
                 CellCis cell = new CellCis();                
                 int[] index = this.cis(i, s + 1);
                 for(int j = 0; j < index.length; j++) {
-                    cell.getCell().add(Network.get(index[j]));
+                    cell.getCell().add(index[j]);
                 }
                 this.cis[s][i] = cell;
             }
@@ -68,11 +68,11 @@ public class TableCis {
     public void defineNeighbor(int column, int line, ArrayList<Node> neighbor) {        
         
         CellCis cell = cis[line][column];
-        ArrayList<Node> nodesJ = cell.getCell();
+        ArrayList<Integer> nodesJ = cell.getCell();
         int size = nodesJ.size();
         
         for(int i = 0; i < size; i++) {
-            int indexJ = nodesJ.get(i).getIndex();
+            int indexJ = nodesJ.get(i);
             int indexFirstNodeUpJ = cis[line][indexJ].getIndexFirstNodeUp();
             if(indexFirstNodeUpJ == column){                     
                 neighbor.add(Network.get(indexJ));
