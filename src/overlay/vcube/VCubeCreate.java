@@ -38,16 +38,18 @@ public class VCubeCreate implements Control {
         this.idLength = Configuration.getInt(prefix + "." + PAR_IDLENGTH);
     }
     
-    public boolean execute() {        
+    public boolean execute() {                
         this.networkSize = Network.size();
-        this.nCluster = (int) Math.ceil(Math.log(networkSize) / Math.log(2));        
-        this.cis = new TableCis(nCluster, networkSize); 
+        this.nCluster = (int) Math.ceil(Math.log(networkSize) / Math.log(2));                
+        this.cis = new TableCis(nCluster, networkSize);                         
         for(int i = 0; i < this.networkSize; i++) {
+            //System.out.println("2");
             Node node = (Node) Network.get(i);
             VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);  
             vcp.setNeighbor(this.defineNeighbor(i));
             vcp.setVCubeId(new BigInteger(idLength, CommonState.r));
             vcp.setCurrentId(i);
+            //vcp.printNeighbor();            
         }                        
         return false;
     }

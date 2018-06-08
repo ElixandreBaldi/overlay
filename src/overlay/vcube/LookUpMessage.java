@@ -6,6 +6,7 @@
 package overlay.vcube;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import peersim.core.Network;
 import peersim.core.Node;
 
@@ -20,9 +21,13 @@ public class LookUpMessage {
     
     private int hopCounter = -1;
     
+    private ArrayList<Integer> visited;
+    
     public LookUpMessage(Node sender, BigInteger targetId) {
         this.sender = sender;
         this.targetId = targetId;
+        this.visited = new ArrayList<Integer>();
+        visited.add(sender.getIndex());
     }
     
     public void increaseHop() {
@@ -39,5 +44,16 @@ public class LookUpMessage {
     
     public int getHopCounter() {
         return hopCounter;
+    }
+    
+    public boolean verifyVisited(int index) {        
+        for(int i = 0; i < visited.size(); i++) {
+            if(visited.get(i) == index) {                
+                return true;
+            }
+        }
+        
+        visited.add(index);
+        return false;
     }
 }
