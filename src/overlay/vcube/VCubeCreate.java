@@ -33,7 +33,7 @@ public class VCubeCreate implements Control {
     
     private int idLength;
     
-    public VCubeCreate(String prefix) {
+    public VCubeCreate(String prefix) {        
         this.pid = Configuration.getPid(prefix +"."+ PAR_PROT);
         this.idLength = Configuration.getInt(prefix + "." + PAR_IDLENGTH);
     }
@@ -43,13 +43,12 @@ public class VCubeCreate implements Control {
         this.nCluster = (int) Math.ceil(Math.log(networkSize) / Math.log(2));                
         this.cis = new TableCis(nCluster, networkSize);                         
         for(int i = 0; i < this.networkSize; i++) {
-            //System.out.println("2");
             Node node = (Node) Network.get(i);
             VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);  
             vcp.setNeighbor(this.defineNeighbor(i));
             vcp.setVCubeId(new BigInteger(idLength, CommonState.r));
             vcp.setCurrentId(i);
-            //vcp.printNeighbor();            
+            vcp.printNeighbor();            
         }                        
         return false;
     }

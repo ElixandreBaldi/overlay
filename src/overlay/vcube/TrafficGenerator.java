@@ -31,8 +31,7 @@ public class TrafficGenerator implements Control {
         int size = Network.size();
         Node sender, target;        
         //for(int i = 0; i < size; i++) {
-            do{            
-                
+            do{                            
                 sender = Network.get(CommonState.r.nextInt(size));
                 target = Network.get(CommonState.r.nextInt(size));
             } while((sender == null || sender.isUp() == false || target == null || target.isUp() == false) && sender.getIndex() == target.getIndex());        

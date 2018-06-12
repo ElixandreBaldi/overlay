@@ -58,7 +58,7 @@ public class VCubeProtocol implements EDProtocol {
             if(target != ((VCubeProtocol) node.getProtocol(pid)).getVCubeId()) { //não chegou no alvo                                                          
                 for(int i = 0; i < neighbor.size(); i++) {
                     if(!message.verifyVisited(neighbor.get(i).getIndex())) {
-                        //System.out.println("Salto em "+node.getIndex());
+                        System.out.println("Salto em "+node.getIndex());
                         t.send(message.getSender(), neighbor.get(i), message, pid);
                         break;
                     }                                                                                     
