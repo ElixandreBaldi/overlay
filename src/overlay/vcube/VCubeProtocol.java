@@ -46,7 +46,7 @@ public class VCubeProtocol implements EDProtocol {
         if(event.getClass() == FinalMessage.class) {
             FinalMessage message = (FinalMessage) event;
             Node sender = message.getSender();
-            System.out.println("Nodo "+node.getIndex()+" recebeu confirmação de entrega de "+sender.getIndex());
+            //System.out.println("Nodo "+node.getIndex()+" recebeu confirmação de entrega de "+sender.getIndex());
         } else if(event.getClass() == LookUpMessage.class) {
             LookUpMessage message = (LookUpMessage) event;
             message.increaseHop();
@@ -58,13 +58,13 @@ public class VCubeProtocol implements EDProtocol {
             if(target != ((VCubeProtocol) node.getProtocol(pid)).getVCubeId()) { //não chegou no alvo                                                          
                 for(int i = 0; i < neighbor.size(); i++) {
                     if(!message.verifyVisited(neighbor.get(i).getIndex())) {
-                        System.out.println("Salto em "+node.getIndex());
+                        //System.out.println("Salto em "+node.getIndex());
                         t.send(message.getSender(), neighbor.get(i), message, pid);
                         break;
                     }                                                                                     
                 }
             } else { //chegou no alvo, fazer envio de confirmação de entrega                
-                System.out.println("Nodo "+this.currentId+" recebeu mensagem de nodo "+sender.getIndex());
+                //System.out.println("Nodo "+this.currentId+" recebeu mensagem de nodo "+sender.getIndex());
                 t.send(node, sender, new FinalMessage(node, message.getHopCounter()), pid);
             }
         }        
