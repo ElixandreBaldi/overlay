@@ -44,7 +44,8 @@ public class VCubeCreate implements Control {
             VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);  
             vcp.setNeighbor(this.defineNeighbor(i));
             vcp.setVCubeId(new BigInteger(idLength, CommonState.r));
-            vcp.setCurrentId(i);            
+            vcp.setCurrentId(i);  
+            vcp.setTimestamp(Network.size());
             //vcp.printNeighbor();            
         }                        
         return false;

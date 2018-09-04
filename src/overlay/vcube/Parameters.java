@@ -9,8 +9,16 @@ package overlay.vcube;
  *
  * @author elixandrebaldi
  */
-class Parameters {
+public class Parameters {
     int tid;
     
     int pid;
+    
+    public int getPid() {
+        return this.pid;
+    }
+    
+    public int getTid() {
+        return this.tid;
+    }
 }
