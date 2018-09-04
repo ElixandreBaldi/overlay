@@ -5,8 +5,13 @@
  */
 package overlay.vcube;
 
+import overlay.message.FinalMessage;
+import overlay.message.LookUpMessage;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import overlay.message.Message;
 import peersim.config.Configuration;
 import peersim.core.Node;
 import peersim.edsim.EDProtocol;
@@ -29,6 +34,8 @@ public class VCubeProtocol implements EDProtocol {
     private Parameters p;
     
     private ArrayList<Node> neighbor;
+    
+    private int[] timestamp;
         
     public VCubeProtocol(String prefix) {
         this.prefix = prefix;
@@ -40,34 +47,10 @@ public class VCubeProtocol implements EDProtocol {
         
     }
     
-    public void processEvent(Node node, int pid, Object event) {
+    public void processEvent(Node node, int pid, Object o) {
+        Message event = (Message) o;
         this.p.pid = pid;        
-        
-        if(event.getClass() == FinalMessage.class) {
-            FinalMessage message = (FinalMessage) event;
-            Node sender = message.getSender();
-            //System.out.println("Nodo "+node.getIndex()+" recebeu confirmação de entrega de "+sender.getIndex());
-        } else if(event.getClass() == LookUpMessage.class) {
-            LookUpMessage message = (LookUpMessage) event;
-            message.increaseHop();
-            BigInteger target = message.getTarget();
-            
-            Transport t = (Transport) node.getProtocol(p.tid);
-            Node sender = message.getSender();
-            
-            if(target != ((VCubeProtocol) node.getProtocol(pid)).getVCubeId()) { //não chegou no alvo                                                          
-                for(int i = 0; i < neighbor.size(); i++) {
-                    if(!message.verifyVisited(neighbor.get(i).getIndex())) {
-                        //System.out.println("Salto em "+node.getIndex());
-                        t.send(message.getSender(), neighbor.get(i), message, pid);
-                        break;
-                    }                                                                                     
-                }
-            } else { //chegou no alvo, fazer envio de confirmação de entrega                
-                //System.out.println("Nodo "+this.currentId+" recebeu mensagem de nodo "+sender.getIndex());
-                t.send(node, sender, new FinalMessage(node, message.getHopCounter()), pid);
-            }
-        }        
+        event.apply(node, this.p, this.neighbor);                      
     }
     
     public Object clone() {
@@ -98,7 +81,10 @@ public class VCubeProtocol implements EDProtocol {
         this.currentId = currentId;
     }
     
-    
+    public void setTimestamp(int size) {
+        this.timestamp = new int[size];        
+        Arrays.fill(this.timestamp, 1);
+    }    
     
     public void printNeighbor() {        
         for(int i = 0; i < neighbor.size(); i++) {
@@ -106,5 +92,5 @@ public class VCubeProtocol implements EDProtocol {
             if(i < neighbor.size() - 1) System.out.print(", ");
         }
         System.out.println("");
-    }
+    }   
 }
