@@ -47,9 +47,9 @@ public class VCubeProtocol implements EDProtocol {
         
     }
     
-    public void processEvent(Node node, int pid, Object o) {
+    public void processEvent(Node node, int pid, Object o) {                
         Message event = (Message) o;
-        this.p.pid = pid;        
+        this.p.pid = pid;       
         event.apply(node, this.p, this.neighbor);                      
     }
     

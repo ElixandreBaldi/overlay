@@ -45,7 +45,7 @@ public class VCubeCreate implements Control {
             vcp.setNeighbor(this.defineNeighbor(i));
             vcp.setVCubeId(new BigInteger(idLength, CommonState.r));
             vcp.setCurrentId(i);  
-            vcp.setTimestamp(Network.size());
+            vcp.setTimestamp(Network.size());           
             //vcp.printNeighbor();            
         }                        
         return false;

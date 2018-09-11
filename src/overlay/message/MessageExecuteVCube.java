@@ -7,6 +7,7 @@ package overlay.message;
 
 import java.util.ArrayList;
 import overlay.vcube.Parameters;
+import peersim.core.CommonState;
 import peersim.core.Node;
 
 /**
@@ -15,11 +16,14 @@ import peersim.core.Node;
  */
 public class MessageExecuteVCube implements Message{
 
-    public MessageExecuteVCube() {        
+    public MessageExecuteVCube() {   
+        //System.out.println("oiiii");
     }
     @Override
     public void apply(Node node, Parameters p, ArrayList<Node> neighbor) {
-        // TODO
+        int teste = CommonState.getIntTime();
+        
+        System.out.println("invocado "+teste);
     }
     
     
