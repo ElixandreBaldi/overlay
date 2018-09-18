@@ -7,12 +7,13 @@ package overlay.message;
 
 import java.util.ArrayList;
 import overlay.vcube.Parameters;
+import overlay.vcube.VCubeProtocol;
 import peersim.core.Node;
 
 /**
  *
  * @author elixandre
  */
-public interface Message {
-    void apply(Node node, Parameters p, ArrayList<Node> neighbor);
+public interface Action {
+    void run(Node node, VCubeProtocol protocol);
 }

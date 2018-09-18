@@ -25,7 +25,7 @@ public class VCubeCreate implements Control {
     
     private final String PAR_IDLENGTH = "idLength";
     
-    private int nCluster;
+    static private int nCluster;
     
     private int networkSize;
     
@@ -36,27 +36,20 @@ public class VCubeCreate implements Control {
         this.idLength = Configuration.getInt(prefix + "." + PAR_IDLENGTH);
     }
     
-    public boolean execute() {                
-        this.networkSize = Network.size();
-        this.nCluster = (int) Math.ceil(Math.log(networkSize) / Math.log(2));                                               
-        for(int i = 0; i < this.networkSize; i++) {
-            Node node = (Node) Network.get(i);
-            VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);  
-            vcp.setNeighbor(this.defineNeighbor(i));
-            vcp.setVCubeId(new BigInteger(idLength, CommonState.r));
-            vcp.setCurrentId(i);  
-            vcp.setTimestamp(Network.size());           
-            //vcp.printNeighbor();            
-        }                        
-        return false;
+    static public int getnCluster() {
+        return nCluster;        
     }
     
-    private ArrayList<Node> defineNeighbor(int index) {        
-        ArrayList<Node> neighbor = new ArrayList<>();
-        for(int s = 1; s <= nCluster; s++) {
-            Cis.defineNeighbor(index, s, neighbor);               
-        }
-        
-        return neighbor;
-    }    
+    public boolean execute() {                
+        this.networkSize = Network.size();
+        this.nCluster = (int) Math.ceil(Math.log(networkSize) / Math.log(2));
+        for(int i = 0; i < this.networkSize; i++) {
+            Node node = (Node) Network.get(i);
+            VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);              
+            vcp.setVCubeId(new BigInteger(idLength, CommonState.r));
+            vcp.setCurrentId(i);
+            vcp.setTimestamp(Network.size());                                   
+        }                        
+        return false;
+    }          
 }

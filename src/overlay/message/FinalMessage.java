@@ -7,12 +7,13 @@ package overlay.message;
 
 import java.util.ArrayList;
 import overlay.vcube.Parameters;
+import overlay.vcube.VCubeProtocol;
 import peersim.core.*;
 /**
  *
  * @author elixandrebaldi
  */
-public class FinalMessage implements Message{
+public class FinalMessage implements Action{
     private int hopCounter;    
     
     private Node sender;
@@ -34,7 +35,7 @@ public class FinalMessage implements Message{
         this.sender = sender;
     }
 
-    public void apply(Node node, Parameters p, ArrayList<Node> neighbor) {                
+    public void run(Node node, VCubeProtocol protocol) {                
         //System.out.println("Nodo "+node.getIndex()+" recebeu confirmação de entrega de "+this.sender.getIndex());
     }
 }

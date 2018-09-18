@@ -21,4 +21,12 @@ public class Parameters {
     public int getTid() {
         return this.tid;
     }
+    
+    public Parameters clone(){
+        Parameters p = new Parameters();
+        p.tid = getTid();
+        p.pid = getPid();
+        
+        return p;
+    }
 }

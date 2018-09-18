@@ -32,9 +32,9 @@ public class TrafficVCube implements Control {
     public boolean execute() {        
         for(int i = 0; i < Network.size(); i++){
             MessageExecuteVCube message = new MessageExecuteVCube();
-            EDSimulator.add(10, message, Network.get(i), pid);
-            System.out.println("1");
+            EDSimulator.add(10, message, Network.get(i), pid);            
         }
+        System.out.println("");
         
         return false;
     }

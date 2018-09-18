@@ -15,7 +15,7 @@ import peersim.core.Node;
  */
 public class Cis {
     
-    static private int[] get(int i, int s) {        
+    static private int[] get(int i, int s) {   
         int k = (int) (Math.pow(2, s)/2);
         int[] indexCluster = new int[k];
         
@@ -27,8 +27,7 @@ public class Cis {
             } else {
                 indexCluster[x] = p^x;
             }
-        }                
-        
+        }        
         return indexCluster;
     }
     
@@ -51,26 +50,24 @@ public class Cis {
         }
     }  
     
-    static public int getIndexFirstNodeUp(int index, int s) {                        
-        int[] cell = get(index, s);
-        
-        for(int i = 0; i < cell.length; i++) {            
-            if(Network.get(cell[i]).isUp()) {                
-                return cell[i];
+    static public int getIndexFirstNodeUp(int index, int s, int[] timestamp) {                        
+        int[] cjs = get(index, s);        
+        for(int i = 0; i < cjs.length; i++) {
+            if(timestamp[cjs[i]] % 2 == 0) {                
+                return cjs[i];
             }
         }
         return -1;
-    }    
+    }
     
-    static public void defineNeighbor(int indexI, int s, ArrayList<Node> neighbor) {        
-        
-        int[] cell = get(indexI, s);        
-        int size = cell.length;
+    static public void getTargets(int indexI, int s, ArrayList<Integer> targets, int[] timestamp) {
+        int[] cis = get(indexI, s);    
+        int size = cis.length;
         for(int i = 0; i < size; i++) {
-            int indexJ = cell[i];
-            int indexFirstNodeUpJ = getIndexFirstNodeUp(indexJ, s);            
-            if(indexFirstNodeUpJ == indexI){            
-                neighbor.add(Network.get(indexJ));
+            int indexJ = cis[i];
+            int indexFirstNodeUpJ = getIndexFirstNodeUp(indexJ, s, timestamp);
+            if(indexFirstNodeUpJ == indexI){
+                targets.add(Network.get(indexJ).getIndex());
             }
         }
     }
