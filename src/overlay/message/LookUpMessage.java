@@ -17,7 +17,8 @@ import peersim.transport.Transport;
  *
  * @author elixandrebaldi
  */
-public class LookUpMessage implements Message{
+
+public class LookUpMessage implements Action{
     private Node sender;
     
     private BigInteger targetId;
@@ -61,8 +62,12 @@ public class LookUpMessage implements Message{
     }
 
     @Override
-    public void apply(Node node, Parameters p, ArrayList<Node> neighbor) {
-        int pid = p.getPid();        
+    public void run(Node node, VCubeProtocol protocol) {
+        Parameters p = protocol.getP();
+        // TODO
+        /*ArrayList neighbor = protocol.getNeighbor();
+        int pid = p.getPid();
+>>>>>>> d144711232f9c24d660783e2e7e4a393af769c4f
         this.increaseHop();
         BigInteger target = this.getTarget();
             
@@ -71,15 +76,25 @@ public class LookUpMessage implements Message{
 
         if(target != ((VCubeProtocol) node.getProtocol(pid)).getVCubeId()) { //não chegou no alvo                                                          
             for(int i = 0; i < neighbor.size(); i++) {
+<<<<<<< HEAD
                 if(!this.verifyVisited(neighbor.get(i).getIndex())) {
                     //System.out.println("Salto em "+node.getIndex());
                     t.send(this.getSender(), neighbor.get(i), this, pid);
+=======
+                Node visit = (Node) neighbor.get(i);
+                if(!this.verifyVisited(visit.getIndex())) {
+                    //System.out.println("Salto em "+node.getIndex());
+                    t.send(this.getSender(), (Node) neighbor.get(i), this, pid);
+>>>>>>> d144711232f9c24d660783e2e7e4a393af769c4f
                     break;
                 }                                                                                     
             }
         } else { //chegou no alvo, fazer envio de confirmação de entrega                
             //System.out.println("Nodo "+node.getIndex()+" recebeu mensagem de nodo "+sender.getIndex());
             t.send(node, sender, new FinalMessage(node, this.getHopCounter()), pid);
+<<<<<<< HEAD
         }
+=======
+        }*/
     }
 }

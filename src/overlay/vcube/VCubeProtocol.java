@@ -11,11 +11,11 @@ import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import overlay.message.Message;
 import peersim.config.Configuration;
 import peersim.core.Node;
 import peersim.edsim.EDProtocol;
 import peersim.transport.Transport;
+import overlay.message.Action;
 
 /**
  *
@@ -31,38 +31,47 @@ public class VCubeProtocol implements EDProtocol {
     
     private String prefix;
     
-    private Parameters p;
-    
-    private ArrayList<Node> neighbor;
+    private Parameters p;       
     
     private int[] timestamp;
         
     public VCubeProtocol(String prefix) {
-        this.prefix = prefix;
-        
+        this.prefix = prefix;        
         this.p = new Parameters();
-        this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);
-        
-        this.neighbor = new ArrayList<Node>();
-        
-    }
-    
-    public void processEvent(Node node, int pid, Object o) {
-        Message event = (Message) o;
-        this.p.pid = pid;        
-        event.apply(node, this.p, this.neighbor);                      
-    }
-    
-    public Object clone() {
-        return new VCubeProtocol(this.prefix);
+        this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);                     
     }
 
-    public ArrayList<Node> getNeighbor() {
-        return neighbor;
-    }
+    public VCubeProtocol(String prefix, BigInteger vcubeId, int currentId, Parameters p, int[] timestamp){
+        this.prefix = prefix;
+        this.vcubeId = vcubeId;
+        this.currentId = currentId;
+        this.p = p.clone();                
+        this.timestamp = new int[timestamp.length];
+        
+        for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
 
-    public void setNeighbor(ArrayList<Node> neighbor) {
-        this.neighbor = neighbor;
+    }
+    
+    public void processEvent(Node node, int pid, Object o) {                
+        Action event = (Action) o;
+        this.p.pid = pid;
+        event.run(node, (VCubeProtocol) this.cloneVCube());                   
+    }
+    
+    public int[] getTimestamp() {
+        return this.timestamp;
+    }
+    
+    public Parameters getP() {
+        return this.p;
+    }
+    
+    public Object clone() {                
+        return new VCubeProtocol(prefix);        
+    }
+    
+    public VCubeProtocol cloneVCube() {                
+        return new VCubeProtocol(prefix, vcubeId, currentId, p, timestamp);        
     }
 
     public BigInteger getVCubeId() {
@@ -84,13 +93,6 @@ public class VCubeProtocol implements EDProtocol {
     public void setTimestamp(int size) {
         this.timestamp = new int[size];        
         Arrays.fill(this.timestamp, 1);
-    }    
-    
-    public void printNeighbor() {        
-        for(int i = 0; i < neighbor.size(); i++) {
-            System.out.print(""+neighbor.get(i).getIndex());
-            if(i < neighbor.size() - 1) System.out.print(", ");
-        }
-        System.out.println("");
-    }   
+        this.timestamp[currentId] = 0;
+    }
 }
