@@ -11,6 +11,8 @@ import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import peersim.config.Configuration;
 import peersim.core.Node;
 import peersim.edsim.EDProtocol;
@@ -34,11 +36,14 @@ public class VCubeProtocol implements EDProtocol {
     private Parameters p;       
     
     private int[] timestamp;
+    
+    private Queue<Action> processQueue;
         
     public VCubeProtocol(String prefix) {
         this.prefix = prefix;        
         this.p = new Parameters();
         this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);                     
+        this.processQueue = new LinkedList<>();
     }
 
     public VCubeProtocol(String prefix, BigInteger vcubeId, int currentId, Parameters p, int[] timestamp){
@@ -46,21 +51,23 @@ public class VCubeProtocol implements EDProtocol {
         this.vcubeId = vcubeId;
         this.currentId = currentId;
         this.p = p.clone();                
-        this.timestamp = new int[timestamp.length];
-        
+        this.timestamp = new int[timestamp.length];       
         for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
 
     }
     
-    public void processEvent(Node node, int pid, Object o) {                
-        Action event = (Action) o;
-        this.p.pid = pid;
-        event.run(node, (VCubeProtocol) this.cloneVCube());                   
+    public void processEvent(Node node, int pid, Object o) {        
+        Action event = (Action) o;        
+        event.run(node, (VCubeProtocol) this, true);        
+    }
+    
+    public Queue<Action> getProcessQueue() {
+        return this.processQueue;
     }
     
     public int[] getTimestamp() {
         return this.timestamp;
-    }
+    }        
     
     public Parameters getP() {
         return this.p;

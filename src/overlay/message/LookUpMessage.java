@@ -62,7 +62,11 @@ public class LookUpMessage implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol) {
+    public void run(Node node, VCubeProtocol protocol, boolean execute) {
+        if(execute) {            
+            protocol.getProcessQueue().add(this);            
+            return;
+        } 
         Parameters p = protocol.getP();
         // TODO
         /*ArrayList neighbor = protocol.getNeighbor();

@@ -5,6 +5,7 @@
  */
 package overlay.message;
 
+import java.util.Queue;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Node;
@@ -23,20 +24,26 @@ public class Ack implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol) {
-        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu ack de nodo "+sender);        
+    public void run(Node node, VCubeProtocol protocol, boolean execute) {        
+        if(execute) {
+            protocol.getProcessQueue().add(this);            
+            return;
+        }        
+        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu ack de nodo "+sender);     
         updateTimestampLocal(protocol.getTimestamp(), protocol.getCurrentId());
     }    
     
-    void updateTimestampLocal(int[] timestampLocal, int index) {        
-        if(timestampLocal[sender] % 2 != 0) {
-            timestampLocal[sender]++;
-        }
-        
+    void updateTimestampLocal(int[] timestampLocal, int index) {
+        boolean changes = false;
         for(int i = 0; i < timestampLocal.length; i++) {
             if(timestampLocal[i] < timestampSender[i] && i != index) {
                 timestampLocal[i] = timestampSender[i];
+                changes = true;
             }
-        }
+        }        
+        if(timestampLocal[sender] % 2 != 0) {
+            timestampLocal[sender]++;
+            changes = true;
+        }        
     }
 }

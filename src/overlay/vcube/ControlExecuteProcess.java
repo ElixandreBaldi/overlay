@@ -5,32 +5,30 @@
  */
 package overlay.vcube;
 
-import overlay.message.LookUpMessage;
-
-import java.math.BigInteger;
-import overlay.message.MessageExecuteVCube;
+import overlay.message.ExecuteProcess;
 import peersim.config.Configuration;
 import peersim.core.CommonState;
 import peersim.core.Control;
 import peersim.core.Network;
-import peersim.core.Node;
 import peersim.edsim.EDSimulator;
 
-
-public class TrafficVCube implements Control {
-
+/**
+ *
+ * @author elixandrebaldi
+ */
+public class ControlExecuteProcess implements Control {
     private static final String PAR_PROT = "protocol";
     
     private final int pid;     
     
-    public TrafficVCube(String prefix) {
+    public ControlExecuteProcess(String prefix) {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
     public boolean execute() {        
         for(int i = 0; i < Network.size(); i++){
-            MessageExecuteVCube message = new MessageExecuteVCube();
-            EDSimulator.add(10, message, Network.get(i), pid);            
+            ExecuteProcess message = new ExecuteProcess();            
+            EDSimulator.add(50, message, Network.get(i), pid);            
         }
         System.out.println("");
         

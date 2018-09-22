@@ -13,6 +13,7 @@ import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.core.Node;
+import peersim.edsim.EDSimulator;
 import peersim.transport.Transport;
 
 
@@ -26,10 +27,10 @@ public class MessageExecuteVCube implements Action{
         //System.out.println("oiiii");
     }
     @Override
-    public void run(Node node, VCubeProtocol protocol) {
+    public void run(Node node, VCubeProtocol protocol, boolean execute) {         
         Parameters p = protocol.getP();
         int indexNode = node.getIndex();
-        int pid = p.getPid();
+        int pid = VCubeCreate.getPid();
         Transport t = (Transport) node.getProtocol(p.getTid());
         int[] timestamp = protocol.getTimestamp();
         
@@ -41,7 +42,8 @@ public class MessageExecuteVCube implements Action{
         }
         
         for(int i = 0; i < targets.size(); i++) {
-            t.send(Network.get(indexNode), Network.get(targets.get(i)), new Ack(indexNode, timestamp.clone()), pid);
-        }
+            //EDSimulator.add(i, new Ack(indexNode, timestamp.clone()), Network.get(targets.get(i)), pid);
+            t.send(Network.get(indexNode), Network.get(targets.get(i)), new Ack(indexNode, timestamp.clone()), pid);            
+        }        
     }
 }

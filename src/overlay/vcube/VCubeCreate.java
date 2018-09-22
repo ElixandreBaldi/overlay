@@ -19,7 +19,7 @@ import peersim.core.Node;
  */
 public class VCubeCreate implements Control {
     
-    private int pid = 0;
+    static private int pid = 0;
     
     private final String PAR_PROT = "protocol";
     
@@ -32,12 +32,16 @@ public class VCubeCreate implements Control {
     private int idLength;
     
     public VCubeCreate(String prefix) {        
-        this.pid = Configuration.getPid(prefix +"."+ PAR_PROT);
+        pid = Configuration.getPid(prefix +"."+ PAR_PROT);
         this.idLength = Configuration.getInt(prefix + "." + PAR_IDLENGTH);
     }
     
     static public int getnCluster() {
         return nCluster;        
+    }
+    
+    static public int getPid() {
+        return pid;        
     }
     
     public boolean execute() {                
