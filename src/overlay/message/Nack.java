@@ -5,21 +5,19 @@
  */
 package overlay.message;
 
-import java.util.Queue;
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
-import peersim.core.CommonState;
 import peersim.core.Node;
 
 /**
  *
- * @author elixandre
+ * @author elixandrebaldi
  */
-public class Ack implements Action{
+public class Nack implements Action{   
     private int sender;
     private int[] timestampSender;
     
-    public Ack(int sender, int[] timestamp) {
+    public Nack(int sender, int[] timestamp) {
         this.sender = sender;
         this.timestampSender = timestamp;
     }
@@ -30,11 +28,8 @@ public class Ack implements Action{
             protocol.getProcessQueue().add(this);            
             return;
         }        
-        int indexLocal = protocol.getCurrentId();
-        int tid = protocol.getP().getTid();
-        int[] timestampLocal = protocol.getTimestamp();
-        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu ack de nodo "+sender);             
-        Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
-        Utils.send(indexLocal, this.sender, node, tid, new Nack(indexLocal, timestampLocal));
+        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Nack de nodo "+sender);     
+        Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);       
     }            
 }
+
