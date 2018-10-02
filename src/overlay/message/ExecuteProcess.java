@@ -21,7 +21,7 @@ public class ExecuteProcess implements Action{
         Queue <Action> processQueue = protocol.getProcessQueue();
         while(!processQueue.isEmpty()) {            
             Action event = processQueue.poll();            
-            event.run(node, protocol, false);
+            event.run(node, protocol, false);            
         }        
     }
     

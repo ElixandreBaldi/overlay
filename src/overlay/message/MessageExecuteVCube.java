@@ -6,6 +6,7 @@
 package overlay.message;
 
 import java.util.ArrayList;
+import overlay.Utils;
 import overlay.vcube.Cis;
 import overlay.vcube.Parameters;
 import overlay.vcube.VCubeCreate;
@@ -28,22 +29,26 @@ public class MessageExecuteVCube implements Action{
     }
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {         
-        Parameters p = protocol.getP();
-        int indexNode = node.getIndex();
+        Parameters p = protocol.getP();        
         int pid = VCubeCreate.getPid();
         Transport t = (Transport) node.getProtocol(p.getTid());
-        int[] timestamp = protocol.getTimestamp();
+        byte[] timestamp = protocol.getTimestamp();
         
         ArrayList<Integer> targets = new ArrayList<>();        
         int nCluster = VCubeCreate.getnCluster();
         
         for(int i = 1; i <= nCluster; i++) {
-            Cis.getTargets(indexNode, i, targets, timestamp.clone());        
+            Cis.getTargets(node.getIndex(), i, targets, timestamp.clone());        
         }
         
         for(int i = 0; i < targets.size(); i++) {
             //EDSimulator.add(i, new Ack(indexNode, timestamp.clone()), Network.get(targets.get(i)), pid);
-            t.send(Network.get(indexNode), Network.get(targets.get(i)), new Ack(indexNode, timestamp.clone()), pid);            
+            Utils.send(
+                Network.get(node.getIndex()).getIndex(), 
+                Network.get(targets.get(i)).getIndex(),
+                (Transport) node.getProtocol(protocol.getP().getTid()), 
+                new Ping(node.getIndex())
+            );            
         }        
     }
 }

@@ -35,7 +35,7 @@ public class VCubeProtocol implements EDProtocol {
     
     private Parameters p;       
     
-    private int[] timestamp;
+    private byte[] timestamp;
     
     private Queue<Action> processQueue;
         
@@ -46,12 +46,12 @@ public class VCubeProtocol implements EDProtocol {
         this.processQueue = new LinkedList<>();
     }
 
-    public VCubeProtocol(String prefix, BigInteger vcubeId, int currentId, Parameters p, int[] timestamp){
+    public VCubeProtocol(String prefix, BigInteger vcubeId, int currentId, Parameters p, byte[] timestamp){
         this.prefix = prefix;
         this.vcubeId = vcubeId;
         this.currentId = currentId;
         this.p = p.clone();                
-        this.timestamp = new int[timestamp.length];       
+        this.timestamp = new byte[timestamp.length];       
         for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
 
     }
@@ -65,7 +65,7 @@ public class VCubeProtocol implements EDProtocol {
         return this.processQueue;
     }
     
-    public int[] getTimestamp() {
+    public byte[] getTimestamp() {
         return this.timestamp;
     }        
     
@@ -98,8 +98,8 @@ public class VCubeProtocol implements EDProtocol {
     }
     
     public void setTimestamp(int size) {
-        this.timestamp = new int[size];        
-        Arrays.fill(this.timestamp, 1);
+        this.timestamp = new byte[size];        
+        Arrays.fill(this.timestamp, (byte) 1);
         this.timestamp[currentId] = 0;
     }
 }

@@ -15,17 +15,17 @@ import peersim.core.Node;
  */
 public class Cis {
     
-    static private int[] get(int i, int s) {   
+    static private byte[] get(int i, int s) {   
         int k = (int) (Math.pow(2, s)/2);
-        int[] indexCluster = new int[k];
+        byte[] indexCluster = new byte[k];
         
         for(int x = 0; x < k; x++) {
             int p = (i ^ (int)Math.pow(2, s-1));
             
             if(x == 0) {
-                indexCluster[x] = p;
+                indexCluster[x] = (byte) p;
             } else {
-                indexCluster[x] = p^x;
+                indexCluster[x] = (byte) (p^x);
             }
         }        
         return indexCluster;
@@ -34,7 +34,7 @@ public class Cis {
     public void print(int nLine, int nColumn) {
         for(int s = 0; s < nLine; s++) {
             for(int i = 0; i < nColumn; i++) {
-                int[] index = get(i, s);
+                byte[] index = get(i, s);
                 
                 System.out.print(" | ");
             }
@@ -50,24 +50,27 @@ public class Cis {
         }
     }  
     
-    static public int getIndexFirstNodeUp(int index, int s, int[] timestamp) {                        
-        int[] cjs = get(index, s);        
+    static public int getIndexFirstNodeUp(int index, int s, byte[] timestamp) {                        
+        byte[] cjs = get(index, s);        
         for(int i = 0; i < cjs.length; i++) {
-            if(timestamp[cjs[i]] % 2 == 0) {                
+            /*if(cjs[i] < 0) {
+                System.out.println("moio");
+            }*/
+            if(timestamp[cjs[i]&0xff] % 2 == 0) {                
                 return cjs[i];
             }
         }
         return -1;
     }
     
-    static public void getTargets(int indexI, int s, ArrayList<Integer> targets, int[] timestamp) {
-        int[] cis = get(indexI, s);    
+    static public void getTargets(int indexI, int s, ArrayList<Integer> targets, byte[] timestamp) {
+        byte[] cis = get(indexI, s);    
         int size = cis.length;
         for(int i = 0; i < size; i++) {
             int indexJ = cis[i];
             int indexFirstNodeUpJ = getIndexFirstNodeUp(indexJ, s, timestamp);
             if(indexFirstNodeUpJ == indexI){
-                targets.add(Network.get(indexJ).getIndex());
+                targets.add(Network.get(indexJ & 0xff).getIndex());
             }
         }
     }

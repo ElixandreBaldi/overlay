@@ -16,13 +16,11 @@ import peersim.transport.Transport;
  *
  * @author elixandre
  */
-public class Ack implements Action{
-    private int sender;
-    private int[] timestampSender;
+public class Ping implements Action{
+    private int sender;    
     
-    public Ack(int sender, int[] timestamp) {
-        this.sender = sender;
-        this.timestampSender = timestamp;
+    public Ping(int sender) {
+        this.sender = sender;        
     }
 
     @Override
@@ -30,12 +28,14 @@ public class Ack implements Action{
         if(execute) {
             protocol.getProcessQueue().add(this);            
             return;
-        }        
-        int indexLocal = protocol.getCurrentId();
-        int tid = protocol.getP().getTid();
-        int[] timestampLocal = protocol.getTimestamp();
+        }
         //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu ack de nodo "+sender);             
-        Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
-        Utils.send(indexLocal, this.sender, (Transport) node.getProtocol(tid), new Nack(indexLocal, timestampLocal));
+        //Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
+        Utils.send(
+                protocol.getCurrentId(), 
+                this.sender, 
+                (Transport) node.getProtocol(protocol.getP().getTid()), 
+                new Pong(protocol.getCurrentId(), protocol.getTimestamp().clone())
+        );
     }            
 }

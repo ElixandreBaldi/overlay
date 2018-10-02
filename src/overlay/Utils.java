@@ -5,7 +5,7 @@
  */
 package overlay;
 
-import overlay.message.Ack;
+import overlay.message.Ping;
 import overlay.message.Action;
 import overlay.message.LockupAnswer;
 import overlay.vcube.VCubeCreate;
@@ -24,7 +24,7 @@ public class Utils {
         transp.send(Network.get(sender), Network.get(target), message, VCubeCreate.getPid());
     }
     
-    static public void updateTimestampLocal(int[] timestampLocal, int[] timestampSender, int indexLocal, int indexSender) {        
+    static public void updateTimestampLocal(byte[] timestampLocal, byte[] timestampSender, int indexLocal, int indexSender) {        
         for(int i = 0; i < timestampLocal.length; i++) {
             if(timestampLocal[i] < timestampSender[i] && i != indexLocal) timestampLocal[i] = timestampSender[i];                            
         }

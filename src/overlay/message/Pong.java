@@ -13,11 +13,11 @@ import peersim.core.Node;
  *
  * @author elixandrebaldi
  */
-public class Nack implements Action{   
+public class Pong implements Action{   
     private int sender;
-    private int[] timestampSender;
+    private byte[] timestampSender;
     
-    public Nack(int sender, int[] timestamp) {
+    public Pong(int sender, byte[] timestamp) {
         this.sender = sender;
         this.timestampSender = timestamp;
     }
