@@ -5,7 +5,7 @@
  */
 package overlay.vcube;
 
-import overlay.message.LookUpMessage;
+import overlay.message.LookUp;
 import java.math.BigInteger;
 import peersim.config.Configuration;
 import peersim.core.CommonState;
@@ -36,8 +36,8 @@ public class TrafficGenerator implements Control {
             target = Network.get(CommonState.r.nextInt(size));
         } while((sender == null || sender.isUp() == false || target == null || target.isUp() == false) && sender.getIndex() == target.getIndex());        
 
-        LookUpMessage message = new LookUpMessage(sender, ((VCubeProtocol) target.getProtocol(pid)).getVCubeId());
-        EDSimulator.add(10, message, sender, pid);                        
+        //LookUp message = new LookUp(sender, ((VCubeProtocol) target.getProtocol(pid)).getVCubeId());
+        //EDSimulator.add(10, message, sender, pid);                        
         
         return false;
     }

@@ -28,7 +28,7 @@ public class Nack implements Action{
             protocol.getProcessQueue().add(this);            
             return;
         }        
-        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Nack de nodo "+sender);     
+        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Nack de nodo "+sender);     
         Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);       
     }            
 }

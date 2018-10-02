@@ -10,6 +10,7 @@ import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Node;
+import peersim.transport.Transport;
 
 /**
  *
@@ -33,8 +34,8 @@ public class Ack implements Action{
         int indexLocal = protocol.getCurrentId();
         int tid = protocol.getP().getTid();
         int[] timestampLocal = protocol.getTimestamp();
-        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu ack de nodo "+sender);             
+        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu ack de nodo "+sender);             
         Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
-        Utils.send(indexLocal, this.sender, node, tid, new Nack(indexLocal, timestampLocal));
+        Utils.send(indexLocal, this.sender, (Transport) node.getProtocol(tid), new Nack(indexLocal, timestampLocal));
     }            
 }

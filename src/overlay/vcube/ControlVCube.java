@@ -5,7 +5,7 @@
  */
 package overlay.vcube;
 
-import overlay.message.LookUpMessage;
+import overlay.message.LookUp;
 
 import java.math.BigInteger;
 import overlay.message.ExecuteProcess;

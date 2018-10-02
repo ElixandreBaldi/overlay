@@ -6,7 +6,7 @@
 package overlay.vcube;
 
 import overlay.message.FinalMessage;
-import overlay.message.LookUpMessage;
+import overlay.message.LookUp;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
