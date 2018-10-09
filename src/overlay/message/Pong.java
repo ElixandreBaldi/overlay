@@ -15,9 +15,9 @@ import peersim.core.Node;
  */
 public class Pong implements Action{   
     private int sender;
-    private byte[] timestampSender;
+    private short[] timestampSender;
     
-    public Pong(int sender, byte[] timestamp) {
+    public Pong(int sender, short[] timestamp) {
         this.sender = sender;
         this.timestampSender = timestamp;
     }
@@ -27,9 +27,9 @@ public class Pong implements Action{
         if(execute) {
             protocol.getProcessQueue().add(this);            
             return;
-        }        
-        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Nack de nodo "+sender);     
-        Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);       
+        }
+        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Pong de nodo "+sender);     
+        Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
     }            
 }
 

@@ -29,8 +29,7 @@ public class Ping implements Action{
             protocol.getProcessQueue().add(this);            
             return;
         }
-        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu ack de nodo "+sender);             
-        //Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
+        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender);        
         Utils.send(
                 protocol.getCurrentId(), 
                 this.sender, 

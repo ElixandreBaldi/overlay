@@ -20,11 +20,10 @@ import peersim.transport.Transport;
  */
 
 public class LookUp implements Action{
-    private int sender;
+    private int sender;    
+    private byte[] key;
     
-    private String key;
-    
-    public LookUp(int sender, String key) {
+    public LookUp(int sender, byte[] key) {
         this.sender = sender;
         this.key = key;        
     }
@@ -33,7 +32,7 @@ public class LookUp implements Action{
         return sender;
     }
     
-    public String getKey() {
+    public byte[] getKey() {
         return key;
     }
 
@@ -45,7 +44,13 @@ public class LookUp implements Action{
         }
         Parameters p = protocol.getP();
         int tid = p.getTid();
-        System.out.println("Nodo: "+node.getIndex()+"     respondendo");
-        Utils.send(node.getIndex(), this.sender, node.getProtocol(tid), new LockupAnswer("oi"));
+        boolean lookupTrue = true;
+        if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) lookupTrue = false;
+            
+        Utils.send(
+            node.getIndex(), 
+            this.sender, 
+            node.getProtocol(tid), 
+            new LockupAnswer(protocol.getCurrentId(), lookupTrue, key));
     }
 }

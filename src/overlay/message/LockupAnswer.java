@@ -5,6 +5,7 @@
  */
 package overlay.message;
 
+import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.Node;
 
@@ -13,14 +14,24 @@ import peersim.core.Node;
  * @author elixandre
  */
 public class LockupAnswer implements Action{
-    private String msg;
-    public LockupAnswer(String msg) {
-        this.msg = msg;        
+    private short sender;
+    private boolean lookupTrue;
+    private byte[] hash;
+    
+    public LockupAnswer(short sender, boolean lookupTrue, byte[] hash) {
+        this.sender = sender;
+        this.lookupTrue = lookupTrue;
+        this.hash = hash;
     }
 
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        System.out.println("Nodo: "+node.getIndex()+"\nMensagem Recebida: "+this.msg);
+        if(lookupTrue) {
+            //System.out.println("Nodo: "+node.getIndex()+"\nMensagem Recebida de: "+this.sender);
+        } else {
+            Utils.executeLookup(hash, node, protocol);
+        }
+        
     }
     
 }

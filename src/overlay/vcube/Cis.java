@@ -50,7 +50,7 @@ public class Cis {
         }
     }  
     
-    static public int getIndexFirstNodeUp(int index, int s, byte[] timestamp) {                        
+    static public int getIndexFirstNodeUp(int index, int s, short[] timestamp) {                        
         byte[] cjs = get(index, s);        
         for(int i = 0; i < cjs.length; i++) {
             /*if(cjs[i] < 0) {
@@ -63,7 +63,7 @@ public class Cis {
         return -1;
     }
     
-    static public void getTargets(int indexI, int s, ArrayList<Integer> targets, byte[] timestamp) {
+    static public void getTargets(int indexI, int s, ArrayList<Integer> targets, short[] timestamp) {
         byte[] cis = get(indexI, s);    
         int size = cis.length;
         for(int i = 0; i < size; i++) {

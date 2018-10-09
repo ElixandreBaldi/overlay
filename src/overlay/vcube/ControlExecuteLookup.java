@@ -5,6 +5,7 @@
  */
 package overlay.vcube;
 
+import overlay.Utils;
 import overlay.message.ExecuteLockup;
 import overlay.message.ExecuteProcess;
 import peersim.config.Configuration;
@@ -27,8 +28,12 @@ public class ControlExecuteLookup implements Control {
     }        
     
     public boolean execute() {                
-        ExecuteLockup message = new ExecuteLockup("akslçdj");            
-        EDSimulator.add(50, message, Network.get(2), pid);        
+        String resource = "Quero gerar códigos hash desta mensagem.";
+        byte[] hash = Utils.generateHash(resource, "SHA-256");
+        //System.out.println(Utils.stringHexa(hash));
+        
+        ExecuteLockup message = new ExecuteLockup(hash);
+        EDSimulator.add(50, message, Utils.getRandomNode(), pid);        
         return false;
     }
 }

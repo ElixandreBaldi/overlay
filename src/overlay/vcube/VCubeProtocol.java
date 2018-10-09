@@ -25,17 +25,15 @@ import overlay.message.Action;
  */
 public class VCubeProtocol implements EDProtocol {
     
-    private final String PAR_TRANSPORT = "transport";
+    private final String PAR_TRANSPORT = "transport";        
     
-    private BigInteger vcubeId;
-    
-    private int currentId;
+    private short currentId;
     
     private String prefix;
     
-    private Parameters p;       
+    private Parameters p;
     
-    private byte[] timestamp;
+    private short[] timestamp;
     
     private Queue<Action> processQueue;
         
@@ -46,18 +44,16 @@ public class VCubeProtocol implements EDProtocol {
         this.processQueue = new LinkedList<>();
     }
 
-    public VCubeProtocol(String prefix, BigInteger vcubeId, int currentId, Parameters p, byte[] timestamp){
-        this.prefix = prefix;
-        this.vcubeId = vcubeId;
+    public VCubeProtocol(String prefix, short currentId, Parameters p, short[] timestamp){
+        this.prefix = prefix;        
         this.currentId = currentId;
-        this.p = p.clone();                
-        this.timestamp = new byte[timestamp.length];       
+        this.p = p.clone();   
+        this.timestamp = new short[timestamp.length];       
         for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
-
     }
     
-    public void processEvent(Node node, int pid, Object o) {        
-        Action event = (Action) o;        
+    public void processEvent(Node node, int pid, Object o) {
+        Action event = (Action) o;
         event.run(node, (VCubeProtocol) this, true);        
     }
     
@@ -65,7 +61,7 @@ public class VCubeProtocol implements EDProtocol {
         return this.processQueue;
     }
     
-    public byte[] getTimestamp() {
+    public short[] getTimestamp() {
         return this.timestamp;
     }        
     
@@ -78,27 +74,19 @@ public class VCubeProtocol implements EDProtocol {
     }
     
     public VCubeProtocol cloneVCube() {                
-        return new VCubeProtocol(prefix, vcubeId, currentId, p, timestamp);        
-    }
+        return new VCubeProtocol(prefix, currentId, p, timestamp);        
+    }  
 
-    public BigInteger getVCubeId() {
-        return vcubeId;
-    }
-
-    public void setVCubeId(BigInteger vcubeId) {
-        this.vcubeId = vcubeId;
-    }
-
-    public int getCurrentId() {
+    public short getCurrentId() {
         return currentId;
     }
 
-    public void setCurrentId(int currentId) {
+    public void setCurrentId(short currentId) {
         this.currentId = currentId;
     }
     
     public void setTimestamp(int size) {
-        this.timestamp = new byte[size];        
+        this.timestamp = new short[size];        
         Arrays.fill(this.timestamp, (byte) 1);
         this.timestamp[currentId] = 0;
     }

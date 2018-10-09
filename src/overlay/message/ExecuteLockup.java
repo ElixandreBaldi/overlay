@@ -14,23 +14,18 @@ import peersim.core.Node;
  * @author elixandre
  */
 public class ExecuteLockup implements Action{
-    private String msg;
-    public ExecuteLockup(String msg) {
-        this.msg = msg;        
-    }    
-
-    private int responsibleKey(String msg) {
-        return 5;
-    }
+    private byte[] hash;
+    
+    public ExecuteLockup(byte[] hash) {
+        this.hash = hash;
+    }       
     
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {
         if(execute) {
-            protocol.getProcessQueue().add(this);            
+            protocol.getProcessQueue().add(this);           
             return;
         }
-        int p = responsibleKey(this.msg);
-        int tid = protocol.getP().getTid();
-        Utils.send(node.getIndex(), p, node.getProtocol(tid), new LookUp(node.getIndex(), "msg"));
+        Utils.executeLookup(hash, node, protocol);
     }
 }

@@ -32,7 +32,7 @@ public class MessageExecuteVCube implements Action{
         Parameters p = protocol.getP();        
         int pid = VCubeCreate.getPid();
         Transport t = (Transport) node.getProtocol(p.getTid());
-        byte[] timestamp = protocol.getTimestamp();
+        short[] timestamp = protocol.getTimestamp();
         
         ArrayList<Integer> targets = new ArrayList<>();        
         int nCluster = VCubeCreate.getnCluster();
