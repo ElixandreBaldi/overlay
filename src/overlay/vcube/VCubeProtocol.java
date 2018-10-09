@@ -20,7 +20,8 @@ import peersim.edsim.EDProtocol;
 import peersim.transport.Transport;
 import overlay.message.Action;
 import overlay.message.LockupAnswer;
-import overlay.message.VerifyTimestamp;
+import overlay.message.VerifyTimestampLookup;
+import overlay.message.VerifyTimestampPut;
 
 /**
  *
@@ -96,9 +97,17 @@ public class VCubeProtocol implements EDProtocol {
     
     public void removeVerifyTimestamp(int startTime) {
         for(int i = 0; i < processQueue.size(); i++) {
-            VerifyTimestamp foo = new VerifyTimestamp();            
-            if(processQueue.get(i).getClass().equals(foo.getClass())) {                
-                VerifyTimestamp process = (VerifyTimestamp) processQueue.get(i);                
+            VerifyTimestampLookup foo = new VerifyTimestampLookup();
+            VerifyTimestampPut fooo = new VerifyTimestampPut();
+            if(processQueue.get(i).getClass().equals(foo.getClass())) {
+                VerifyTimestampLookup process = (VerifyTimestampLookup) processQueue.get(i);                
+                if(process.getStartTime() == startTime) {                    
+                    processQueue.remove(i);
+                    System.out.println("Removendo");
+                    break;
+                }
+            } else if (processQueue.get(i).getClass().equals(fooo.getClass())) {
+                VerifyTimestampPut process = (VerifyTimestampPut) processQueue.get(i);
                 if(process.getStartTime() == startTime) {                    
                     processQueue.remove(i);
                     System.out.println("Removendo");

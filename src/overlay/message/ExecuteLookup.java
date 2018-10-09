@@ -13,10 +13,10 @@ import peersim.core.Node;
  *
  * @author elixandre
  */
-public class ExecuteLockup implements Action{
+public class ExecuteLookup implements Action{
     private byte[] hash;
     
-    public ExecuteLockup(byte[] hash) {
+    public ExecuteLookup(byte[] hash) {
         this.hash = hash;
     }       
     

@@ -9,6 +9,7 @@ import java.util.UUID;
 import overlay.Utils;
 import overlay.message.ExecuteLookup;
 import overlay.message.ExecuteProcess;
+import overlay.message.ExecutePut;
 import peersim.config.Configuration;
 import peersim.core.CommonState;
 import peersim.core.Control;
@@ -19,24 +20,24 @@ import peersim.edsim.EDSimulator;
  *
  * @author elixandrebaldi
  */
-public class ControlExecuteLookup implements Control {
+public class ControlExecutePut implements Control {
     private static final String PAR_PROT = "protocol";
     
     private final int pid;     
     
-    public ControlExecuteLookup(String prefix) {
+    public ControlExecutePut(String prefix) {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
     public boolean execute() {                        
-        byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");
+        byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");
         //System.out.println(Utils.stringHexa(hash));
         
-        ExecuteLookup message = new ExecuteLookup(hash);
+        ExecutePut message = new ExecutePut(hash);
         EDSimulator.add(50, message, Utils.getRandomNode(), pid);  
-        /*if(VCubeCreate.flag1) {
-            EDSimulator.add(5, message, Network.get(3), pid);     
-            VCubeCreate.flag1 = false;
+        /*if(VCubeCreate.flag2) {
+            EDSimulator.add(5, message, Network.get(5), pid);
+            VCubeCreate.flag2 = false;
         } */       
         return false;
     }

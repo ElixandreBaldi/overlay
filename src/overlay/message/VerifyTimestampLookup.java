@@ -14,18 +14,16 @@ import peersim.core.Node;
  *
  * @author elixandre
  */
-public class VerifyTimestamp implements Action{
-    private int startTime;
-    private int indexTarget;
+public class VerifyTimestampLookup implements Action{
+    private int startTime;    
     private byte[] hash;    
 
-    public VerifyTimestamp(int startTime, short indexTarget, byte[] hash) {
-        this.startTime = startTime;
-        this.indexTarget = indexTarget;
+    public VerifyTimestampLookup(int startTime, byte[] hash) {
+        this.startTime = startTime;        
         this.hash = hash;
     }
 
-    public VerifyTimestamp() {     
+    public VerifyTimestampLookup() {    
     }    
     
     public int getStartTime() {
@@ -41,7 +39,7 @@ public class VerifyTimestamp implements Action{
         if(CommonState.getIntTime() - startTime >= 100) {            
             Utils.executeLookup(hash, node, protocol);
         } else {
-            Utils.addVerifyTimestamp(protocol.getCurrentId(), hash, node, startTime);
+            Utils.addVerifyTimestampLookup(hash, node, startTime);
         }
     }
     

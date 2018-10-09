@@ -14,7 +14,9 @@ import overlay.message.Ping;
 import overlay.message.Action;
 import overlay.message.LockupAnswer;
 import overlay.message.LookUp;
-import overlay.message.VerifyTimestamp;
+import overlay.message.Put;
+import overlay.message.VerifyTimestampLookup;
+import overlay.message.VerifyTimestampPut;
 import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
@@ -96,8 +98,28 @@ public class Utils {
             s.append(Integer.toHexString(highPiece | lowPiece));
         }
         return s.toString();
+    }        
+    
+    public static void addVerifyTimestampLookup(byte[] hash, Node node, int time) {
+        EDSimulator.add(1, 
+            new VerifyTimestampLookup(time, hash),
+            node,
+            VCubeCreate.getPid());
     }
     
+    public static void addVerifyTimestampPut(byte[] hash, Node node, int time) {
+        EDSimulator.add(1, 
+            new VerifyTimestampPut(time, hash),
+            node,
+            VCubeCreate.getPid());
+    }
+    
+    public static String getRandomString() {
+        byte[] array = new byte[20]; // length is bounded by 7
+        new Random().nextBytes(array);
+        return new String(array, Charset.forName("UTF-8"));        
+    }
+
     public static void executeLookup(byte[] hash, Node node, VCubeProtocol protocol) {
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());
         int tid = protocol.getP().getTid();
@@ -108,21 +130,22 @@ public class Utils {
                 node.getProtocol(tid), 
                 new LookUp(node.getIndex(), hash, time));
         System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
-        Utils.addVerifyTimestamp(p, hash, node, time);
+        Utils.addVerifyTimestampLookup(hash, node, time);
                  
     }
     
-    public static void addVerifyTimestamp(short p, byte[] hash, Node node, int time) {
-        EDSimulator.add(
-            1, 
-            new VerifyTimestamp(time, p, hash),
-            node,
-            VCubeCreate.getPid());
-    }
-    
-    public static String getRandomString() {
-        byte[] array = new byte[20]; // length is bounded by 7
-        new Random().nextBytes(array);
-        return new String(array, Charset.forName("UTF-8"));        
+    public static void executePut(byte[] hash, Node node, VCubeProtocol protocol) {
+        short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());
+        int tid = protocol.getP().getTid();
+        int time = CommonState.getIntTime();
+        Utils.send(
+            node.getIndex(),
+            p,
+            node.getProtocol(tid),
+            new Put(node.getIndex(), hash, time)
+        );
+        
+        System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
+        Utils.addVerifyTimestampLookup(hash, node, time);
     }
 }

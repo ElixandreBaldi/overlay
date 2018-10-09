@@ -19,7 +19,8 @@ import peersim.core.Node;
  */
 public class VCubeCreate implements Control {
     
-    static public boolean flag = true;
+    static public boolean flag1 = true;
+    static public boolean flag2 = true;
     
     static private int pid = 0;
     
