@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import overlay.Utils;
 import overlay.vcube.Parameters;
 import overlay.vcube.VCubeProtocol;
+import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.core.Node;
 import peersim.transport.Transport;
@@ -22,10 +23,12 @@ import peersim.transport.Transport;
 public class LookUp implements Action{
     private int sender;    
     private byte[] key;
+    private int startTime;
     
-    public LookUp(int sender, byte[] key) {
+    public LookUp(int sender, byte[] key, int startTime) {
         this.sender = sender;
-        this.key = key;        
+        this.key = key;   
+        this.startTime = startTime;
     }
     
     public int getSender() {
@@ -47,10 +50,12 @@ public class LookUp implements Action{
         boolean lookupTrue = true;
         if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) lookupTrue = false;
             
+        System.out.println("Recebeu Lookup: "+protocol.getCurrentId()+" "+lookupTrue);
+        
         Utils.send(
             node.getIndex(), 
             this.sender, 
             node.getProtocol(tid), 
-            new LockupAnswer(protocol.getCurrentId(), lookupTrue, key));
+            new LockupAnswer(protocol.getCurrentId(), lookupTrue, key, startTime));
     }
 }

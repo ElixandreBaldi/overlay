@@ -5,6 +5,7 @@
  */
 package overlay.message;
 
+import java.util.List;
 import java.util.Queue;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
@@ -18,10 +19,11 @@ public class ExecuteProcess implements Action{
 
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {                      
-        Queue <Action> processQueue = protocol.getProcessQueue();
+        List <Action> processQueue = protocol.getProcessQueue();
         while(!processQueue.isEmpty()) {            
-            Action event = processQueue.poll();            
+            Action event = processQueue.remove(0);
             event.run(node, protocol, false);            
+            
         }        
     }
     

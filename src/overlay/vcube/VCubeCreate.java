@@ -19,11 +19,13 @@ import peersim.core.Node;
  */
 public class VCubeCreate implements Control {
     
+    static public boolean flag = true;
+    
     static private int pid = 0;
     
     private final String PAR_PROT = "protocol";
     
-    private final String PAR_IDLENGTH = "idLength";
+    private final String PAR_IDLENGTH = "idLength";        
     
     static private int nCluster;
     
@@ -44,15 +46,15 @@ public class VCubeCreate implements Control {
         return pid;        
     }
     
-    public boolean execute() {                
+    public boolean execute() {
         this.networkSize = Network.size();
         this.nCluster = (int) Math.ceil(Math.log(networkSize) / Math.log(2));
         for(short i = 0; i < this.networkSize; i++) {
             Node node = (Node) Network.get(i);
-            VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);                          
+            VCubeProtocol vcp = (VCubeProtocol) node.getProtocol(this.pid);
             vcp.setCurrentId(i);
-            vcp.setTimestamp(Network.size());                                   
+            vcp.setTimestamp(Network.size());
         }
         return false;
-    }          
+    }
 }

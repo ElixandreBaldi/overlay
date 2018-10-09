@@ -12,12 +12,15 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import peersim.config.Configuration;
 import peersim.core.Node;
 import peersim.edsim.EDProtocol;
 import peersim.transport.Transport;
 import overlay.message.Action;
+import overlay.message.LockupAnswer;
+import overlay.message.VerifyTimestamp;
 
 /**
  *
@@ -35,7 +38,7 @@ public class VCubeProtocol implements EDProtocol {
     
     private short[] timestamp;
     
-    private Queue<Action> processQueue;
+    private List<Action> processQueue;
         
     public VCubeProtocol(String prefix) {
         this.prefix = prefix;        
@@ -57,7 +60,7 @@ public class VCubeProtocol implements EDProtocol {
         event.run(node, (VCubeProtocol) this, true);        
     }
     
-    public Queue<Action> getProcessQueue() {
+    public List<Action> getProcessQueue() {
         return this.processQueue;
     }
     
@@ -89,5 +92,19 @@ public class VCubeProtocol implements EDProtocol {
         this.timestamp = new short[size];        
         Arrays.fill(this.timestamp, (byte) 1);
         this.timestamp[currentId] = 0;
+    }
+    
+    public void removeVerifyTimestamp(int startTime) {
+        for(int i = 0; i < processQueue.size(); i++) {
+            VerifyTimestamp foo = new VerifyTimestamp();            
+            if(processQueue.get(i).getClass().equals(foo.getClass())) {                
+                VerifyTimestamp process = (VerifyTimestamp) processQueue.get(i);                
+                if(process.getStartTime() == startTime) {                    
+                    processQueue.remove(i);
+                    System.out.println("Removendo");
+                    break;
+                }
+            }
+        }
     }
 }

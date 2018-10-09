@@ -6,18 +6,22 @@
 package overlay;
 
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 import overlay.message.Ping;
 import overlay.message.Action;
 import overlay.message.LockupAnswer;
 import overlay.message.LookUp;
+import overlay.message.VerifyTimestamp;
 import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.core.Node;
 import peersim.core.Protocol;
+import peersim.edsim.EDSimulator;
 import peersim.transport.Transport;
 
 /**
@@ -51,13 +55,13 @@ public class Utils {
     static public short responsibleKey(byte[] hash, short[] timestamp) {
         BigInteger value = new BigInteger(hash);
         BigInteger two = new BigInteger("2");
-        BigInteger v = value.divide(two.pow(160-VCubeCreate.getnCluster()));
+        BigInteger v = value.divide(two.pow(256-VCubeCreate.getnCluster()));
                 
         short j = v.shortValue();
         if(j < 0) j *= -1;
         //TODO ta certo esse * -1?
         
-        return findResponsible(j, timestamp);                            
+        return findResponsible(j, timestamp);
         //return j;
     }
     
@@ -97,11 +101,28 @@ public class Utils {
     public static void executeLookup(byte[] hash, Node node, VCubeProtocol protocol) {
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());
         int tid = protocol.getP().getTid();
+        int time = CommonState.getIntTime();
         Utils.send(
                 node.getIndex(),
                 p, 
                 node.getProtocol(tid), 
-                new LookUp(node.getIndex(), hash));
-        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
+                new LookUp(node.getIndex(), hash, time));
+        System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
+        Utils.addVerifyTimestamp(p, hash, node, time);
+                 
+    }
+    
+    public static void addVerifyTimestamp(short p, byte[] hash, Node node, int time) {
+        EDSimulator.add(
+            1, 
+            new VerifyTimestamp(time, p, hash),
+            node,
+            VCubeCreate.getPid());
+    }
+    
+    public static String getRandomString() {
+        byte[] array = new byte[20]; // length is bounded by 7
+        new Random().nextBytes(array);
+        return new String(array, Charset.forName("UTF-8"));        
     }
 }

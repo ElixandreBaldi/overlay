@@ -27,13 +27,16 @@ public class ControlExecuteLookup implements Control {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
-    public boolean execute() {                
-        String resource = "Quero gerar códigos hash desta mensagem.";
-        byte[] hash = Utils.generateHash(resource, "SHA-256");
+    public boolean execute() {                        
+        byte[] hash = Utils.generateHash(Utils.getRandomString(), "SHA-256");
         //System.out.println(Utils.stringHexa(hash));
         
         ExecuteLockup message = new ExecuteLockup(hash);
-        EDSimulator.add(50, message, Utils.getRandomNode(), pid);        
+        //EDSimulator.add(50, message, Utils.getRandomNode(), pid);  
+        if(VCubeCreate.flag) {
+            EDSimulator.add(5, message, Network.get(5), pid);     
+            VCubeCreate.flag = false;
+        }        
         return false;
     }
 }
