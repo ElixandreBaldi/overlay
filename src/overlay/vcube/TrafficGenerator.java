@@ -5,7 +5,7 @@
  */
 package overlay.vcube;
 
-import overlay.message.LookUp;
+import overlay.actions.LookUp;
 import java.math.BigInteger;
 import peersim.config.Configuration;
 import peersim.core.CommonState;

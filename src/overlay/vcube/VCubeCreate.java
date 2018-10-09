@@ -7,6 +7,7 @@ package overlay.vcube;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import overlay.Utils;
 import peersim.config.Configuration;
 import peersim.core.CommonState;
 import peersim.core.Control;
@@ -34,8 +35,9 @@ public class VCubeCreate implements Control {
     
     private int idLength;
     
-    public VCubeCreate(String prefix) {        
+    public VCubeCreate(String prefix) {     
         pid = Configuration.getPid(prefix +"."+ PAR_PROT);
+        Utils.pid = pid;
         this.idLength = Configuration.getInt(prefix + "." + PAR_IDLENGTH);
     }
     

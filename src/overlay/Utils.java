@@ -10,13 +10,13 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
-import overlay.message.Ping;
-import overlay.message.Action;
-import overlay.message.LockupAnswer;
-import overlay.message.LookUp;
-import overlay.message.Put;
-import overlay.message.VerifyTimestampLookup;
-import overlay.message.VerifyTimestampPut;
+import overlay.actions.Ping;
+import overlay.actions.Action;
+import overlay.actions.LockupAnswer;
+import overlay.actions.LookUp;
+import overlay.actions.Put;
+import overlay.actions.VerifyTimestampLookup;
+import overlay.actions.VerifyTimestampPut;
 import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
@@ -31,6 +31,10 @@ import peersim.transport.Transport;
  * @author elixandrebaldi
  */
 public class Utils {
+    static public int countNodeDown = 0;
+    
+    static public int pid = 0;
+    
     static public void send(int sender, int target, Protocol t, Action message) {        
         Transport transp = (Transport) t;        
         transp.send(Network.get(sender), Network.get(target), message, VCubeCreate.getPid());
@@ -129,7 +133,7 @@ public class Utils {
                 p, 
                 node.getProtocol(tid), 
                 new LookUp(node.getIndex(), hash, time));
-        System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
+        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
         Utils.addVerifyTimestampLookup(hash, node, time);
                  
     }
@@ -145,7 +149,15 @@ public class Utils {
             new Put(node.getIndex(), hash, time)
         );
         
-        System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
+        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
         Utils.addVerifyTimestampLookup(hash, node, time);
+    }
+
+    public static void printNetwork() {
+        for(int i = 0; i < Network.size(); i++) {
+            VCubeProtocol node = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
+            System.out.print(" "+node.getStatus());
+        }
+        System.out.println("");
     }
 }

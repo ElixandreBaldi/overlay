@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package overlay.message;
+package overlay.actions;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +31,7 @@ public class LockupAnswer implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {
         if(lookupTrue) {
-            System.out.println("Nodo: "+node.getIndex()+"   Mensagem Recebida de: "+this.sender);
+            //System.out.println("Nodo: "+node.getIndex()+"   Mensagem Recebida de: "+this.sender);
             protocol.removeVerifyTimestamp(startTime);
         } else {
             Utils.executeLookup(hash, node, protocol);

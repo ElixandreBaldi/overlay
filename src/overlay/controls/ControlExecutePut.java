@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package overlay.vcube;
+package overlay.controls;
 
 import java.util.UUID;
 import overlay.Utils;
-import overlay.message.ExecuteLookup;
-import overlay.message.ExecuteProcess;
-import overlay.message.ExecutePut;
+import overlay.actions.ExecuteLookup;
+import overlay.actions.ExecuteProcess;
+import overlay.actions.ExecutePut;
 import peersim.config.Configuration;
 import peersim.core.CommonState;
 import peersim.core.Control;

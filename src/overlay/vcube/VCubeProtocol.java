@@ -5,8 +5,8 @@
  */
 package overlay.vcube;
 
-import overlay.message.FinalMessage;
-import overlay.message.LookUp;
+import overlay.actions.FinalMessage;
+import overlay.actions.LookUp;
 import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -18,10 +18,10 @@ import peersim.config.Configuration;
 import peersim.core.Node;
 import peersim.edsim.EDProtocol;
 import peersim.transport.Transport;
-import overlay.message.Action;
-import overlay.message.LockupAnswer;
-import overlay.message.VerifyTimestampLookup;
-import overlay.message.VerifyTimestampPut;
+import overlay.actions.Action;
+import overlay.actions.LockupAnswer;
+import overlay.actions.VerifyTimestampLookup;
+import overlay.actions.VerifyTimestampPut;
 
 /**
  *
@@ -29,7 +29,9 @@ import overlay.message.VerifyTimestampPut;
  */
 public class VCubeProtocol implements EDProtocol {
     
-    private final String PAR_TRANSPORT = "transport";        
+    private boolean status;
+    
+    private final String PAR_TRANSPORT = "transport";
     
     private short currentId;
     
@@ -46,6 +48,7 @@ public class VCubeProtocol implements EDProtocol {
         this.p = new Parameters();
         this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);                     
         this.processQueue = new LinkedList<>();
+        this.status = true;
     }
 
     public VCubeProtocol(String prefix, short currentId, Parameters p, short[] timestamp){
@@ -54,11 +57,22 @@ public class VCubeProtocol implements EDProtocol {
         this.p = p.clone();   
         this.timestamp = new short[timestamp.length];       
         for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
+        this.status = true;
     }
     
     public void processEvent(Node node, int pid, Object o) {
-        Action event = (Action) o;
-        event.run(node, (VCubeProtocol) this, true);        
+        if(status) {
+            Action event = (Action) o;
+            event.run(node, (VCubeProtocol) this, true);        
+        }
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
     
     public List<Action> getProcessQueue() {
@@ -100,17 +114,15 @@ public class VCubeProtocol implements EDProtocol {
             VerifyTimestampLookup foo = new VerifyTimestampLookup();
             VerifyTimestampPut fooo = new VerifyTimestampPut();
             if(processQueue.get(i).getClass().equals(foo.getClass())) {
-                VerifyTimestampLookup process = (VerifyTimestampLookup) processQueue.get(i);                
-                if(process.getStartTime() == startTime) {                    
+                VerifyTimestampLookup process = (VerifyTimestampLookup) processQueue.get(i);
+                if(process.getStartTime() == startTime) {
                     processQueue.remove(i);
-                    System.out.println("Removendo");
                     break;
                 }
             } else if (processQueue.get(i).getClass().equals(fooo.getClass())) {
                 VerifyTimestampPut process = (VerifyTimestampPut) processQueue.get(i);
-                if(process.getStartTime() == startTime) {                    
+                if(process.getStartTime() == startTime) {
                     processQueue.remove(i);
-                    System.out.println("Removendo");
                     break;
                 }
             }

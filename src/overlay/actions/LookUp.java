@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package overlay.message;
+package overlay.actions;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ import peersim.transport.Transport;
  * @author elixandrebaldi
  */
 
-public class Put implements Action{
+public class LookUp implements Action{
     private int sender;    
     private byte[] key;
     private int startTime;
     
-    public Put(int sender, byte[] key, int startTime) {
+    public LookUp(int sender, byte[] key, int startTime) {
         this.sender = sender;
         this.key = key;   
         this.startTime = startTime;
@@ -47,15 +47,15 @@ public class Put implements Action{
         }
         Parameters p = protocol.getP();
         int tid = p.getTid();
-        boolean putTrue = true;
-        if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) putTrue = false;
+        boolean lookupTrue = true;
+        if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) lookupTrue = false;
             
-        System.out.println("Recebeu Put: "+protocol.getCurrentId()+" "+putTrue);
+        //System.out.println("Recebeu Lookup: "+protocol.getCurrentId()+" "+lookupTrue);
         
         Utils.send(
             node.getIndex(), 
             this.sender, 
             node.getProtocol(tid), 
-            new PutAnswer(protocol.getCurrentId(), putTrue, key, startTime));
+            new LockupAnswer(protocol.getCurrentId(), lookupTrue, key, startTime));
     }
 }

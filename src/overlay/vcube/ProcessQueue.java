@@ -6,7 +6,7 @@
 package overlay.vcube;
 
 import java.util.ArrayList;
-import overlay.message.Action;
+import overlay.actions.Action;
 
 /**
  *

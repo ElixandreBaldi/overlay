@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package overlay.message;
+package overlay.actions;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +31,7 @@ public class PutAnswer implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {
         if(putTrue) {
-            System.out.println("Nodo: "+node.getIndex()+"   Confiramação de Put Recebida de: "+this.sender);
+            //System.out.println("Nodo: "+node.getIndex()+"   Confiramação de Put Recebida de: "+this.sender);
             protocol.removeVerifyTimestamp(startTime);
         } else {
             Utils.executePut(hash, node, protocol);

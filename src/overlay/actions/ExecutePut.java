@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package overlay.message;
+package overlay.actions;
 
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
