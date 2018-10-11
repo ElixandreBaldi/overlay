@@ -9,6 +9,8 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import overlay.actions.Ping;
 import overlay.actions.Action;
@@ -171,5 +173,38 @@ public class Utils {
             System.out.print(" "+node.getStatus());
         }
         System.out.println("");
+    }
+    
+    public static int getIndexResponsable(short responsable, List<Responsables> responsables) {        
+        for(int i = 0; i < responsables.size(); i++) {
+            if(responsables.get(i).getResponsable() == responsable) return i;        
+        }        
+        return -1;
+    }
+    
+    public static short findFuller(short[] timestamp){
+        short fuller = -1;
+        int countFuller = -1;
+        List<Responsables> responsables = new ArrayList<>();
+        for(int i = 0; i < timestamp.length; i++) {
+            if(timestamp[i] % 2 != 0 ){
+                short responsable = Utils.findResponsible((short) i, timestamp);
+                int indexResponsable = getIndexResponsable(responsable, responsables);
+                if( indexResponsable >= 0) {
+                    int count = responsables.get(indexResponsable).incrementCount();
+                    if(count > countFuller) {
+                        fuller = responsable;
+                        countFuller = count;
+                    }
+                } else {
+                    responsables.add(new Responsables(responsable));
+                    if(countFuller < 1) {
+                        fuller = responsable;
+                        countFuller = 1;
+                    }
+                }
+            }
+        }        
+        return fuller;
     }
 }

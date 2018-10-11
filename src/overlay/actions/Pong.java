@@ -14,11 +14,11 @@ import peersim.core.Node;
  *
  * @author elixandrebaldi
  */
-public class Pong implements Action{   
+public class Pong implements Action{
     private int sender;
     private short[] timestampSender;
     private int startTime;
-    
+
     public Pong(int sender, short[] timestamp, int startTime) {
         this.sender = sender;
         this.timestampSender = timestamp;
@@ -26,14 +26,13 @@ public class Pong implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {        
+    public void run(Node node, VCubeProtocol protocol, boolean execute) {
         if(execute) {
-            protocol.getProcessQueue().add(this);            
+            protocol.getProcessQueue().add(this);
             return;
         }
         System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Pong de nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());
         protocol.removeVerifyTimestamp(startTime);
-        Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);        
-    }            
+        Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
+    }
 }
-
