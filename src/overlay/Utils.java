@@ -16,6 +16,7 @@ import overlay.actions.LockupAnswer;
 import overlay.actions.LookUp;
 import overlay.actions.Put;
 import overlay.actions.VerifyTimestampLookup;
+import overlay.actions.VerifyTimestampPing;
 import overlay.actions.VerifyTimestampPut;
 import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
@@ -31,7 +32,11 @@ import peersim.transport.Transport;
  * @author elixandrebaldi
  */
 public class Utils {
-    static public int countNodeDown = 0;
+    static final public int timestampLimit = 1500;
+    
+    static public boolean flagDown = true;
+    
+    static public int countNodeDown = 0;    
     
     static public int pid = 0;
     
@@ -118,6 +123,14 @@ public class Utils {
             VCubeCreate.getPid());
     }
     
+    public static void addVerifyTimestampPing(Node node, int time, short target) {
+        EDSimulator.add(
+            1, 
+            new VerifyTimestampPing(time, target),
+            node,
+            VCubeCreate.getPid());
+    }
+    
     public static String getRandomString() {
         byte[] array = new byte[20]; // length is bounded by 7
         new Random().nextBytes(array);
@@ -147,10 +160,9 @@ public class Utils {
             p,
             node.getProtocol(tid),
             new Put(node.getIndex(), hash, time)
-        );
-        
+        );        
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
-        Utils.addVerifyTimestampLookup(hash, node, time);
+        Utils.addVerifyTimestampPut(hash, node, time);
     }
 
     public static void printNetwork() {

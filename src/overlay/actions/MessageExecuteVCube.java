@@ -42,13 +42,7 @@ public class MessageExecuteVCube implements Action{
         }
         
         for(int i = 0; i < targets.size(); i++) {
-            //EDSimulator.add(i, new Ack(indexNode, timestamp.clone()), Network.get(targets.get(i)), pid);
-            Utils.send(
-                Network.get(node.getIndex()).getIndex(), 
-                Network.get(targets.get(i)).getIndex(),
-                (Transport) node.getProtocol(protocol.getP().getTid()), 
-                new Ping(node.getIndex())
-            );            
+            EDSimulator.add(0, new ExecutePing(targets.get(i).shortValue()), Network.get(protocol.getCurrentId()), Utils.pid);            
         }        
     }
 }

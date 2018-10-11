@@ -25,8 +25,9 @@ public class ControlDownNode implements Control{
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
-    public boolean execute() {        
-        if(Utils.countNodeDown < Network.size()) {
+    public boolean execute() {    
+        if(Utils.countNodeDown < Network.size() && Utils.flagDown) {
+            Utils.flagDown = false;
             int size = Network.size();
             VCubeProtocol target = null;
             do {                

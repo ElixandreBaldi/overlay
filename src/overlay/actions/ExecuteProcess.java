@@ -19,7 +19,7 @@ public class ExecuteProcess implements Action{
 
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {                      
-        List <Action> processQueue = protocol.getProcessQueue();
+        List <Action> processQueue = protocol.getProcessQueue();        
         if(!processQueue.isEmpty()) {            
             Action event = processQueue.remove(0);
             event.run(node, protocol, false);            

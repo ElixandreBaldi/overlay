@@ -53,6 +53,7 @@ public class FindEmptyVertex implements Action{
     
     public int encontrarMaisAdequado(short[] timestamp){
         int maisCheio = encontrarMaisCheio(timestamp);
+        //System.out.println("Mais Cheio: "+maisCheio);
         int cont = 0;
         int imaisAdequado;
         int maisAdequado = 0;
@@ -81,9 +82,18 @@ public class FindEmptyVertex implements Action{
     
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {
+        if(execute) {
+            protocol.getProcessQueue().add(this);            
+            return;
+        }
         short[] timestampClone = protocol.getTimestamp().clone();
         
-        System.out.println("Mais adequado: "+encontrarMaisAdequado(timestampClone));
+        //System.out.println("");        
+        //System.out.println("Nodo: "+protocol.getCurrentId());
+        //for(int i = 0; i < timestampClone.length; i++) System.out.print(" "+timestampClone[i]);
+        //System.out.println("");
+        //System.out.println("Mais adequado: "+encontrarMaisAdequado(timestampClone));
+        //System.out.println("");
     }
     
 }

@@ -17,10 +17,12 @@ import peersim.transport.Transport;
  * @author elixandre
  */
 public class Ping implements Action{
-    private int sender;    
+    private short sender;   
+    private int startTime;   
     
-    public Ping(int sender) {
-        this.sender = sender;        
+    public Ping(short sender, int startTime) {
+        this.sender = sender;
+        this.startTime = startTime;
     }
 
     @Override
@@ -31,10 +33,10 @@ public class Ping implements Action{
         }
         //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender);        
         Utils.send(
-                protocol.getCurrentId(), 
-                this.sender, 
-                (Transport) node.getProtocol(protocol.getP().getTid()), 
-                new Pong(protocol.getCurrentId(), protocol.getTimestamp().clone())
-        );
+            protocol.getCurrentId(),
+            this.sender, 
+            (Transport) node.getProtocol(protocol.getP().getTid()), 
+            new Pong(protocol.getCurrentId(), protocol.getTimestamp().clone(), startTime)
+        );        
     }            
 }

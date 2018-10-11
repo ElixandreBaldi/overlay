@@ -21,6 +21,7 @@ import peersim.transport.Transport;
 import overlay.actions.Action;
 import overlay.actions.LockupAnswer;
 import overlay.actions.VerifyTimestampLookup;
+import overlay.actions.VerifyTimestampPing;
 import overlay.actions.VerifyTimestampPut;
 
 /**
@@ -110,9 +111,10 @@ public class VCubeProtocol implements EDProtocol {
     }
     
     public void removeVerifyTimestamp(int startTime) {
-        for(int i = 0; i < processQueue.size(); i++) {
-            VerifyTimestampLookup foo = new VerifyTimestampLookup();
-            VerifyTimestampPut fooo = new VerifyTimestampPut();
+        VerifyTimestampLookup foo = new VerifyTimestampLookup();
+        VerifyTimestampPut fooo = new VerifyTimestampPut();
+        VerifyTimestampPing foooo = new VerifyTimestampPing();
+        for(int i = 0; i < processQueue.size(); i++) {            
             if(processQueue.get(i).getClass().equals(foo.getClass())) {
                 VerifyTimestampLookup process = (VerifyTimestampLookup) processQueue.get(i);
                 if(process.getStartTime() == startTime) {
@@ -123,6 +125,13 @@ public class VCubeProtocol implements EDProtocol {
                 VerifyTimestampPut process = (VerifyTimestampPut) processQueue.get(i);
                 if(process.getStartTime() == startTime) {
                     processQueue.remove(i);
+                    break;
+                }
+            } else if (processQueue.get(i).getClass().equals(foooo.getClass())) {
+                VerifyTimestampPing process = (VerifyTimestampPing) processQueue.get(i);
+                if(process.getStartTime() == startTime) {
+                    processQueue.remove(i);
+                    System.out.println("Removendo da fila: ");
                     break;
                 }
             }
