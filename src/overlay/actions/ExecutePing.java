@@ -28,7 +28,7 @@ class ExecutePing implements Action{
             return;
         }
         int time = CommonState.getIntTime();
-        System.out.println("Nodo "+protocol.getCurrentId()+" mandando ping para "+target+"    "+time);
+        //System.out.println("Nodo "+protocol.getCurrentId()+" mandando ping para "+target+"    "+time);
         
         Utils.send(
                 protocol.getCurrentId(),

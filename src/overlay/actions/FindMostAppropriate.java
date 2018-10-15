@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
+import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.core.Node;
 import peersim.edsim.EDSimulator;
@@ -69,8 +70,12 @@ public class FindMostAppropriate implements Action{
         int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId(), protocol);
         
         if(indexMostAppropriate >= 0) {
+            System.out.println("Nodo  "+protocol.getCurrentId()+"   ativou o nodo "+indexMostAppropriate+"      "+CommonState.getIntTime());
+            protocol.printTimestamp();
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);
             target.setStatus(true);
+        } else{
+            System.out.println("Nodo "+protocol.getCurrentId()+"   tem o timestamp sem falhas");
         }
     }
     

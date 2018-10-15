@@ -111,25 +111,18 @@ public class VCubeProtocol implements EDProtocol {
     }
     
     public void removeVerifyTimestamp(int startTime) {        
-        VerifyTimestampLookup foo = new VerifyTimestampLookup();
-        VerifyTimestampPut fooo = new VerifyTimestampPut();
-        VerifyTimestampPing foooo = new VerifyTimestampPing();
-        System.out.println("Time: "+startTime);        
         for(int i = 0; i < processQueue.size(); i++) {
-            System.out.print(" "+processQueue.get(i).getStartTime()+", ");
             Action process = processQueue.get(i);
             if(process.getStartTime() == startTime) {
-                System.out.println("Removendo");
                 processQueue.remove(i);
                 break;                
             }
         }
-        System.out.println("");
     }
 
     public void printTimestamp() {
-        //for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
+        for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
         
-        //System.out.println("");
+        System.out.println("");
     }
 }

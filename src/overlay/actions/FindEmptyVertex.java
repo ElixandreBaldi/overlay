@@ -10,6 +10,7 @@ import java.util.List;
 import overlay.Responsables;
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
+import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.core.Node;
 import peersim.edsim.EDSimulator;
@@ -29,7 +30,10 @@ public class FindEmptyVertex implements Action{
         short fuller = Utils.findFuller(protocol.getTimestamp().clone());
         
         if(fuller == -1) protocol.printTimestamp();
-        else EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);
+        else {
+            System.out.println("Nodo "+protocol.getCurrentId()+"    encontrou o nodo mais sobrecarregado: "+fuller+"      "+CommonState.getIntTime());
+            EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);
+        }
     }
     
     @Override
