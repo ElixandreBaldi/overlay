@@ -74,4 +74,8 @@ public class FindMostAppropriate implements Action{
         }
     }
     
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

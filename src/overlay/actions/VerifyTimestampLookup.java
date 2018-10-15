@@ -39,7 +39,7 @@ public class VerifyTimestampLookup implements Action{
         if(CommonState.getIntTime() - startTime >= 100) {            
             Utils.executeLookup(hash, node, protocol);
         } else {
-            Utils.addVerifyTimestampLookup(hash, node, startTime);
+            Utils.addVerifyTimestampLookup(protocol, hash, node, startTime);
         }
     }
     

@@ -32,4 +32,9 @@ public class FindEmptyVertex implements Action{
         else EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);
     }
     
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
+    
 }

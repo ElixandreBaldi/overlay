@@ -110,36 +110,26 @@ public class VCubeProtocol implements EDProtocol {
         this.timestamp[currentId] = 0;
     }
     
-    public void removeVerifyTimestamp(int startTime) {
+    public void removeVerifyTimestamp(int startTime) {        
         VerifyTimestampLookup foo = new VerifyTimestampLookup();
         VerifyTimestampPut fooo = new VerifyTimestampPut();
         VerifyTimestampPing foooo = new VerifyTimestampPing();
-        for(int i = 0; i < processQueue.size(); i++) {            
-            if(processQueue.get(i).getClass().equals(foo.getClass())) {
-                VerifyTimestampLookup process = (VerifyTimestampLookup) processQueue.get(i);
-                if(process.getStartTime() == startTime) {
-                    processQueue.remove(i);
-                    break;
-                }
-            } else if (processQueue.get(i).getClass().equals(fooo.getClass())) {
-                VerifyTimestampPut process = (VerifyTimestampPut) processQueue.get(i);
-                if(process.getStartTime() == startTime) {
-                    processQueue.remove(i);
-                    break;
-                }
-            } else if (processQueue.get(i).getClass().equals(foooo.getClass())) {
-                VerifyTimestampPing process = (VerifyTimestampPing) processQueue.get(i);
-                if(process.getStartTime() == startTime) {
-                    processQueue.remove(i);                    
-                    break;
-                }
+        System.out.println("Time: "+startTime);        
+        for(int i = 0; i < processQueue.size(); i++) {
+            System.out.print(" "+processQueue.get(i).getStartTime()+", ");
+            Action process = processQueue.get(i);
+            if(process.getStartTime() == startTime) {
+                System.out.println("Removendo");
+                processQueue.remove(i);
+                break;                
             }
         }
+        System.out.println("");
     }
 
     public void printTimestamp() {
-        for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
+        //for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
         
-        System.out.println("");
+        //System.out.println("");
     }
 }

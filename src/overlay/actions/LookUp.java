@@ -58,4 +58,9 @@ public class LookUp implements Action{
             node.getProtocol(tid), 
             new LockupAnswer(protocol.getCurrentId(), lookupTrue, key, startTime));
     }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

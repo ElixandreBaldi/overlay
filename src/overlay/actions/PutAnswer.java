@@ -37,4 +37,9 @@ public class PutAnswer implements Action{
             Utils.executePut(hash, node, protocol);
         }
     }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

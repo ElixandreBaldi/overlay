@@ -111,26 +111,16 @@ public class Utils {
         return s.toString();
     }        
     
-    public static void addVerifyTimestampLookup(byte[] hash, Node node, int time) {
-        EDSimulator.add(1, 
-            new VerifyTimestampLookup(time, hash),
-            node,
-            VCubeCreate.getPid());
+    public static void addVerifyTimestampLookup(VCubeProtocol protocol, byte[] hash, Node node, int time) {
+        protocol.getProcessQueue().add(new VerifyTimestampLookup(time, hash));        
     }
     
-    public static void addVerifyTimestampPut(byte[] hash, Node node, int time) {
-        EDSimulator.add(1, 
-            new VerifyTimestampPut(time, hash),
-            node,
-            VCubeCreate.getPid());
+    public static void addVerifyTimestampPut(VCubeProtocol protocol, byte[] hash, Node node, int time) {        
+        protocol.getProcessQueue().add(new VerifyTimestampPut(time, hash));
     }
     
-    public static void addVerifyTimestampPing(Node node, int time, short target) {
-        EDSimulator.add(
-            1, 
-            new VerifyTimestampPing(time, target),
-            node,
-            VCubeCreate.getPid());
+    public static void addVerifyTimestampPing(VCubeProtocol protocol, Node node, int time, short target) {
+        protocol.getProcessQueue().add(new VerifyTimestampPing(time, target));
     }
     
     public static String getRandomString() {
@@ -149,7 +139,7 @@ public class Utils {
                 node.getProtocol(tid), 
                 new LookUp(node.getIndex(), hash, time));
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
-        Utils.addVerifyTimestampLookup(hash, node, time);
+        Utils.addVerifyTimestampLookup(protocol, hash, node, time);
                  
     }
     
@@ -164,7 +154,7 @@ public class Utils {
             new Put(node.getIndex(), hash, time)
         );        
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
-        Utils.addVerifyTimestampPut(hash, node, time);
+        Utils.addVerifyTimestampPut(protocol, hash, node, time);
     }
 
     public static void printNetwork() {

@@ -39,7 +39,7 @@ public class VerifyTimestampPut implements Action{
         if(CommonState.getIntTime() - startTime >= 100) {            
             Utils.executePut(hash, node, protocol);
         } else {
-            Utils.addVerifyTimestampPut(hash, node, startTime);
+            Utils.addVerifyTimestampPut(protocol, hash, node, startTime);
         }
     }
     

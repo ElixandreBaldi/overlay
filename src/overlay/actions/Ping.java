@@ -39,4 +39,9 @@ public class Ping implements Action{
             new Pong(protocol.getCurrentId(), protocol.getTimestamp().clone(), startTime)
         );        
     }            
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

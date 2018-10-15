@@ -36,6 +36,11 @@ class ExecutePing implements Action{
                 node.getProtocol(protocol.getP().getTid()), 
                 new Ping(protocol.getCurrentId(), time));
         
-        Utils.addVerifyTimestampPing(node, time, target);
+        Utils.addVerifyTimestampPing(protocol, node, time, target);
+    }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
     }
 }

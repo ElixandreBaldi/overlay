@@ -37,4 +37,9 @@ public class LockupAnswer implements Action{
             Utils.executeLookup(hash, node, protocol);
         }
     }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

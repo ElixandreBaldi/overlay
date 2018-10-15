@@ -36,8 +36,8 @@ public class VerifyTimestampPing implements Action{
             if(protocol.getTimestamp()[target] % 2 == 0) protocol.getTimestamp()[target]++;
             
             System.out.println("Nodo "+protocol.getCurrentId()+"   detectou falha no nodo: "+target+"        no start: "+time+"        no tempo: "+CommonState.getIntTime());
-        } else {
-            Utils.addVerifyTimestampPing(node, time, target);
+        } else {            
+            Utils.addVerifyTimestampPing(protocol, node, time, target);
         }
     }    
 

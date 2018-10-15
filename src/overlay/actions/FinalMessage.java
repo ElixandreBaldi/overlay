@@ -43,4 +43,9 @@ public class FinalMessage implements Action{
 
         //System.out.println("Nodo "+node.getIndex()+" recebeu confirmação de entrega de "+this.sender.getIndex());
     }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

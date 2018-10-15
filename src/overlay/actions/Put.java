@@ -58,4 +58,9 @@ public class Put implements Action{
             node.getProtocol(tid), 
             new PutAnswer(protocol.getCurrentId(), putTrue, key, startTime));
     }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

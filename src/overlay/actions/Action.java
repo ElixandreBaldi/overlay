@@ -12,5 +12,7 @@ import peersim.core.Node;
  * @author elixandre
  */
 public interface Action {
-    void run(Node node, VCubeProtocol protocol, boolean execute);        
+    void run(Node node, VCubeProtocol protocol, boolean execute);
+    
+    int getStartTime();
 }

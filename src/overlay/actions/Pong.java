@@ -35,4 +35,9 @@ public class Pong implements Action{
         protocol.removeVerifyTimestamp(startTime);
         Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
     }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }

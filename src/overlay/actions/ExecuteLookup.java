@@ -14,7 +14,7 @@ import peersim.core.Node;
  * @author elixandre
  */
 public class ExecuteLookup implements Action{
-    private byte[] hash;
+    private byte[] hash;        
     
     public ExecuteLookup(byte[] hash) {
         this.hash = hash;
@@ -27,5 +27,10 @@ public class ExecuteLookup implements Action{
             return;
         }
         Utils.executeLookup(hash, node, protocol);
+    }
+
+    @Override
+    public int getStartTime() {
+        return -1;
     }
 }

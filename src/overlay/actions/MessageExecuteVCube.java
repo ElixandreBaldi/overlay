@@ -45,4 +45,9 @@ public class MessageExecuteVCube implements Action{
             EDSimulator.add(0, new ExecutePing(targets.get(i).shortValue()), Network.get(protocol.getCurrentId()), Utils.pid);            
         }        
     }
+    
+    @Override
+    public int getStartTime() {
+        return -1;
+    }
 }
