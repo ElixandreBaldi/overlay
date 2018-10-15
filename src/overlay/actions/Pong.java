@@ -8,6 +8,7 @@ package overlay.actions;
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
+import peersim.core.Network;
 import peersim.core.Node;
 
 /**
@@ -31,7 +32,13 @@ public class Pong implements Action{
             protocol.getProcessQueue().add(this);
             return;
         }
-        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Pong de nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());
+        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Pong de nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());
+        int time = CommonState.getIntTime();
+        int dif = time - startTime;
+        //System.out.println(protocol.getCurrentId()+";"+startTime+";"+time+";"+dif);
+        Utils.sumPingPong += dif;
+        Utils.nSumPingPong++;
+        
         protocol.removeVerifyTimestamp(startTime);
         Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
     }

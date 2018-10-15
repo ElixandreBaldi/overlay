@@ -29,9 +29,11 @@ public class FindEmptyVertex implements Action{
         }
         short fuller = Utils.findFuller(protocol.getTimestamp().clone());
         
-        if(fuller == -1) protocol.printTimestamp();
+        if(fuller == -1) {
+            //protocol.printTimestamp();
+        }
         else {
-            System.out.println("Nodo "+protocol.getCurrentId()+"    encontrou o nodo mais sobrecarregado: "+fuller+"      "+CommonState.getIntTime());
+            //System.out.println("Nodo "+protocol.getCurrentId()+"    encontrou o nodo mais sobrecarregado: "+fuller+"      "+CommonState.getIntTime());
             EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);
         }
     }

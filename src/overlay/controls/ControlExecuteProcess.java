@@ -28,9 +28,8 @@ public class ControlExecuteProcess implements Control {
     public boolean execute() {        
         for(int i = 0; i < Network.size(); i++){
             ExecuteProcess message = new ExecuteProcess();            
-            EDSimulator.add(1, message, Network.get(i), pid);            
-        }
-        //System.out.println("");
+            EDSimulator.add(1, message, Network.get(i), pid);
+        }        
         
         return false;
     }

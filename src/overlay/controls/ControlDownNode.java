@@ -34,7 +34,7 @@ public class ControlDownNode implements Control{
                 target = (VCubeProtocol) Network.get(CommonState.r.nextInt(size)).getProtocol(pid);
             } while (target == null || !target.getStatus());            
             target.setStatus(false);
-            System.out.println("saiu: "+target.getCurrentId());
+            //System.out.println("saiu: "+target.getCurrentId());
             Utils.countNodeDown++;
         }
         return false;

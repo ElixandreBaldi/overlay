@@ -31,14 +31,10 @@ public class ControlExecutePut implements Control {
     
     public boolean execute() {                        
         byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");
-        //System.out.println(Utils.stringHexa(hash));
         
         ExecutePut message = new ExecutePut(hash);
-        EDSimulator.add(50, message, Utils.getRandomNode(), pid);  
-        /*if(VCubeCreate.flag2) {
-            EDSimulator.add(5, message, Network.get(5), pid);
-            VCubeCreate.flag2 = false;
-        } */       
+        EDSimulator.add(50, message, Utils.getRandomNode(), pid);
+              
         return false;
     }
 }

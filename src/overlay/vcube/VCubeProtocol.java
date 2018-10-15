@@ -106,7 +106,7 @@ public class VCubeProtocol implements EDProtocol {
     
     public void setTimestamp(int size) {
         this.timestamp = new short[size];        
-        Arrays.fill(this.timestamp, (byte) 1);
+        Arrays.fill(this.timestamp, (short) 2);
         this.timestamp[currentId] = 0;
     }
     
@@ -121,8 +121,8 @@ public class VCubeProtocol implements EDProtocol {
     }
 
     public void printTimestamp() {
-        for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
+        //for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
         
-        System.out.println("");
+        //System.out.println("");
     }
 }

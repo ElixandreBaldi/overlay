@@ -34,13 +34,19 @@ import peersim.transport.Transport;
  * @author elixandrebaldi
  */
 public class Utils {
-    static final public int timestampLimit = 1500;
+    static final public int timestampLimit = 500;
     
     static public boolean flagDown = true;
     
     static public int countNodeDown = 0;    
     
     static public int pid = 0;
+    
+    static public int repetation = 0;
+    
+    static public int sumPingPong = 0;
+    
+    static public int nSumPingPong = 0;
     
     static public void send(int sender, int target, Protocol t, Action message) {        
         Transport transp = (Transport) t;        
@@ -153,7 +159,7 @@ public class Utils {
             node.getProtocol(tid),
             new Put(node.getIndex(), hash, time)
         );        
-        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
+        System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
         Utils.addVerifyTimestampPut(protocol, hash, node, time);
     }
 

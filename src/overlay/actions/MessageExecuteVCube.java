@@ -30,8 +30,7 @@ public class MessageExecuteVCube implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol, boolean execute) {         
         Parameters p = protocol.getP();        
-        int pid = VCubeCreate.getPid();
-        Transport t = (Transport) node.getProtocol(p.getTid());
+        int pid = VCubeCreate.getPid();        
         short[] timestamp = protocol.getTimestamp();
         
         ArrayList<Integer> targets = new ArrayList<>();        
@@ -42,7 +41,7 @@ public class MessageExecuteVCube implements Action{
         }
         
         for(int i = 0; i < targets.size(); i++) {
-            EDSimulator.add(0, new ExecutePing(targets.get(i).shortValue()), Network.get(protocol.getCurrentId()), Utils.pid);            
+            protocol.getProcessQueue().add(new ExecutePing(targets.get(i).shortValue()));
         }        
     }
     
