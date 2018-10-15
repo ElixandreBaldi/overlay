@@ -32,7 +32,7 @@ public class FindMostAppropriate implements Action{
         return count;
     }
     
-    public int findMostAppropriate(short[] timestamp, int fuller){        
+    public int findMostAppropriate(short[] timestamp, int fuller, VCubeProtocol protocol){        
         List<Short> freeVertex = new ArrayList<>();
         int countBit = 0;
         short indexMostAppropriate = -1;
@@ -50,7 +50,8 @@ public class FindMostAppropriate implements Action{
         
         if(freeVertex.size() == 0) {
             short newFuller = Utils.findFuller(timestamp.clone());
-            EDSimulator.add(0, new FindMostAppropriate(), Network.get(newFuller), Utils.pid);
+            if(newFuller == -1) protocol.printTimestamp();
+            else EDSimulator.add(0, new FindMostAppropriate(), Network.get(newFuller), Utils.pid);
             
             return -1;
         }
@@ -65,7 +66,7 @@ public class FindMostAppropriate implements Action{
             return;
         }
         
-        int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId());
+        int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId(), protocol);
         
         if(indexMostAppropriate >= 0) {
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);

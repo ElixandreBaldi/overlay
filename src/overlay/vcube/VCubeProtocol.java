@@ -130,11 +130,16 @@ public class VCubeProtocol implements EDProtocol {
             } else if (processQueue.get(i).getClass().equals(foooo.getClass())) {
                 VerifyTimestampPing process = (VerifyTimestampPing) processQueue.get(i);
                 if(process.getStartTime() == startTime) {
-                    processQueue.remove(i);
-                    System.out.println("Removendo da fila: ");
+                    processQueue.remove(i);                    
                     break;
                 }
             }
         }
+    }
+
+    public void printTimestamp() {
+        for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
+        
+        System.out.println("");
     }
 }

@@ -28,7 +28,8 @@ public class FindEmptyVertex implements Action{
         }
         short fuller = Utils.findFuller(protocol.getTimestamp().clone());
         
-        EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);
+        if(fuller == -1) protocol.printTimestamp();
+        else EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);
     }
     
 }
