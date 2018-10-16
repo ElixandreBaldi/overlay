@@ -9,7 +9,9 @@ import java.util.Queue;
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
+import peersim.core.Network;
 import peersim.core.Node;
+import peersim.edsim.EDSimulator;
 import peersim.transport.Transport;
 
 /**
@@ -25,19 +27,27 @@ public class Ping implements Action{
         this.startTime = startTime;
     }
 
+    public Ping() {        
+    }
+
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {        
-        if(execute) {
-            protocol.getProcessQueue().add(this);            
-            return;
+    public void run(Node node, VCubeProtocol protocol) {
+        Action message = null;
+        int scheduler = 1;
+        if(protocol.getStatus()){
+            //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender+"  "+startTime+" "+CommonState.getIntTime());        
+            message = new PongOk(protocol.getCurrentId(), protocol.getTimestamp().clone(), startTime);
+        } else{
+            //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender+"  "+startTime+" "+CommonState.getIntTime()+" estamos falhos");        
+            message = new PongError(protocol.getCurrentId(), protocol.getTimestamp().clone(), startTime);
+            scheduler = 3;
         }
-        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender);        
-        Utils.send(
-            protocol.getCurrentId(),
-            this.sender, 
-            (Transport) node.getProtocol(protocol.getP().getTid()), 
-            new Pong(protocol.getCurrentId(), protocol.getTimestamp().clone(), startTime)
-        );        
+        
+        EDSimulator.add(
+            scheduler, 
+            message, 
+            Network.get(this.sender),
+            Utils.pid);
     }            
     
     @Override

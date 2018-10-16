@@ -51,31 +51,32 @@ public class FindMostAppropriate implements Action{
         
         if(freeVertex.size() == 0) {
             short newFuller = Utils.findFuller(timestamp.clone());
-            if(newFuller == -1) protocol.printTimestamp();
-            else EDSimulator.add(0, new FindMostAppropriate(), Network.get(newFuller), Utils.pid);
+            if(newFuller >= 0) {
+                EDSimulator.add(1, new FindMostAppropriate(), Network.get(newFuller), Utils.pid);                
+            }
             
-            return -1;
+            return -2;
         }
         
         return indexMostAppropriate;
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        if(execute) {
-            protocol.getProcessQueue().add(this);            
-            return;
-        }
+    public void run(Node node, VCubeProtocol protocol) {        
         
         int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId(), protocol);
         
         if(indexMostAppropriate >= 0) {
-            //System.out.println("Nodo  "+protocol.getCurrentId()+"   ativou o nodo "+indexMostAppropriate+"      "+CommonState.getIntTime());
-            protocol.printTimestamp();
+            System.out.println("Nodo  "+protocol.getCurrentId()+"   ativou o nodo "+indexMostAppropriate+"      "+CommonState.getIntTime());
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);
             target.setStatus(true);
-        } else{
-            //System.out.println("Nodo "+protocol.getCurrentId()+"   tem o timestamp sem falhas");
+            Utils.countNodeDown--;
+        } else if(indexMostAppropriate == -1){
+            protocol.printTimestamp();
+            System.out.println("Nodo "+protocol.getCurrentId()+"   tem o timestamp sem falhas");
+        } else if(indexMostAppropriate == -2){
+            protocol.printTimestamp();
+            System.out.println("Nodo "+protocol.getCurrentId()+"  delegou o findMostAppropriate");
         }
     }
     

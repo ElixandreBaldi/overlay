@@ -21,11 +21,7 @@ public class ExecuteLookup implements Action{
     }       
     
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        if(execute) {
-            protocol.getProcessQueue().add(this);           
-            return;
-        }
+    public void run(Node node, VCubeProtocol protocol) {        
         Utils.executeLookup(hash, node, protocol);
     }
 

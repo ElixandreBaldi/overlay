@@ -5,16 +5,10 @@
  */
 package overlay.controls;
 
-import overlay.actions.LookUp;
-
-import overlay.Utils;
-import overlay.actions.ExecuteProcess;
-import overlay.actions.MessageExecuteVCube;
+import overlay.actions.ExecutePing;
 import peersim.config.Configuration;
-import peersim.core.CommonState;
 import peersim.core.Control;
 import peersim.core.Network;
-import peersim.core.Node;
 import peersim.edsim.EDSimulator;
 
 
@@ -28,22 +22,8 @@ public class ControlVCube implements Control {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
-    public boolean execute() {
-        if(!(Utils.timestampLimit.intValue() > CommonState.getIntTime() - Utils.lastVCube)) {
-            Utils.lastVCube = CommonState.getIntTime();
-            for(int i = 0; i < Network.size(); i++){
-                MessageExecuteVCube executeVCube = new MessageExecuteVCube();
-                EDSimulator.add(0, executeVCube, Network.get(i), pid);                       
-            }                
-            //System.out.println("");
-            Utils.repetation++;
-            if(Utils.repetation > 32){
-                float media = Utils.sumPingPong.divide(Utils.nSumPingPong).floatValue();
-                System.out.println(Utils.sumPingPong+";"+Utils.nSumPingPong+";"+media);
-                System.out.println("Maior ping pong:  "+Utils.timeouter);
-                System.exit(0);
-            }        
-        }
+    public boolean execute() {                
+        for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);       
         return false;
     }
 }

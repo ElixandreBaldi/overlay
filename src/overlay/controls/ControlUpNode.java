@@ -36,11 +36,10 @@ public class ControlUpNode implements Control{
             Node target = null;
             VCubeProtocol protocol;
             do {
-                Random r = new Random(123456);
-                target = Network.get(r.nextInt(size));
-                protocol = (VCubeProtocol) target.getProtocol(Utils.pid);
-            } while (target == null || !protocol.getStatus());
-            
+                Random r = new Random();  
+                target = Network.get(r.nextInt(size));                
+                protocol = (VCubeProtocol) target.getProtocol(Utils.pid);                                
+            } while (target == null || !protocol.getStatus());                        
             EDSimulator.add(1, new FindEmptyVertex(), target, Utils.pid);
         }
         

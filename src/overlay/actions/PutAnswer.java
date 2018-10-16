@@ -29,10 +29,9 @@ public class PutAnswer implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
+    public void run(Node node, VCubeProtocol protocol) {
         if(putTrue) {
-            System.out.println("Nodo: "+node.getIndex()+"   Confiramação de Put Recebida de: "+this.sender);
-            protocol.removeVerifyTimestamp(startTime);
+            System.out.println("Nodo: "+node.getIndex()+"   Confiramação de Put Recebida de: "+this.sender);            
         } else {
             Utils.executePut(hash, node, protocol);
         }

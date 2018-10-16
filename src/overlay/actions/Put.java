@@ -13,6 +13,7 @@ import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.core.Node;
+import peersim.edsim.EDSimulator;
 import peersim.transport.Transport;
 
 /**
@@ -40,23 +41,13 @@ public class Put implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        if(execute) {
-            protocol.getProcessQueue().add(this);            
-            return;
-        }
-        Parameters p = protocol.getP();
-        int tid = p.getTid();
+    public void run(Node node, VCubeProtocol protocol) {        
+        Parameters p = protocol.getP();        
         boolean putTrue = true;
         if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) putTrue = false;
             
         //System.out.println("Recebeu Put: "+protocol.getCurrentId()+" "+putTrue);
-        
-        Utils.send(
-            node.getIndex(), 
-            this.sender, 
-            node.getProtocol(tid), 
-            new PutAnswer(protocol.getCurrentId(), putTrue, key, startTime));
+        EDSimulator.add(1, new PutAnswer(protocol.getCurrentId(), putTrue, key, startTime), Network.get(this.sender), Utils.pid);
     }
     
     @Override

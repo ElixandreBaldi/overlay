@@ -14,15 +14,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import overlay.Utils;
 import peersim.config.Configuration;
 import peersim.core.Node;
 import peersim.edsim.EDProtocol;
 import peersim.transport.Transport;
 import overlay.actions.Action;
 import overlay.actions.LockupAnswer;
-import overlay.actions.VerifyTimestampLookup;
-import overlay.actions.VerifyTimestampPing;
-import overlay.actions.VerifyTimestampPut;
+import overlay.actions.Ping;
 
 /**
  *
@@ -40,9 +39,7 @@ public class VCubeProtocol implements EDProtocol {
     
     private Parameters p;
     
-    private short[] timestamp;
-    
-    private int timeout;
+    private short[] timestamp;        
     
     private List<Action> processQueue;
         
@@ -51,24 +48,25 @@ public class VCubeProtocol implements EDProtocol {
         this.p = new Parameters();
         this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);                     
         this.processQueue = new LinkedList<>();
-        this.status = true;
-        this.timeout = 50;
+        this.status = true;        
     }
 
     public VCubeProtocol(String prefix, short currentId, Parameters p, short[] timestamp){
         this.prefix = prefix;        
         this.currentId = currentId;
-        this.p = p.clone(); 
-        this.timeout = 50;
+        this.p = p.clone();         
         this.timestamp = new short[timestamp.length];       
         for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
         this.status = true;
     }
     
     public void processEvent(Node node, int pid, Object o) {
-        if(status) {
+        Ping foo = new Ping();
+        if(this.status || o.getClass().equals(foo.getClass())) {
             Action event = (Action) o;
-            event.run(node, (VCubeProtocol) this, true);        
+            event.run(node, (VCubeProtocol) this);        
+        } else {
+            Utils.hit++;
         }
     }
 
@@ -79,11 +77,7 @@ public class VCubeProtocol implements EDProtocol {
     public void setStatus(boolean status) {
         this.status = status;
         
-        if(!status) {
-            this.timeout = 50;
-            this.setTimestamp(timestamp.length);
-            this.processQueue = new LinkedList<>();
-        }
+        if(!status) this.setTimestamp(timestamp.length);                    
     }
     
     public List<Action> getProcessQueue() {
@@ -118,21 +112,11 @@ public class VCubeProtocol implements EDProtocol {
         this.timestamp = new short[size];        
         Arrays.fill(this.timestamp, (short) 2);
         this.timestamp[currentId] = 0;
-    }
-    
-    public void removeVerifyTimestamp(int startTime) {        
-        for(int i = 0; i < processQueue.size(); i++) {
-            Action process = processQueue.get(i);
-            if(process.getStartTime() == startTime) {
-                processQueue.remove(i);
-                break;                
-            }
-        }
-    }
+    }        
 
     public void printTimestamp() {
-        //for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
+        for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
         
-        //System.out.println("");
+        System.out.println("");
     }
 }

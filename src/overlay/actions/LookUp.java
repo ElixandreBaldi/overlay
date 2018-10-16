@@ -13,6 +13,7 @@ import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.core.Node;
+import peersim.edsim.EDSimulator;
 import peersim.transport.Transport;
 
 /**
@@ -40,23 +41,14 @@ public class LookUp implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        if(execute) {
-            protocol.getProcessQueue().add(this);            
-            return;
-        }
+    public void run(Node node, VCubeProtocol protocol) {        
         Parameters p = protocol.getP();
         int tid = p.getTid();
         boolean lookupTrue = true;
         if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) lookupTrue = false;
             
         //System.out.println("Recebeu Lookup: "+protocol.getCurrentId()+" "+lookupTrue);
-        
-        Utils.send(
-            node.getIndex(), 
-            this.sender, 
-            node.getProtocol(tid), 
-            new LockupAnswer(protocol.getCurrentId(), lookupTrue, key, startTime));
+        EDSimulator.add(1, new LockupAnswer(protocol.getCurrentId(), lookupTrue, key, startTime), Network.get(this.sender), Utils.pid);
     }
     
     @Override

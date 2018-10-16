@@ -8,7 +8,6 @@ package overlay.controls;
 import java.util.UUID;
 import overlay.Utils;
 import overlay.actions.ExecuteLookup;
-import overlay.actions.ExecuteProcess;
 import overlay.actions.ExecutePut;
 import peersim.config.Configuration;
 import peersim.core.CommonState;
@@ -30,10 +29,8 @@ public class ControlExecutePut implements Control {
     }        
     
     public boolean execute() {                        
-        byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");
-        
-        ExecutePut message = new ExecutePut(hash);
-        EDSimulator.add(50, message, Utils.getRandomNode(), pid);
+        byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");                
+        EDSimulator.add(1, new ExecutePut(hash), Utils.getRandomNode(), pid);
               
         return false;
     }

@@ -29,13 +29,8 @@ public class LockupAnswer implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        if(lookupTrue) {
-            //System.out.println("Nodo: "+node.getIndex()+"   Mensagem Recebida de: "+this.sender);
-            protocol.removeVerifyTimestamp(startTime);
-        } else {
-            Utils.executeLookup(hash, node, protocol);
-        }
+    public void run(Node node, VCubeProtocol protocol) {
+        if(!lookupTrue) Utils.executeLookup(hash, node, protocol);        
     }
     
     @Override

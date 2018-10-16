@@ -22,19 +22,16 @@ import peersim.edsim.EDSimulator;
 public class FindEmptyVertex implements Action{
     
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        if(execute) {
-            protocol.getProcessQueue().add(this);            
-            return;
-        }
-        short fuller = Utils.findFuller(protocol.getTimestamp().clone());
+    public void run(Node node, VCubeProtocol protocol) {
         
-        if(fuller == -1) {
-            //protocol.printTimestamp();
+        short fuller = Utils.findFuller(protocol.getTimestamp().clone());
+        //System.out.println("aslçd" + fuller);
+        if(fuller >= 0) {
+            //System.out.println("Nodo "+protocol.getCurrentId()+"    encontrou o nodo mais sobrecarregado: "+fuller+"      "+CommonState.getIntTime());
+            EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);            
         }
         else {
-            //System.out.println("Nodo "+protocol.getCurrentId()+"    encontrou o nodo mais sobrecarregado: "+fuller+"      "+CommonState.getIntTime());
-            EDSimulator.add(0, new FindMostAppropriate(), Network.get(fuller), Utils.pid);
+            //protocol.printTimestamp();
         }
     }
     

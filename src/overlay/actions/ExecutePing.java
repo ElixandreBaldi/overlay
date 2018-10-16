@@ -5,38 +5,47 @@
  */
 package overlay.actions;
 
+import java.util.ArrayList;
 import overlay.Utils;
+import overlay.vcube.Cis;
+import overlay.vcube.Parameters;
+import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
+import peersim.core.Network;
 import peersim.core.Node;
+import peersim.edsim.EDSimulator;
+import peersim.transport.Transport;
+
 
 /**
  *
  * @author elixandre
  */
-class ExecutePing implements Action{
-    private short target;
-    
-    public ExecutePing(short target) {
-        this.target = target;
-    }        
+public class ExecutePing implements Action{
 
+    public ExecutePing() {   
+        //System.out.println("oiiii");
+    }
     @Override
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {
-        if(execute) {
-            protocol.getProcessQueue().add(this);           
-            return;
+    public void run(Node node, VCubeProtocol protocol) {
+        if(!protocol.getStatus()) return;
+        
+        Parameters p = protocol.getP();        
+        int pid = VCubeCreate.getPid();        
+        short[] timestamp = protocol.getTimestamp();
+        
+        ArrayList<Integer> targets = new ArrayList<>();        
+        int nCluster = VCubeCreate.getnCluster();
+        
+        for(int i = 1; i <= nCluster; i++) {
+            Cis.getTargets(node.getIndex(), i, targets, timestamp.clone());        
         }
+        
         int time = CommonState.getIntTime();
-        //System.out.println("Nodo "+protocol.getCurrentId()+" mandando ping para "+target+"    "+time);
-        
-        Utils.send(
-                protocol.getCurrentId(),
-                target, 
-                node.getProtocol(protocol.getP().getTid()), 
-                new Ping(protocol.getCurrentId(), time));
-        
-        Utils.addVerifyTimestampPing(protocol, node, time, target);
+        for(int i = 0; i < targets.size(); i++) {
+            EDSimulator.add(i+1, new Ping(protocol.getCurrentId(), time+i), Network.get(targets.get(i)), Utils.pid);            
+        }        
     }
     
     @Override

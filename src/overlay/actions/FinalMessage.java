@@ -35,11 +35,7 @@ public class FinalMessage implements Action{
     public void setSender(Node sender) {
         this.sender = sender;
     }
-    public void run(Node node, VCubeProtocol protocol, boolean execute) {  
-        if(execute) {            
-            protocol.getProcessQueue().add(this);            
-            return;
-        } 
+    public void run(Node node, VCubeProtocol protocol) {          
 
         //System.out.println("Nodo "+node.getIndex()+" recebeu confirmação de entrega de "+this.sender.getIndex());
     }

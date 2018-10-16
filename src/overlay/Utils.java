@@ -12,14 +12,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import overlay.actions.Ping;
 import overlay.actions.Action;
-import overlay.actions.LockupAnswer;
 import overlay.actions.LookUp;
 import overlay.actions.Put;
-import overlay.actions.VerifyTimestampLookup;
-import overlay.actions.VerifyTimestampPing;
-import overlay.actions.VerifyTimestampPut;
 import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
@@ -33,8 +28,7 @@ import peersim.transport.Transport;
  *
  * @author elixandrebaldi
  */
-public class Utils {
-    static public BigInteger timestampLimit = new BigInteger("50");
+public class Utils {    
     
     static public boolean flagDown = true;
     
@@ -42,20 +36,9 @@ public class Utils {
     
     static public int pid = 0;
     
-    static public int repetation = 0;
-    
-    static public BigInteger sumPingPong = new BigInteger("0");
-    
-    static public BigInteger nSumPingPong = new BigInteger("0");
-    
-    static public int lastVCube = -1;
-    
-    static public int timeouter = 0;
-    
-    static public void send(int sender, int target, Protocol t, Action message) {        
-        Transport transp = (Transport) t;        
-        transp.send(Network.get(sender), Network.get(target), message, VCubeCreate.getPid());
-    }
+    static public int repetation = 0;                
+
+    public static long hit = 0;
     
     static public void updateTimestampLocal(short[] timestampLocal, short[] timestampSender, int indexLocal, int indexSender) {        
         for(int i = 0; i < timestampLocal.length; i++) {
@@ -121,18 +104,6 @@ public class Utils {
         return s.toString();
     }        
     
-    public static void addVerifyTimestampLookup(VCubeProtocol protocol, byte[] hash, Node node, int time) {
-        protocol.getProcessQueue().add(new VerifyTimestampLookup(time, hash));        
-    }
-    
-    public static void addVerifyTimestampPut(VCubeProtocol protocol, byte[] hash, Node node, int time) {        
-        protocol.getProcessQueue().add(new VerifyTimestampPut(time, hash));
-    }
-    
-    public static void addVerifyTimestampPing(VCubeProtocol protocol, Node node, int time, short target) {
-        protocol.getProcessQueue().add(new VerifyTimestampPing(time, target));
-    }
-    
     public static String getRandomString() {
         byte[] array = new byte[20]; // length is bounded by 7
         new Random().nextBytes(array);
@@ -143,28 +114,15 @@ public class Utils {
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());
         int tid = protocol.getP().getTid();
         int time = CommonState.getIntTime();
-        Utils.send(
-                node.getIndex(),
-                p, 
-                node.getProtocol(tid), 
-                new LookUp(node.getIndex(), hash, time));
+        EDSimulator.add(1, new LookUp(node.getIndex(), hash, time), Network.get(p), Utils.pid);        
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
-        Utils.addVerifyTimestampLookup(protocol, hash, node, time);
-                 
     }
     
     public static void executePut(byte[] hash, Node node, VCubeProtocol protocol) {
-        short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());
-        int tid = protocol.getP().getTid();
+        short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
         int time = CommonState.getIntTime();
-        Utils.send(
-            node.getIndex(),
-            p,
-            node.getProtocol(tid),
-            new Put(node.getIndex(), hash, time)
-        );        
-        System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);
-        Utils.addVerifyTimestampPut(protocol, hash, node, time);
+        EDSimulator.add(1, new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);        
+        System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);        
     }
 
     public static void printNetwork() {
@@ -206,5 +164,9 @@ public class Utils {
             }
         }        
         return fuller;
+    }
+
+    public static boolean isPair(short s) {
+        return s % 2 == 0;
     }
 }
