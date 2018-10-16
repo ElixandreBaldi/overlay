@@ -32,7 +32,7 @@ public class VerifyTimestampPing implements Action{
             protocol.getProcessQueue().add(this);            
             return;
         }
-        if(CommonState.getIntTime() - time >= Utils.timestampLimit) {
+        if(CommonState.getIntTime() - time >= Utils.timestampLimit.intValue()) {
             if(protocol.getTimestamp()[target] % 2 == 0) protocol.getTimestamp()[target]++;
             
             //System.out.println("Nodo "+protocol.getCurrentId()+"   detectou falha no nodo: "+target+"        no start: "+time+"        no tempo: "+CommonState.getIntTime());

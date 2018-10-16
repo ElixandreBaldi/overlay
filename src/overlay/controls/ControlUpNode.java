@@ -5,6 +5,7 @@
  */
 package overlay.controls;
 
+import java.util.Random;
 import overlay.Utils;
 import overlay.actions.Action;
 import overlay.actions.FindEmptyVertex;
@@ -35,7 +36,8 @@ public class ControlUpNode implements Control{
             Node target = null;
             VCubeProtocol protocol;
             do {
-                target = Network.get(CommonState.r.nextInt(size));
+                Random r = new Random(123456);
+                target = Network.get(r.nextInt(size));
                 protocol = (VCubeProtocol) target.getProtocol(Utils.pid);
             } while (target == null || !protocol.getStatus());
             

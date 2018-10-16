@@ -36,7 +36,7 @@ public class VerifyTimestampLookup implements Action{
             protocol.getProcessQueue().add(this);            
             return;
         }        
-        if(CommonState.getIntTime() - startTime >= Utils.timestampLimit) {            
+        if(CommonState.getIntTime() - startTime >= Utils.timestampLimit.intValue()) {            
             Utils.executeLookup(hash, node, protocol);
         } else {
             Utils.addVerifyTimestampLookup(protocol, hash, node, startTime);

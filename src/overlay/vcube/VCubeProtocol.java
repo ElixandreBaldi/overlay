@@ -42,6 +42,8 @@ public class VCubeProtocol implements EDProtocol {
     
     private short[] timestamp;
     
+    private int timeout;
+    
     private List<Action> processQueue;
         
     public VCubeProtocol(String prefix) {
@@ -50,12 +52,14 @@ public class VCubeProtocol implements EDProtocol {
         this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);                     
         this.processQueue = new LinkedList<>();
         this.status = true;
+        this.timeout = 50;
     }
 
     public VCubeProtocol(String prefix, short currentId, Parameters p, short[] timestamp){
         this.prefix = prefix;        
         this.currentId = currentId;
-        this.p = p.clone();   
+        this.p = p.clone(); 
+        this.timeout = 50;
         this.timestamp = new short[timestamp.length];       
         for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
         this.status = true;
@@ -74,6 +78,12 @@ public class VCubeProtocol implements EDProtocol {
 
     public void setStatus(boolean status) {
         this.status = status;
+        
+        if(!status) {
+            this.timeout = 50;
+            this.setTimestamp(timestamp.length);
+            this.processQueue = new LinkedList<>();
+        }
     }
     
     public List<Action> getProcessQueue() {

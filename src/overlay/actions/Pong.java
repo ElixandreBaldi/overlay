@@ -5,6 +5,7 @@
  */
 package overlay.actions;
 
+import java.math.BigInteger;
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
@@ -35,10 +36,18 @@ public class Pong implements Action{
         //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Pong de nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());
         int time = CommonState.getIntTime();
         int dif = time - startTime;
+        if(dif > Utils.timeouter) Utils.timeouter = dif;
+        BigInteger difBig = new BigInteger(""+dif);
+        BigInteger oneBig = new BigInteger("1");
+        Utils.sumPingPong = Utils.sumPingPong.add(difBig);
+        Utils.nSumPingPong = Utils.nSumPingPong.add(oneBig);        
+        Utils.timestampLimit = Utils.sumPingPong.divide(Utils.nSumPingPong);        
+        
         //System.out.println(protocol.getCurrentId()+";"+startTime+";"+time+";"+dif);
-        Utils.sumPingPong += dif;
-        Utils.nSumPingPong++;
-        Utils.timestampLimit = Utils.sumPingPong / Utils.nSumPingPong;
+        
+        //protocol.updateEstimatedRTT();
+        //protocol.updateDevRTT();
+        //protocol.updateTimeoutInterval();                
         
         protocol.removeVerifyTimestamp(startTime);
         Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);

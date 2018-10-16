@@ -34,7 +34,7 @@ import peersim.transport.Transport;
  * @author elixandrebaldi
  */
 public class Utils {
-    static public int timestampLimit = 50;
+    static public BigInteger timestampLimit = new BigInteger("50");
     
     static public boolean flagDown = true;
     
@@ -44,11 +44,13 @@ public class Utils {
     
     static public int repetation = 0;
     
-    static public int sumPingPong = 0;
+    static public BigInteger sumPingPong = new BigInteger("0");
     
-    static public int nSumPingPong = 0;
+    static public BigInteger nSumPingPong = new BigInteger("0");
     
     static public int lastVCube = -1;
+    
+    static public int timeouter = 0;
     
     static public void send(int sender, int target, Protocol t, Action message) {        
         Transport transp = (Transport) t;        

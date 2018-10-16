@@ -36,7 +36,7 @@ public class VerifyTimestampPut implements Action{
             protocol.getProcessQueue().add(this);
             return;
         }        
-        if(CommonState.getIntTime() - startTime >= Utils.timestampLimit) {            
+        if(CommonState.getIntTime() - startTime >= Utils.timestampLimit.intValue()) {            
             Utils.executePut(hash, node, protocol);
         } else {
             Utils.addVerifyTimestampPut(protocol, hash, node, startTime);

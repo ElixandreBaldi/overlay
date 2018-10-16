@@ -7,7 +7,6 @@ package overlay.controls;
 
 import overlay.actions.LookUp;
 
-import java.math.BigInteger;
 import overlay.Utils;
 import overlay.actions.ExecuteProcess;
 import overlay.actions.MessageExecuteVCube;
@@ -30,7 +29,7 @@ public class ControlVCube implements Control {
     }        
     
     public boolean execute() {
-        if(!(Utils.timestampLimit > CommonState.getIntTime() - Utils.lastVCube)) {
+        if(!(Utils.timestampLimit.intValue() > CommonState.getIntTime() - Utils.lastVCube)) {
             Utils.lastVCube = CommonState.getIntTime();
             for(int i = 0; i < Network.size(); i++){
                 MessageExecuteVCube executeVCube = new MessageExecuteVCube();
@@ -39,8 +38,9 @@ public class ControlVCube implements Control {
             //System.out.println("");
             Utils.repetation++;
             if(Utils.repetation > 32){
-                float media = Utils.sumPingPong/(float)Utils.nSumPingPong;
+                float media = Utils.sumPingPong.divide(Utils.nSumPingPong).floatValue();
                 System.out.println(Utils.sumPingPong+";"+Utils.nSumPingPong+";"+media);
+                System.out.println("Maior ping pong:  "+Utils.timeouter);
                 System.exit(0);
             }        
         }
