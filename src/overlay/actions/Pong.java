@@ -38,6 +38,7 @@ public class Pong implements Action{
         //System.out.println(protocol.getCurrentId()+";"+startTime+";"+time+";"+dif);
         Utils.sumPingPong += dif;
         Utils.nSumPingPong++;
+        Utils.timestampLimit = Utils.sumPingPong / Utils.nSumPingPong;
         
         protocol.removeVerifyTimestamp(startTime);
         Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);

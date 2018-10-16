@@ -29,18 +29,21 @@ public class ControlVCube implements Control {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
-    public boolean execute() {        
-        for(int i = 0; i < Network.size(); i++){
-            MessageExecuteVCube executeVCube = new MessageExecuteVCube();
-            EDSimulator.add(0, executeVCube, Network.get(i), pid);                       
-        }                
-        //System.out.println("");
-        Utils.repetation++;
-        if(Utils.repetation > 32){
-            float media = Utils.sumPingPong/(float)Utils.nSumPingPong;
-            System.out.println(Utils.sumPingPong+";"+Utils.nSumPingPong+";"+media);
-            System.exit(0);
-        }        
+    public boolean execute() {
+        if(!(Utils.timestampLimit > CommonState.getIntTime() - Utils.lastVCube)) {
+            Utils.lastVCube = CommonState.getIntTime();
+            for(int i = 0; i < Network.size(); i++){
+                MessageExecuteVCube executeVCube = new MessageExecuteVCube();
+                EDSimulator.add(0, executeVCube, Network.get(i), pid);                       
+            }                
+            //System.out.println("");
+            Utils.repetation++;
+            if(Utils.repetation > 32){
+                float media = Utils.sumPingPong/(float)Utils.nSumPingPong;
+                System.out.println(Utils.sumPingPong+";"+Utils.nSumPingPong+";"+media);
+                System.exit(0);
+            }        
+        }
         return false;
     }
 }
