@@ -31,6 +31,9 @@ public class LookUp implements Action{
         this.key = key;   
         this.startTime = startTime;
     }
+
+    public LookUp() {        
+    }
     
     public int getSender() {
         return sender;
@@ -42,12 +45,9 @@ public class LookUp implements Action{
 
     @Override
     public void run(Node node, VCubeProtocol protocol) {        
-        Parameters p = protocol.getP();
-        int tid = p.getTid();
+        Parameters p = protocol.getP();        
         boolean lookupTrue = true;
-        if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) lookupTrue = false;
-            
-        //System.out.println("Recebeu Lookup: "+protocol.getCurrentId()+" "+lookupTrue);
+        if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) lookupTrue = false;                    
         EDSimulator.add(1, new LockupAnswer(protocol.getCurrentId(), lookupTrue, key, startTime), Network.get(this.sender), Utils.pid);
     }
     

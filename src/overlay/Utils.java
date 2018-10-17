@@ -38,7 +38,9 @@ public class Utils {
     
     static public int repetation = 0;                
 
-    public static long hit = 0;
+    public static long hitsLookup = 0;
+
+    public static long hitsPut = 0;
     
     static public void updateTimestampLocal(short[] timestampLocal, short[] timestampSender, int indexLocal, int indexSender) {        
         for(int i = 0; i < timestampLocal.length; i++) {
@@ -74,10 +76,11 @@ public class Utils {
     static public Node getRandomNode() {
         Node target;
         short size = (short) Network.size();
+        VCubeProtocol protocol = null;
         do{                                        
             target = Network.get(CommonState.r.nextInt(size));
-        } while(target == null || target.isUp() == false);
-        
+            protocol = (VCubeProtocol) target.getProtocol(Utils.pid);;
+        } while(target == null || !protocol.getStatus());        
         return target;
     }
     
@@ -110,12 +113,12 @@ public class Utils {
         return new String(array, Charset.forName("UTF-8"));        
     }
 
-    public static void executeLookup(byte[] hash, Node node, VCubeProtocol protocol) {
-        short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());
-        int tid = protocol.getP().getTid();
+    public static void executeLookup(byte[] hash, Node node, VCubeProtocol protocol) {        
+        short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
+        System.out.println(""+protocol.getTimestamp()[p]);
         int time = CommonState.getIntTime();
-        EDSimulator.add(1, new LookUp(node.getIndex(), hash, time), Network.get(p), Utils.pid);        
-        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
+        EDSimulator.add(1, new LookUp(node.getIndex(), hash, time), Network.get(p), Utils.pid);    
+        System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
     }
     
     public static void executePut(byte[] hash, Node node, VCubeProtocol protocol) {

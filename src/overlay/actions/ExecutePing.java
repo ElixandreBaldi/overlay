@@ -31,8 +31,7 @@ public class ExecutePing implements Action{
     public void run(Node node, VCubeProtocol protocol) {
         if(!protocol.getStatus()) return;
         
-        Parameters p = protocol.getP();        
-        int pid = VCubeCreate.getPid();        
+        Parameters p = protocol.getP();                
         short[] timestamp = protocol.getTimestamp();
         
         ArrayList<Integer> targets = new ArrayList<>();        

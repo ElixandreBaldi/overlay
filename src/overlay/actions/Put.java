@@ -31,6 +31,9 @@ public class Put implements Action{
         this.key = key;   
         this.startTime = startTime;
     }
+
+    public Put() {        
+    }
     
     public int getSender() {
         return sender;

@@ -28,15 +28,8 @@ public class ControlExecuteLookup implements Control {
     }        
     
     public boolean execute() {                        
-        byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");
-        //System.out.println(Utils.stringHexa(hash));
-        
-        ExecuteLookup message = new ExecuteLookup(hash);
-        EDSimulator.add(50, message, Utils.getRandomNode(), pid);  
-        /*if(VCubeCreate.flag1) {
-            EDSimulator.add(5, message, Network.get(3), pid);     
-            VCubeCreate.flag1 = false;
-        } */       
+        byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
+        EDSimulator.add(1, new ExecuteLookup(hash), Utils.getRandomNode(), Utils.pid);        
         return false;
     }
 }

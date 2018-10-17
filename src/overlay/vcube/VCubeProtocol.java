@@ -22,6 +22,9 @@ import peersim.transport.Transport;
 import overlay.actions.Action;
 import overlay.actions.LockupAnswer;
 import overlay.actions.Ping;
+import overlay.actions.Put;
+import peersim.core.Network;
+import peersim.edsim.EDSimulator;
 
 /**
  *
@@ -61,12 +64,27 @@ public class VCubeProtocol implements EDProtocol {
     }
     
     public void processEvent(Node node, int pid, Object o) {
-        Ping foo = new Ping();
+        Ping foo = new Ping();        
         if(this.status || o.getClass().equals(foo.getClass())) {
             Action event = (Action) o;
             event.run(node, (VCubeProtocol) this);        
         } else {
-            Utils.hit++;
+            LookUp fooL = new LookUp();
+            Put fooP = new Put();
+            
+            if(o.getClass().equals(fooL.getClass())) {                
+                fooL = (LookUp) o;
+                VCubeProtocol protocol = (VCubeProtocol) Network.get(fooL.getSender()).getProtocol(Utils.pid);
+                short p = Utils.responsibleKey(fooL.getKey(), protocol.getTimestamp().clone());
+                
+                EDSimulator.add(3, new LookUp(fooL.getSender(), fooL.getKey(), fooL.getStartTime()), Network.get(p), Utils.pid);
+                System.out.println("nodo: "+this.currentId+" status: "+this.status+"      timestamp: "+protocol.getTimestamp()[this.currentId]);
+                System.out.println("Nodo "+fooL.getSender()+" reeeeeenviando lookup para "+p);
+                Utils.hitsLookup++;
+            }
+            else if(o.getClass().equals(fooP.getClass())) {
+                Utils.hitsPut++;
+            }
         }
     }
 

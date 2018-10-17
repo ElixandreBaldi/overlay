@@ -30,7 +30,10 @@ public class PongError implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol) {
         //System.out.println("Nodo: "+protocol.getCurrentId()+" detectou falha no nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());
-        if(Utils.isPair(protocol.getTimestamp()[sender])) protocol.getTimestamp()[sender]++;
+        if(Utils.isPair(protocol.getTimestamp()[sender])){
+            System.out.println("atualizooooooooooooooooooooooooooooooou     "+sender);
+            protocol.getTimestamp()[sender]++;
+        }
         
         //protocol.printTimestamp();
     }

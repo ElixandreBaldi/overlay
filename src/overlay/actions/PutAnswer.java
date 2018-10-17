@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
+import peersim.core.CommonState;
 import peersim.core.Node;
 
 /**
@@ -31,7 +32,7 @@ public class PutAnswer implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol) {
         if(putTrue) {
-            System.out.println("Nodo: "+node.getIndex()+"   Confiramação de Put Recebida de: "+this.sender);            
+            System.out.println("Nodo: "+node.getIndex()+"   Confiramação de Put Recebida de: "+this.sender+"    startTime: "+startTime+"   time:"+CommonState.getIntTime());            
         } else {
             Utils.executePut(hash, node, protocol);
         }

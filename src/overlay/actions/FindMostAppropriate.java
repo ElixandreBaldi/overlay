@@ -67,16 +67,16 @@ public class FindMostAppropriate implements Action{
         int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId(), protocol);
         
         if(indexMostAppropriate >= 0) {
-            System.out.println("Nodo  "+protocol.getCurrentId()+"   ativou o nodo "+indexMostAppropriate+"      "+CommonState.getIntTime());
+            //System.out.println("Nodo  "+protocol.getCurrentId()+"   ativou o nodo "+indexMostAppropriate+"      "+CommonState.getIntTime());
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);
             target.setStatus(true);
             Utils.countNodeDown--;
         } else if(indexMostAppropriate == -1){
-            protocol.printTimestamp();
-            System.out.println("Nodo "+protocol.getCurrentId()+"   tem o timestamp sem falhas");
+            //protocol.printTimestamp();
+            //System.out.println("Nodo "+protocol.getCurrentId()+"   tem o timestamp sem falhas");
         } else if(indexMostAppropriate == -2){
-            protocol.printTimestamp();
-            System.out.println("Nodo "+protocol.getCurrentId()+"  delegou o findMostAppropriate");
+            //protocol.printTimestamp();
+            //System.out.println("Nodo "+protocol.getCurrentId()+"  delegou o findMostAppropriate");
         }
     }
     
