@@ -45,7 +45,6 @@ public class Put implements Action{
 
     @Override
     public void run(Node node, VCubeProtocol protocol) {        
-        Parameters p = protocol.getP();        
         boolean putTrue = true;
         if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) putTrue = false;
             
@@ -55,6 +54,6 @@ public class Put implements Action{
     
     @Override
     public int getStartTime() {
-        return -1;
+        return this.startTime;
     }
 }

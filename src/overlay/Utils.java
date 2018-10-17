@@ -115,17 +115,16 @@ public class Utils {
 
     public static void executeLookup(byte[] hash, Node node, VCubeProtocol protocol) {        
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
-        System.out.println(""+protocol.getTimestamp()[p]);
         int time = CommonState.getIntTime();
         EDSimulator.add(1, new LookUp(node.getIndex(), hash, time), Network.get(p), Utils.pid);    
-        System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
+        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
     }
     
     public static void executePut(byte[] hash, Node node, VCubeProtocol protocol) {
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
         int time = CommonState.getIntTime();
         EDSimulator.add(1, new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);        
-        System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);        
+        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);        
     }
 
     public static void printNetwork() {

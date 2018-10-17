@@ -23,6 +23,7 @@ import overlay.actions.Action;
 import overlay.actions.LockupAnswer;
 import overlay.actions.Ping;
 import overlay.actions.Put;
+import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.edsim.EDSimulator;
 
@@ -70,22 +71,39 @@ public class VCubeProtocol implements EDProtocol {
             event.run(node, (VCubeProtocol) this);        
         } else {
             LookUp fooL = new LookUp();
-            Put fooP = new Put();
+            Put fooP = new Put();            
             
             if(o.getClass().equals(fooL.getClass())) {                
                 fooL = (LookUp) o;
                 VCubeProtocol protocol = (VCubeProtocol) Network.get(fooL.getSender()).getProtocol(Utils.pid);
-                short p = Utils.responsibleKey(fooL.getKey(), protocol.getTimestamp().clone());
-                
-                EDSimulator.add(3, new LookUp(fooL.getSender(), fooL.getKey(), fooL.getStartTime()), Network.get(p), Utils.pid);
-                System.out.println("nodo: "+this.currentId+" status: "+this.status+"      timestamp: "+protocol.getTimestamp()[this.currentId]);
-                System.out.println("Nodo "+fooL.getSender()+" reeeeeenviando lookup para "+p);
-                Utils.hitsLookup++;
+                protocol.executeReLookup(fooL);
+                                
+                Utils.hitsLookup++;                
             }
             else if(o.getClass().equals(fooP.getClass())) {
+                fooP = (Put) o;
+                VCubeProtocol protocol = (VCubeProtocol) Network.get(fooP.getSender()).getProtocol(Utils.pid);
+                protocol.executeRePut(fooP);
+                
                 Utils.hitsPut++;
             }
         }
+    }
+    
+    public void executeReLookup(LookUp fooL) {
+        short p = Utils.responsibleKey(fooL.getKey(), this.getTimestamp());
+                
+        EDSimulator.add(10, new LookUp(fooL.getSender(), fooL.getKey(), fooL.getStartTime()), Network.get(p), Utils.pid);
+        //System.out.println("nodo: "+this.currentId+" status: "+this.status+"      timestamp: "+this.getTimestamp()[this.currentId]);
+        //System.out.println("Nodo "+fooL.getSender()+" reeeeeenviando lookup para "+p+"                     startTime:"+fooL.getStartTime()+"   no tempo "+CommonState.getIntTime());
+    }
+    
+    public void executeRePut(Put fooP) {
+        short p = Utils.responsibleKey(fooP.getKey(), this.getTimestamp());
+                
+        EDSimulator.add(10, new Put(fooP.getSender(), fooP.getKey(), fooP.getStartTime()), Network.get(p), Utils.pid);
+        //System.out.println("nodo: "+this.currentId+" status: "+this.status+"      timestamp: "+this.getTimestamp()[this.currentId]);
+        //System.out.println("Nodo "+fooL.getSender()+" reeeeeenviando put para "+p+"                     startTime:"+fooP.getStartTime()+"   no tempo "+CommonState.getIntTime());
     }
 
     public boolean getStatus() {

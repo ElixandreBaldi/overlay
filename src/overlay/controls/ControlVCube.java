@@ -5,6 +5,7 @@
  */
 package overlay.controls;
 
+import overlay.Utils;
 import overlay.actions.ExecutePing;
 import peersim.config.Configuration;
 import peersim.core.Control;
@@ -23,7 +24,10 @@ public class ControlVCube implements Control {
     }        
     
     public boolean execute() {                
-        for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);       
+        for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);        
+        //System.out.println("hits put: "+Utils.hitsPut);
+        //System.out.println("hits lookup: "+Utils.hitsLookup);
+        //System.out.println("");
         return false;
     }
 }

@@ -32,7 +32,7 @@ public class PutAnswer implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol) {
         if(putTrue) {
-            System.out.println("Nodo: "+node.getIndex()+"   Confiramação de Put Recebida de: "+this.sender+"    startTime: "+startTime+"   time:"+CommonState.getIntTime());            
+            if(CommonState.getIntTime() - startTime > 3) System.out.println("Nodo: "+protocol.getCurrentId()+"   Confiramação de Put Recebida de: "+this.sender+"    startTime: "+startTime+"   time:"+CommonState.getIntTime());            
         } else {
             Utils.executePut(hash, node, protocol);
         }

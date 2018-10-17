@@ -26,7 +26,7 @@ public class ControlDownNode implements Control{
     }        
     
     public boolean execute() {        
-        if(Utils.countNodeDown < Network.size() - 1 /*&& Utils.flagDown*/) {            
+        if(Utils.countNodeDown < Network.size() - 3 /*&& Utils.flagDown*/) {            
             //Utils.flagDown = false;
             int size = Network.size();
             VCubeProtocol target = null;
