@@ -75,6 +75,10 @@ public class Utils {
 
     public static int countPutFault = 0;
 
+    public static int countExitNode = 0;
+    
+    public static int countStartNode = 0;
+
     
     public static void finish(int time) {
         try(FileWriter fw = new FileWriter(VCubeCreate.pathOut, true);
@@ -99,6 +103,15 @@ public class Utils {
                 long countLookUpTrue = countLookup - countLookupFault;
                 long mediaLookup = sumTimeLookup/countLookUpTrue;
                 out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+timeDiagnostic+";"+time);
+            } else if(VCubeCreate.scenario == 5) {
+                long countPutsTrue = countPuts - countPutFault;
+                long mediaPut = sumTimePut/countPutsTrue;
+                System.out.println(""+countPuts);
+                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+countStartNode+";"+countExitNode+";"+time);
+            } else if(VCubeCreate.scenario == 6) {
+                long countLookUpTrue = countLookup - countLookupFault;
+                long mediaLookup = sumTimeLookup/countLookUpTrue;
+                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countStartNode+";"+countExitNode+";"+time);
             }
         } catch (IOException e) {
             //exception handling left as an exercise for the reader            
@@ -270,5 +283,15 @@ public class Utils {
         if(count > 1) return true;
         
         return false;
+    }
+
+    public static long countNodesOff() {
+        int count = 0;
+        for(int i = 0; i < Network.size(); i++) {
+            VCubeProtocol protocol = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
+            if(!protocol.getStatus()) count++;
+        }        
+        
+        return count;
     }
 }

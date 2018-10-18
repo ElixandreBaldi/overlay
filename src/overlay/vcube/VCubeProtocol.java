@@ -117,9 +117,15 @@ public class VCubeProtocol implements EDProtocol {
                 //System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);               
                 if(Utils.networkFull() && VCubeCreate.scenario == 0) {
                     Utils.finish(time);
-                }
+                }                
+                
+                if(VCubeCreate.scenario == 5 || VCubeCreate.scenario == 6) {
+                    Utils.countUpQueue--;
+                }                
+                Utils.countStartNode++;
             }else {
                 this.setTimestamp(timestamp.length);
+                Utils.countExitNode++;
             }
         }                
     }

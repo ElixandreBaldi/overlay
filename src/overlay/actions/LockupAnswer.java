@@ -43,6 +43,10 @@ public class LockupAnswer implements Action{
                 Utils.finish(CommonState.getIntTime());
             }
             
+            if(VCubeCreate.scenario == 6 && Utils.countLookup >= Utils.nLookups) {
+                Utils.finish(CommonState.getIntTime());
+            }
+            
         } else {
             Utils.executeLookup(hash, node, protocol);
         }   

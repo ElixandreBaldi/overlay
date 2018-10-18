@@ -42,6 +42,10 @@ public class PutAnswer implements Action{
             if( (VCubeCreate.scenario == 1 || (VCubeCreate.scenario == 3 && Utils.timeDiagnostic > 0)) && Utils.countPuts >= Utils.nPuts) {                
                 Utils.finish(CommonState.getIntTime());
             }
+            
+            if(VCubeCreate.scenario == 5 && Utils.countPuts >= Utils.nPuts ) {
+                Utils.finish(CommonState.getIntTime());
+            }
         } else {
             Utils.executePut(hash, node, protocol);
         }
