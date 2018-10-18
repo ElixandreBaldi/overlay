@@ -5,6 +5,10 @@
  */
 package overlay;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -12,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javax.security.auth.login.Configuration;
 import overlay.actions.Action;
 import overlay.actions.LookUp;
 import overlay.actions.Put;
@@ -30,21 +35,95 @@ import peersim.transport.Transport;
  */
 public class Utils {    
     
-    static public boolean flagDown = true;
+    static public boolean flagDown = true;          
     
-    static public int countNodeDown = 0;    
-    
-    static public int pid = 0;
-    
-    static public int repetation = 0;                
+    static public int pid = 0;        
 
     public static long hitsLookup = 0;
 
     public static long hitsPut = 0;
     
+    public static long countUpQueue = 0;
+    
+    public static long countUpStatusTrue = 0;
+    
+    public static long countTestesVCube = 0;
+    
+    public static boolean flagPut = true;
+    
+    public static boolean flagLookup = true;
+
+    public static final int nPuts = 940000;
+    
+    public static long sumTimePut = 0;
+    
+    public static long countPuts = 0;
+    
+    public static long sumTimeLookup = 0;
+    
+    public static long countLookup = 0;
+    
+    public static long nLookups = 500;
+    
+    public static long timeDiagnostic = 0;
+
+    public static int countDiagnostic = 0;
+
+    public static int timeEnd = 100000000;
+
+    public static int countLookupFault = 0;
+
+    public static int countPutFault = 0;
+
+    
+    public static void finish(int time) {
+        try(FileWriter fw = new FileWriter(VCubeCreate.pathOut, true);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {            
+            if(VCubeCreate.scenario == 0) {
+                out.println(countTestesVCube+";"+countUpStatusTrue+";"+time+";");
+            } else if(VCubeCreate.scenario == 1) {
+                long countPutsTrue = countPuts - countPutFault;
+                long mediaPuts = sumTimePut/countPutsTrue;
+                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPuts+";"+time);
+            } else if(VCubeCreate.scenario == 2) {
+                long countLookUpTrue = countLookup - countLookupFault;
+                long mediaLookup = sumTimeLookup/countLookUpTrue;
+                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+time);
+            } else if(VCubeCreate.scenario == 3) {
+                long countPutsTrue = countPuts - countPutFault;
+                long mediaPut = sumTimePut/countPutsTrue;
+                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+timeDiagnostic+";"+time);
+            } else if(VCubeCreate.scenario == 4) {
+                long countLookUpTrue = countLookup - countLookupFault;
+                long mediaLookup = sumTimeLookup/countLookUpTrue;
+                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+timeDiagnostic+";"+time);
+            }
+        } catch (IOException e) {
+            //exception handling left as an exercise for the reader            
+        }                
+                        
+        /*System.out.println("Quantidade de Hits - Put: ");
+        System.out.println("Quantidade de tentativas de acionar um nodo já ativo: ");
+        System.out.println("Quantidade de Testes do VCube: ");
+        System.out.println("Tempo Final: ");*/
+        
+        System.exit(0);
+    }
+    
     static public void updateTimestampLocal(short[] timestampLocal, short[] timestampSender, int indexLocal, int indexSender) {        
         for(int i = 0; i < timestampLocal.length; i++) {
-            if(timestampLocal[i] < timestampSender[i] && i != indexLocal) timestampLocal[i] = timestampSender[i];                            
+            if(timestampLocal[i] < timestampSender[i] && i != indexLocal) {
+                timestampLocal[i] = timestampSender[i];
+                Utils.countDiagnostic++;                
+                if(Network.size() == (Utils.countDiagnostic + 1)) {
+                    Utils.timeDiagnostic = CommonState.getIntTime();
+                    if( (VCubeCreate.scenario == 3 || VCubeCreate.scenario == 4) && (Utils.countPuts >= Utils.nPuts || Utils.countLookup == Utils.nLookups)) {
+                        Utils.finish(CommonState.getIntTime());
+                    }
+                }  
+            }                            
         }
         if(timestampLocal[indexSender] % 2 != 0) timestampLocal[indexSender]++;            
     }
@@ -130,9 +209,9 @@ public class Utils {
     public static void printNetwork() {
         for(int i = 0; i < Network.size(); i++) {
             VCubeProtocol node = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
-            System.out.print(" "+node.getStatus());
+            //System.out.print(" "+node.getStatus());
         }
-        System.out.println("");
+        //System.out.println("");
     }
     
     public static int getIndexResponsable(short responsable, List<Responsables> responsables) {        
@@ -170,5 +249,26 @@ public class Utils {
 
     public static boolean isPair(short s) {
         return s % 2 == 0;
+    }
+    
+    public static boolean networkFull() {
+        for(int i = 0; i < Network.size(); i++) {
+            VCubeProtocol protocol = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
+            if(!protocol.getStatus()) {                 
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean canDown() {
+        int count = 0;
+        for(int i = 0; i < Network.size(); i++) {
+            VCubeProtocol protocol = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
+            if(protocol.getStatus()) count++;
+        }
+        if(count > 1) return true;
+        
+        return false;
     }
 }

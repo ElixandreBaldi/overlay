@@ -28,9 +28,18 @@ public class ControlExecutePut implements Control {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
-    public boolean execute() {                        
-        byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");                
-        EDSimulator.add(1, new ExecutePut(hash), Utils.getRandomNode(), pid);
+    public boolean execute() { 
+        if(!Utils.flagPut) return false;
+        Utils.flagPut = false;
+        
+        int countPutToEach = (int) ((Utils.nPuts / Network.size()) + 1);
+        
+        for(int j = 0; j < countPutToEach; j++) {
+            for(int i = 0; i < Network.size(); i++) {
+                byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");                
+                EDSimulator.add(j, new ExecutePut(hash), Network.get(i), pid);                
+            }
+        }
               
         return false;
     }

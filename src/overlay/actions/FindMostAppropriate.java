@@ -8,6 +8,7 @@ package overlay.actions;
 import java.util.ArrayList;
 import java.util.List;
 import overlay.Utils;
+import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Network;
@@ -19,8 +20,10 @@ import peersim.edsim.EDSimulator;
  * @author elixandre
  */
 public class FindMostAppropriate implements Action{
-
-    public FindMostAppropriate() {
+    private int startTime;
+    
+    public FindMostAppropriate(int startTime) {
+        this.startTime = startTime;
     }
     
     public int counterBit(int n) {
@@ -52,7 +55,7 @@ public class FindMostAppropriate implements Action{
         if(freeVertex.size() == 0) {
             short newFuller = Utils.findFuller(timestamp.clone());
             if(newFuller >= 0) {
-                EDSimulator.add(1, new FindMostAppropriate(), Network.get(newFuller), Utils.pid);                
+                EDSimulator.add(1, new FindMostAppropriate(this.startTime), Network.get(newFuller), Utils.pid);                
             }
             
             return -2;
@@ -66,11 +69,9 @@ public class FindMostAppropriate implements Action{
         
         int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId(), protocol);
         
-        if(indexMostAppropriate >= 0) {
-            //System.out.println("Nodo  "+protocol.getCurrentId()+"   ativou o nodo "+indexMostAppropriate+"      "+CommonState.getIntTime());
+        if(indexMostAppropriate >= 0) {            
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);
-            target.setStatus(true);
-            Utils.countNodeDown--;
+            target.setStatus(true, protocol.getCurrentId());
         } else if(indexMostAppropriate == -1){
             //protocol.printTimestamp();
             //System.out.println("Nodo "+protocol.getCurrentId()+"   tem o timestamp sem falhas");

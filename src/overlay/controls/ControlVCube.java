@@ -24,7 +24,8 @@ public class ControlVCube implements Control {
     }        
     
     public boolean execute() {                
-        for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);        
+        for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);  
+        Utils.countTestesVCube++;
         //System.out.println("hits put: "+Utils.hitsPut);
         //System.out.println("hits lookup: "+Utils.hitsLookup);
         //System.out.println("");

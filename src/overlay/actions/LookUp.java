@@ -45,7 +45,6 @@ public class LookUp implements Action{
 
     @Override
     public void run(Node node, VCubeProtocol protocol) {        
-        Parameters p = protocol.getP();        
         boolean lookupTrue = true;
         if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) lookupTrue = false;                    
         EDSimulator.add(1, new LockupAnswer(protocol.getCurrentId(), lookupTrue, key, startTime), Network.get(this.sender), Utils.pid);

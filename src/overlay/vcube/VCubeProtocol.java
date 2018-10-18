@@ -20,6 +20,9 @@ import peersim.core.Node;
 import peersim.edsim.EDProtocol;
 import peersim.transport.Transport;
 import overlay.actions.Action;
+import overlay.actions.ExecuteLookup;
+import overlay.actions.ExecutePut;
+import overlay.actions.FindEmptyVertex;
 import overlay.actions.LockupAnswer;
 import overlay.actions.Ping;
 import overlay.actions.Put;
@@ -43,26 +46,13 @@ public class VCubeProtocol implements EDProtocol {
     
     private Parameters p;
     
-    private short[] timestamp;        
-    
-    private List<Action> processQueue;
+    private short[] timestamp;                
         
     public VCubeProtocol(String prefix) {
         this.prefix = prefix;        
         this.p = new Parameters();
-        this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);                     
-        this.processQueue = new LinkedList<>();
-        this.status = true;        
-    }
-
-    public VCubeProtocol(String prefix, short currentId, Parameters p, short[] timestamp){
-        this.prefix = prefix;        
-        this.currentId = currentId;
-        this.p = p.clone();         
-        this.timestamp = new short[timestamp.length];       
-        for(int i = 0; i < timestamp.length; i++) this.timestamp[i] = timestamp[i];
-        this.status = true;
-    }
+        this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);        
+    }   
     
     public void processEvent(Node node, int pid, Object o) {
         Ping foo = new Ping();        
@@ -71,7 +61,10 @@ public class VCubeProtocol implements EDProtocol {
             event.run(node, (VCubeProtocol) this);        
         } else {
             LookUp fooL = new LookUp();
-            Put fooP = new Put();            
+            Put fooP = new Put();
+            
+            ExecuteLookup exL = new ExecuteLookup();
+            ExecutePut exP = new ExecutePut();
             
             if(o.getClass().equals(fooL.getClass())) {                
                 fooL = (LookUp) o;
@@ -86,38 +79,49 @@ public class VCubeProtocol implements EDProtocol {
                 protocol.executeRePut(fooP);
                 
                 Utils.hitsPut++;
+            } else if(o.getClass().equals(exL.getClass())) {                
+                Utils.countLookup++;
+                Utils.countLookupFault++;
+            } else if(o.getClass().equals(exP.getClass())) {
+                Utils.countPuts++;
+                Utils.countPutFault++;
             }
         }
     }
     
     public void executeReLookup(LookUp fooL) {
-        short p = Utils.responsibleKey(fooL.getKey(), this.getTimestamp());
-                
+        short p = Utils.responsibleKey(fooL.getKey(), this.getTimestamp());                
         EDSimulator.add(10, new LookUp(fooL.getSender(), fooL.getKey(), fooL.getStartTime()), Network.get(p), Utils.pid);
-        //System.out.println("nodo: "+this.currentId+" status: "+this.status+"      timestamp: "+this.getTimestamp()[this.currentId]);
-        //System.out.println("Nodo "+fooL.getSender()+" reeeeeenviando lookup para "+p+"                     startTime:"+fooL.getStartTime()+"   no tempo "+CommonState.getIntTime());
     }
     
     public void executeRePut(Put fooP) {
-        short p = Utils.responsibleKey(fooP.getKey(), this.getTimestamp());
-                
+        short p = Utils.responsibleKey(fooP.getKey(), this.getTimestamp());                
         EDSimulator.add(10, new Put(fooP.getSender(), fooP.getKey(), fooP.getStartTime()), Network.get(p), Utils.pid);
-        //System.out.println("nodo: "+this.currentId+" status: "+this.status+"      timestamp: "+this.getTimestamp()[this.currentId]);
-        //System.out.println("Nodo "+fooL.getSender()+" reeeeeenviando put para "+p+"                     startTime:"+fooP.getStartTime()+"   no tempo "+CommonState.getIntTime());
     }
 
     public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-        
-        if(!status) this.setTimestamp(timestamp.length);                    
-    }
-    
-    public List<Action> getProcessQueue() {
-        return this.processQueue;
+    public void setStatus(boolean status, int ativator) {
+        if(status && this.status) {            
+            //recebeu no tempo 1, e mandou no tempo 2
+            EDSimulator.add(2, new FindEmptyVertex(), Network.get(this.currentId), Utils.pid);
+            //System.out.println("To ativo by: "+this.currentId+"   "+CommonState.getIntTime());
+            Utils.countUpStatusTrue++;
+        } else {
+            this.status = status;
+            if(status) {
+                int time = CommonState.getIntTime();
+                time++;
+                //System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);               
+                if(Utils.networkFull() && VCubeCreate.scenario == 0) {
+                    Utils.finish(time);
+                }
+            }else {
+                this.setTimestamp(timestamp.length);
+            }
+        }                
     }
     
     public short[] getTimestamp() {
@@ -130,11 +134,7 @@ public class VCubeProtocol implements EDProtocol {
     
     public Object clone() {                
         return new VCubeProtocol(prefix);        
-    }
-    
-    public VCubeProtocol cloneVCube() {                
-        return new VCubeProtocol(prefix, currentId, p, timestamp);        
-    }  
+    }       
 
     public short getCurrentId() {
         return currentId;
@@ -142,17 +142,29 @@ public class VCubeProtocol implements EDProtocol {
 
     public void setCurrentId(short currentId) {
         this.currentId = currentId;
+        
+        this.status = true;
+        
+        if(VCubeCreate.nodosOk == -1) {      
+            if(!(this.currentId == 0)) this.status = false;
+        } else if(VCubeCreate.nodosOk == 0) {
+            if(!(this.currentId < Network.size() / 2)) this.status = false;
+        }
+        
+        //System.out.println(this.status);
+        
     }
     
     public void setTimestamp(int size) {
         this.timestamp = new short[size];        
-        Arrays.fill(this.timestamp, (short) 2);
+        if(VCubeCreate.scenario == 0) Arrays.fill(this.timestamp, (short) 1);
+        else Arrays.fill(this.timestamp, (short) 2);
         this.timestamp[currentId] = 0;
     }        
 
     public void printTimestamp() {
-        for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
+        //for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
         
-        System.out.println("");
+        //System.out.println("");
     }
 }

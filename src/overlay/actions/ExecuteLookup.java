@@ -19,6 +19,9 @@ public class ExecuteLookup implements Action{
     public ExecuteLookup(byte[] hash) {
         this.hash = hash;
     }       
+
+    public ExecuteLookup() {        
+    }
     
     @Override
     public void run(Node node, VCubeProtocol protocol) {        

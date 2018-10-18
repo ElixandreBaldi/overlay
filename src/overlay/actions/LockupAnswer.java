@@ -8,6 +8,7 @@ package overlay.actions;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import overlay.Utils;
+import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Node;
@@ -32,7 +33,16 @@ public class LockupAnswer implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol) {
         if(lookupTrue) {
-            if(CommonState.getIntTime() - startTime > 3) System.out.println("Nodo: "+node.getIndex()+"   Confiramação de LookUp Recebida de: "+this.sender+"    startTime: "+startTime+"   time:"+CommonState.getIntTime());            
+            //if(CommonState.getIntTime() - startTime > 3) 
+            //System.out.println("Nodo: "+node.getIndex()+"   Confiramação de LookUp Recebida de: "+this.sender+"    startTime: "+startTime+"   time:"+CommonState.getIntTime());            
+            long dif = CommonState.getIntTime() - startTime;
+            Utils.sumTimeLookup += dif;
+            Utils.countLookup++;
+            
+            if( (VCubeCreate.scenario == 2 || (VCubeCreate.scenario == 4 && Utils.timeDiagnostic > 0)) && Utils.countLookup >= Utils.nLookups) {
+                Utils.finish(CommonState.getIntTime());
+            }
+            
         } else {
             Utils.executeLookup(hash, node, protocol);
         }   

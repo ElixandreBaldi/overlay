@@ -27,9 +27,20 @@ public class ControlExecuteLookup implements Control {
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
-    public boolean execute() {                        
-        byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
-        EDSimulator.add(1, new ExecuteLookup(hash), Utils.getRandomNode(), Utils.pid);        
+    public boolean execute() {    
+        
+        if(!Utils.flagLookup) return false;
+        Utils.flagLookup = false;
+        
+        int countLookUpToEach = (int) ((Utils.nLookups / Network.size()) + 1);
+        
+        for(int j = 0; j < countLookUpToEach; j++) {
+            for(int i = 0; i < Network.size(); i++) {
+                byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
+                EDSimulator.add(j, new ExecuteLookup(hash), Network.get(i), Utils.pid);        
+            }
+        }
+        
         return false;
     }
 }

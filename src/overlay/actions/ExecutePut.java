@@ -20,6 +20,9 @@ public class ExecutePut implements Action{
         this.hash = hash;
     }
 
+    public ExecutePut() {        
+    }
+
     @Override
     public void run(Node node, VCubeProtocol protocol) {        
         Utils.executePut(hash, node, protocol);

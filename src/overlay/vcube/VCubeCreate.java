@@ -20,8 +20,9 @@ import peersim.core.Node;
  */
 public class VCubeCreate implements Control {
     
-    static public boolean flag1 = true;
-    static public boolean flag2 = true;
+    static public int nodosOk;
+    
+    static public int scenario;
     
     static private int pid = 0;
     
@@ -35,10 +36,16 @@ public class VCubeCreate implements Control {
     
     private int idLength;
     
-    public VCubeCreate(String prefix) {     
+    static public String pathOut;
+    
+    public VCubeCreate(String prefix) {                
         pid = Configuration.getPid(prefix +"."+ PAR_PROT);
         Utils.pid = pid;
         this.idLength = Configuration.getInt(prefix + "." + PAR_IDLENGTH);
+        
+        this.nodosOk = Configuration.getInt(prefix + ".nodosOk");
+        this.scenario = Configuration.getInt(prefix + ".scenario");
+        this.pathOut = Configuration.getString(prefix + ".pathOut");
     }
     
     static public int getnCluster() {

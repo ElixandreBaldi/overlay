@@ -7,6 +7,7 @@ package overlay.actions;
 
 import java.math.BigInteger;
 import overlay.Utils;
+import overlay.vcube.VCubeCreate;
 import overlay.vcube.VCubeProtocol;
 import peersim.core.CommonState;
 import peersim.core.Network;
@@ -28,11 +29,21 @@ public class PongError implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol) {
+    public void run(Node node, VCubeProtocol protocol) {        
         //System.out.println("Nodo: "+protocol.getCurrentId()+" detectou falha no nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());
         if(Utils.isPair(protocol.getTimestamp()[sender])){
-            protocol.getTimestamp()[sender]++;
+            protocol.getTimestamp()[sender]++;            
+            Utils.countDiagnostic++;
+            
+            if(Network.size() == (Utils.countDiagnostic + 1)) {
+                Utils.timeDiagnostic = CommonState.getIntTime(); 
+                if( (VCubeCreate.scenario == 3 || VCubeCreate.scenario == 4) && (Utils.countPuts >= Utils.nPuts || Utils.countLookup == Utils.nLookups)){
+                    Utils.finish(CommonState.getIntTime());
+                }
+            }                        
         }
+        
+        
         
         //protocol.printTimestamp();
     }
