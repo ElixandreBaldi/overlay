@@ -123,6 +123,8 @@ public class VCubeProtocol implements EDProtocol {
                     Utils.countUpQueue--;
                 } 
                 Utils.countStartNode++;
+                Utils.sumTimeUp += time;
+                Utils.countSoumTimeUp++;
                 //System.out.println("alguem entrou");
             }else {
                 this.setTimestamp(timestamp.length);
