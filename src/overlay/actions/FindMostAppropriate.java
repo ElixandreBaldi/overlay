@@ -55,10 +55,14 @@ public class FindMostAppropriate implements Action{
         if(freeVertex.size() == 0) {
             short newFuller = Utils.findFuller(timestamp.clone());
             if(newFuller >= 0) {
-                EDSimulator.add(1, new FindMostAppropriate(this.startTime), Network.get(newFuller), Utils.pid);                
+                EDSimulator.add(1, new FindMostAppropriate(this.startTime), Network.get(newFuller), Utils.pid);
+                Utils.countDelegateFindMostAppropriate++;
+            } else {
+                Utils.countViewFull++;
+                //o nodo enxerga a rede como cheia.
             }
             
-            return -2;
+            return -1;
         }
         
         return indexMostAppropriate;
@@ -72,12 +76,6 @@ public class FindMostAppropriate implements Action{
         if(indexMostAppropriate >= 0) {            
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);
             target.setStatus(true, protocol.getCurrentId());
-        } else if(indexMostAppropriate == -1){
-            //protocol.printTimestamp();
-            //System.out.println("Nodo "+protocol.getCurrentId()+"   tem o timestamp sem falhas");
-        } else if(indexMostAppropriate == -2){
-            //protocol.printTimestamp();
-            //System.out.println("Nodo "+protocol.getCurrentId()+"  delegou o findMostAppropriate");
         }
     }
     
