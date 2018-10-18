@@ -91,12 +91,12 @@ public class VCubeProtocol implements EDProtocol {
     
     public void executeReLookup(LookUp fooL) {
         short p = Utils.responsibleKey(fooL.getKey(), this.getTimestamp());                
-        EDSimulator.add(10, new LookUp(fooL.getSender(), fooL.getKey(), fooL.getStartTime()), Network.get(p), Utils.pid);
+        EDSimulator.add(5, new LookUp(fooL.getSender(), fooL.getKey(), fooL.getStartTime()), Network.get(p), Utils.pid);
     }
     
     public void executeRePut(Put fooP) {
-        short p = Utils.responsibleKey(fooP.getKey(), this.getTimestamp());                
-        EDSimulator.add(10, new Put(fooP.getSender(), fooP.getKey(), fooP.getStartTime()), Network.get(p), Utils.pid);
+        short p = Utils.responsibleKey(fooP.getKey(), this.getTimestamp());  
+        EDSimulator.add(5, new Put(fooP.getSender(), fooP.getKey(), fooP.getStartTime()), Network.get(p), Utils.pid);
     }
 
     public boolean getStatus() {
@@ -121,11 +121,13 @@ public class VCubeProtocol implements EDProtocol {
                 
                 if(VCubeCreate.scenario == 5 || VCubeCreate.scenario == 6) {
                     Utils.countUpQueue--;
-                }                
+                } 
                 Utils.countStartNode++;
+                //System.out.println("alguem entrou");
             }else {
                 this.setTimestamp(timestamp.length);
                 Utils.countExitNode++;
+                //System.out.println("alguem saiu");
             }
         }                
     }

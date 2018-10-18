@@ -53,7 +53,7 @@ public class Utils {
     
     public static boolean flagLookup = true;
 
-    public static final int nPuts = 940000;
+    public static final int nPuts = 900000;
     
     public static long sumTimePut = 0;
     
@@ -63,7 +63,7 @@ public class Utils {
     
     public static long countLookup = 0;
     
-    public static long nLookups = 500;
+    public static long nLookups = 900000;
     
     public static long timeDiagnostic = 0;
 
@@ -78,6 +78,8 @@ public class Utils {
     public static int countExitNode = 0;
     
     public static int countStartNode = 0;
+    
+    public static int countPutSend = 0;
 
     
     public static void finish(int time) {
@@ -215,16 +217,17 @@ public class Utils {
     public static void executePut(byte[] hash, Node node, VCubeProtocol protocol) {
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
         int time = CommonState.getIntTime();
-        EDSimulator.add(1, new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);        
+        EDSimulator.add(1, new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);  
+        Utils.countPutSend++;
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);        
     }
 
     public static void printNetwork() {
         for(int i = 0; i < Network.size(); i++) {
             VCubeProtocol node = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
-            //System.out.print(" "+node.getStatus());
+            System.out.print(" "+node.getStatus());
         }
-        //System.out.println("");
+        System.out.println("");
     }
     
     public static int getIndexResponsable(short responsable, List<Responsables> responsables) {        
@@ -280,7 +283,7 @@ public class Utils {
             VCubeProtocol protocol = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
             if(protocol.getStatus()) count++;
         }
-        if(count > 1) return true;
+        if(count > 2) return true;
         
         return false;
     }

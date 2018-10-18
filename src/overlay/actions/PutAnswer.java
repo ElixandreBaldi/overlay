@@ -42,8 +42,10 @@ public class PutAnswer implements Action{
             if( (VCubeCreate.scenario == 1 || (VCubeCreate.scenario == 3 && Utils.timeDiagnostic > 0)) && Utils.countPuts >= Utils.nPuts) {                
                 Utils.finish(CommonState.getIntTime());
             }
-            
-            if(VCubeCreate.scenario == 5 && Utils.countPuts >= Utils.nPuts ) {
+                        
+            int limit = (int) (Utils.nPuts*0.9);
+            //System.out.println(Utils.countPutSend+"    "+Utils.countPuts+"  "+limit);
+            if(VCubeCreate.scenario == 5 && Utils.countPuts >= limit ) {
                 Utils.finish(CommonState.getIntTime());
             }
         } else {

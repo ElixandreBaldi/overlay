@@ -43,7 +43,9 @@ public class LockupAnswer implements Action{
                 Utils.finish(CommonState.getIntTime());
             }
             
-            if(VCubeCreate.scenario == 6 && Utils.countLookup >= Utils.nLookups) {
+            int limit = (int) (Utils.nLookups*0.9);
+            
+            if(VCubeCreate.scenario == 6 && Utils.countLookup >= limit) {
                 Utils.finish(CommonState.getIntTime());
             }
             

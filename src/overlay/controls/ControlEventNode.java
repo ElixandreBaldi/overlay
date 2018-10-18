@@ -33,8 +33,9 @@ public class ControlEventNode implements Control{
         Random r = new Random();
         double range = r.nextDouble();
         
-        
+        //Utils.printNetwork();
         if(range > 0.5) { // UP
+            //System.out.println(Utils.countUpQueue+" "+Utils.countNodesOff());
             if(Utils.countUpQueue < Utils.countNodesOff()) {
                 Utils.countUpQueue++;
                 int size = Network.size();
