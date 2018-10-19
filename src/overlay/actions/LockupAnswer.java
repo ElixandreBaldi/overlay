@@ -30,6 +30,9 @@ public class LockupAnswer implements Action{
         this.startTime = startTime;
     }
 
+    public LockupAnswer() {        
+    }
+
     @Override
     public void run(Node node, VCubeProtocol protocol) {
         if(lookupTrue) {
@@ -43,8 +46,8 @@ public class LockupAnswer implements Action{
                 Utils.finish(CommonState.getIntTime());
             }
             
-            int limit = (int) (Utils.nLookups*0.9);
-            
+            int limit = (int) (Utils.nLookups * 0.9);
+            System.out.println(Utils.countLookup+"    "+Utils.countLookup+"  "+limit);
             if(VCubeCreate.scenario == 6 && Utils.countLookup >= limit) {
                 Utils.finish(CommonState.getIntTime());
             }

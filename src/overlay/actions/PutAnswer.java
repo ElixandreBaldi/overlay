@@ -30,6 +30,9 @@ public class PutAnswer implements Action{
         this.startTime = startTime;
     }
 
+    public PutAnswer() {        
+    }
+
     @Override
     public void run(Node node, VCubeProtocol protocol) {
         if(putTrue) {

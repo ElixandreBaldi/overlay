@@ -21,9 +21,11 @@ import peersim.edsim.EDSimulator;
  */
 public class FindMostAppropriate implements Action{
     private int startTime;
+    private short root;
     
-    public FindMostAppropriate(int startTime) {
+    public FindMostAppropriate(short root, int startTime) {
         this.startTime = startTime;
+        this.root = root;
     }
     
     public int counterBit(int n) {
@@ -54,11 +56,14 @@ public class FindMostAppropriate implements Action{
         
         if(freeVertex.size() == 0) {
             short newFuller = Utils.findFuller(timestamp.clone());
-            if(newFuller >= 0) {
-                EDSimulator.add(1, new FindMostAppropriate(this.startTime), Network.get(newFuller), Utils.pid);
+            if(newFuller >= 0) {                
+                EDSimulator.add(1, new FindMostAppropriate(this.root, this.startTime), Network.get(newFuller), Utils.pid);
                 Utils.countDelegateFindMostAppropriate++;
+                //System.out.println("Aqui 2");
+                //protocol.printTimestamp();
             } else {
-                Utils.countViewFull++;
+                //Utils.countViewFull++;                
+                EDSimulator.add(1, new FindEmptyVertex(), Network.get(this.root), Utils.pid);
                 //o nodo enxerga a rede como cheia.
             }
             

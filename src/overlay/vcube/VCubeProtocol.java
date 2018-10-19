@@ -26,6 +26,7 @@ import overlay.actions.FindEmptyVertex;
 import overlay.actions.LockupAnswer;
 import overlay.actions.Ping;
 import overlay.actions.Put;
+import overlay.actions.PutAnswer;
 import peersim.core.CommonState;
 import peersim.core.Network;
 import peersim.edsim.EDSimulator;
@@ -66,6 +67,9 @@ public class VCubeProtocol implements EDProtocol {
             ExecuteLookup exL = new ExecuteLookup();
             ExecutePut exP = new ExecutePut();
             
+            LockupAnswer exLE = new LockupAnswer();
+            PutAnswer exPE = new PutAnswer();
+            
             if(o.getClass().equals(fooL.getClass())) {                
                 fooL = (LookUp) o;
                 VCubeProtocol protocol = (VCubeProtocol) Network.get(fooL.getSender()).getProtocol(Utils.pid);
@@ -85,6 +89,12 @@ public class VCubeProtocol implements EDProtocol {
             } else if(o.getClass().equals(exP.getClass())) {
                 Utils.countPuts++;
                 Utils.countPutFault++;
+            }  else if(o.getClass().equals(exLE.getClass())) {                
+                Action event = (Action) o;
+                event.run(node, this);
+            } else if(o.getClass().equals(exPE.getClass())) {
+                Action event = (Action) o;
+                event.run(node, this);
             }
         }
     }
@@ -123,11 +133,13 @@ public class VCubeProtocol implements EDProtocol {
                     Utils.countUpQueue--;
                 } 
                 Utils.countStartNode++;
+                
                 Utils.sumTimeUp += time;
-                Utils.countSoumTimeUp++;
+                Utils.countSumTimeUp++;
+                VCubeProtocol protocol = (VCubeProtocol) Network.get(ativator).getProtocol(Utils.pid);
+                this.setTimestamp(protocol.getTimestamp().clone());
                 //System.out.println("alguem entrou");
-            }else {
-                this.setTimestamp(timestamp.length);
+            }else {                
                 Utils.countExitNode++;
                 //System.out.println("alguem saiu");
             }
@@ -166,15 +178,26 @@ public class VCubeProtocol implements EDProtocol {
     }
     
     public void setTimestamp(int size) {
-        this.timestamp = new short[size];        
+        this.timestamp = new short[size];
         if(VCubeCreate.scenario == 0) Arrays.fill(this.timestamp, (short) 1);
-        else Arrays.fill(this.timestamp, (short) 2);
+        else if(VCubeCreate.scenario < 5) Arrays.fill(this.timestamp, (short) 2);
+        else if(VCubeCreate.scenario < 7) {
+            for(int i = 0; i < size; i++) {
+                if(i < size/2) this.timestamp[i] = 2;
+                else this.timestamp[i] = 1;
+            }
+        }
+        
         this.timestamp[currentId] = 0;
     }        
+    
+    public void setTimestamp(short[] timestamp) {
+        this.timestamp = timestamp;
+    }
 
     public void printTimestamp() {
-        //for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
+        for(int i = 0; i < timestamp.length; i++) System.out.print(" "+timestamp[i]+", ");
         
-        //System.out.println("");
+        System.out.println("");
     }
 }

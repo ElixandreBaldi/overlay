@@ -53,7 +53,7 @@ public class Utils {
     
     public static boolean flagLookup = true;
 
-    public static final int nPuts = 900000;
+    public static final int nPuts = 90000;
     
     public static long sumTimePut = 0;
     
@@ -63,7 +63,7 @@ public class Utils {
     
     public static long countLookup = 0;
     
-    public static long nLookups = 900000;
+    public static long nLookups = 90000;
     
     public static long timeDiagnostic = 0;
 
@@ -80,6 +80,14 @@ public class Utils {
     public static int countStartNode = 0;
     
     public static int countPutSend = 0;
+
+    public static int countViewFull = 0;
+
+    public static int countDelegateFindMostAppropriate = 0;
+
+    public static int countSumTimeUp = 0;
+    
+    public static int sumTimeUp = 0;
 
     
     public static void finish(int time) {
@@ -113,7 +121,10 @@ public class Utils {
             } else if(VCubeCreate.scenario == 6) {
                 long countLookUpTrue = countLookup - countLookupFault;
                 long mediaLookup = sumTimeLookup/countLookUpTrue;
-                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countStartNode+";"+countExitNode+";"+time);
+                
+                int mediaTimeUp = sumTimeUp;
+                if(countSumTimeUp > 0) mediaTimeUp /= countSumTimeUp;
+                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countStartNode+";"+countExitNode+";"+countViewFull+";"+countDelegateFindMostAppropriate+";"+mediaTimeUp+";"+time);
             }
         } catch (IOException e) {
             //exception handling left as an exercise for the reader            
@@ -283,6 +294,7 @@ public class Utils {
             VCubeProtocol protocol = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
             if(protocol.getStatus()) count++;
         }
+        //System.out.println(""+count);
         if(count > 2) return true;
         
         return false;
