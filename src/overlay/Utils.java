@@ -63,7 +63,7 @@ public class Utils {
     
     public static long countLookup = 0;
     
-    public static long nLookups = 900000;
+    public static long nLookups = 3000000;
     
     public static int timeNewEvent = 0;
     
