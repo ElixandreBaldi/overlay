@@ -98,28 +98,30 @@ public class Utils {
             PrintWriter out = new PrintWriter(bw))
         {            
             if(VCubeCreate.scenario == 0) {
-                out.println(countTestesVCube+";"+countUpStatusTrue+";"+time+";");
+                out.println(countTestesVCube+";"+time+";");
             } else if(VCubeCreate.scenario == 1) {
                 long countPutsTrue = countPuts - countPutFault;
                 long mediaPuts = sumTimePut/countPutsTrue;
-                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPuts+";"+time);
+                out.println(countTestesVCube+";"+sumTimePut+";"+countPutsTrue+";"+mediaPuts+";"+time);
             } else if(VCubeCreate.scenario == 2) {
                 long countLookUpTrue = countLookup - countLookupFault;
                 long mediaLookup = sumTimeLookup/countLookUpTrue;
-                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+time);
+                out.println(countTestesVCube+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+time);
             } else if(VCubeCreate.scenario == 3) {
                 long countPutsTrue = countPuts - countPutFault;
                 long mediaPut = sumTimePut/countPutsTrue;
-                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+timeDiagnostic+";"+time);
+                out.println(countTestesVCube+";"+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+timeDiagnostic+";"+time);
             } else if(VCubeCreate.scenario == 4) {
                 long countLookUpTrue = countLookup - countLookupFault;
                 long mediaLookup = sumTimeLookup/countLookUpTrue;
-                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+timeDiagnostic+";"+time);
+                out.println(countTestesVCube+";"+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+timeDiagnostic+";"+time);
             } else if(VCubeCreate.scenario == 5) {
                 long countPutsTrue = countPuts - countPutFault;
                 long mediaPut = sumTimePut/countPutsTrue;
-                System.out.println(""+countPuts);
-                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+countStartNode+";"+countExitNode+";"+time);
+                int mediaTimeUp = sumTimeUp;
+                if(countSumTimeUp > 0) mediaTimeUp /= countSumTimeUp;
+                
+                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+countStartNode+";"+countExitNode+";"+mediaTimeUp+";"+time);
             } else if(VCubeCreate.scenario == 6) {
                 long countLookUpTrue = countLookup - countLookupFault;
                 long mediaLookup = sumTimeLookup/countLookUpTrue;
@@ -127,7 +129,7 @@ public class Utils {
                 int mediaTimeUp = sumTimeUp;
                 if(countSumTimeUp > 0) mediaTimeUp /= countSumTimeUp;
                 System.out.println("full: "+countViewFull);
-                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countStartNode+";"+countExitNode+";"+countViewFull+";"+countDelegateFindMostAppropriate+";"+mediaTimeUp+";"+time);
+                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countStartNode+";"+countExitNode+";"+mediaTimeUp+";"+time);
             }
         } catch (IOException e) {
             //exception handling left as an exercise for the reader            
