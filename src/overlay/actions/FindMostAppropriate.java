@@ -78,7 +78,7 @@ public class FindMostAppropriate implements Action{
         
         int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId(), protocol);
         
-        if(indexMostAppropriate >= 0) {            
+        if(indexMostAppropriate >= 0) {
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);
             target.setStatus(true, protocol.getCurrentId());
         }

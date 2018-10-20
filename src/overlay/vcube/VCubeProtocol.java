@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.UUID;
 import overlay.Utils;
 import peersim.config.Configuration;
 import peersim.core.Node;
@@ -84,11 +85,11 @@ public class VCubeProtocol implements EDProtocol {
                 
                 Utils.hitsPut++;
             } else if(o.getClass().equals(exL.getClass())) {                
-                Utils.countLookup++;
-                Utils.countLookupFault++;
+                byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
+                EDSimulator.add(0, new ExecuteLookup(hash), Utils.getRandomNode(), Utils.pid);        
             } else if(o.getClass().equals(exP.getClass())) {
-                Utils.countPuts++;
-                Utils.countPutFault++;
+                byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");        
+                EDSimulator.add(0, new ExecutePut(hash), Utils.getRandomNode(), Utils.pid); 
             }  else if(o.getClass().equals(exLE.getClass())) {                
                 Action event = (Action) o;
                 event.run(node, this);
@@ -114,17 +115,17 @@ public class VCubeProtocol implements EDProtocol {
     }
 
     public void setStatus(boolean status, int ativator) {
-        if(status && this.status) {            
+        /*if(status && this.status) {            
             //recebeu no tempo 1, e mandou no tempo 2
             EDSimulator.add(2, new FindEmptyVertex(), Network.get(this.currentId), Utils.pid);
-            //System.out.println("To ativo by: "+this.currentId+"   "+CommonState.getIntTime());
+            System.out.println("To ativo by: "+this.currentId+"   "+CommonState.getIntTime());
             Utils.countUpStatusTrue++;
-        } else {
+        } else {*/
             this.status = status;
             if(status) {
                 int time = CommonState.getIntTime();
                 time++;
-                //System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);               
+                //System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);
                 if(Utils.networkFull() && VCubeCreate.scenario == 0) {
                     Utils.finish(time);
                 }                
@@ -143,7 +144,7 @@ public class VCubeProtocol implements EDProtocol {
                 Utils.countExitNode++;
                 //System.out.println("alguem saiu");
             }
-        }                
+        //}                
     }
     
     public short[] getTimestamp() {

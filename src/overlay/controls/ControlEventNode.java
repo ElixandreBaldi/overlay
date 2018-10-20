@@ -33,7 +33,7 @@ public class ControlEventNode implements Control{
         Random r = new Random();
         double range = r.nextDouble();
         
-        //Utils.printNetwork();
+        //Utils.printNetwork();        
         if(range > 0.5) { // UP
             if(Utils.countUpQueue < Utils.countNodesOff()) {
                 Utils.countUpQueue++;
@@ -47,7 +47,7 @@ public class ControlEventNode implements Control{
                 EDSimulator.add(0, new FindEmptyVertex(), target, Utils.pid);
             }
         } else { //Down
-            if(Utils.canDown()) {                
+            if(Utils.canDown()) {
                 //Utils.flagDown = false;
                 int size = Network.size();
                 VCubeProtocol target = null;

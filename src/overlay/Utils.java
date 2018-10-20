@@ -63,7 +63,9 @@ public class Utils {
     
     public static long countLookup = 0;
     
-    public static long nLookups = 90000;
+    public static long nLookups = 900000;
+    
+    public static int timeNewLookup = 0;
     
     public static long timeDiagnostic = 0;
 
@@ -124,6 +126,7 @@ public class Utils {
                 
                 int mediaTimeUp = sumTimeUp;
                 if(countSumTimeUp > 0) mediaTimeUp /= countSumTimeUp;
+                System.out.println("full: "+countViewFull);
                 out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countStartNode+";"+countExitNode+";"+countViewFull+";"+countDelegateFindMostAppropriate+";"+mediaTimeUp+";"+time);
             }
         } catch (IOException e) {

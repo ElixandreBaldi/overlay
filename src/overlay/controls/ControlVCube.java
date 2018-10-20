@@ -8,6 +8,7 @@ package overlay.controls;
 import overlay.Utils;
 import overlay.actions.ExecutePing;
 import peersim.config.Configuration;
+import peersim.core.CommonState;
 import peersim.core.Control;
 import peersim.core.Network;
 import peersim.edsim.EDSimulator;
@@ -26,6 +27,12 @@ public class ControlVCube implements Control {
     public boolean execute() {                
         for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);  
         Utils.countTestesVCube++;
+        
+        if((CommonState.getIntTime() - Utils.timeNewLookup ) > 100) {
+            System.out.println("saiu");
+            Utils.finish(CommonState.getIntTime() - 100);            
+        }
+        
         //System.out.println("hits put: "+Utils.hitsPut);
         //System.out.println("hits lookup: "+Utils.hitsLookup);
         //System.out.println("");

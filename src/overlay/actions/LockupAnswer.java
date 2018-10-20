@@ -41,13 +41,14 @@ public class LockupAnswer implements Action{
             long dif = CommonState.getIntTime() - startTime;
             Utils.sumTimeLookup += dif;
             Utils.countLookup++;
+            Utils.timeNewLookup = CommonState.getIntTime();
             
             if( (VCubeCreate.scenario == 2 || (VCubeCreate.scenario == 4 && Utils.timeDiagnostic > 0)) && Utils.countLookup >= Utils.nLookups) {
                 Utils.finish(CommonState.getIntTime());
             }
             
             int limit = (int) (Utils.nLookups * 0.9);
-            System.out.println(Utils.countLookup+"    "+Utils.countLookup+"  "+limit);
+            if(Utils.countLookup >= limit) System.out.println(Utils.countLookup+"    "+Utils.countLookup+"  "+limit);
             if(VCubeCreate.scenario == 6 && Utils.countLookup >= limit) {
                 Utils.finish(CommonState.getIntTime());
             }
