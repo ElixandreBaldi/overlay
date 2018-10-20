@@ -47,8 +47,6 @@ public class Put implements Action{
     public void run(Node node, VCubeProtocol protocol) {        
         boolean putTrue = true;
         if(!(Utils.responsibleKey(key, protocol.getTimestamp()) == protocol.getCurrentId())) putTrue = false;
-            
-        //System.out.println("Recebeu Put: "+protocol.getCurrentId()+" "+putTrue);
         EDSimulator.add(1, new PutAnswer(protocol.getCurrentId(), putTrue, key, startTime), Network.get(this.sender), Utils.pid);
     }
     

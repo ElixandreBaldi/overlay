@@ -28,8 +28,7 @@ public class ControlVCube implements Control {
         for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);  
         Utils.countTestesVCube++;
         
-        if((CommonState.getIntTime() - Utils.timeNewLookup ) > 100) {
-            System.out.println("saiu");
+        if((CommonState.getIntTime() - Utils.timeNewEvent ) > 100) {
             Utils.finish(CommonState.getIntTime() - 100);            
         }
         

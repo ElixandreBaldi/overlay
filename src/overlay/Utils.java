@@ -53,7 +53,7 @@ public class Utils {
     
     public static boolean flagLookup = true;
 
-    public static final int nPuts = 90000;
+    public static final int nPuts = 900000;
     
     public static long sumTimePut = 0;
     
@@ -65,7 +65,7 @@ public class Utils {
     
     public static long nLookups = 900000;
     
-    public static int timeNewLookup = 0;
+    public static int timeNewEvent = 0;
     
     public static long timeDiagnostic = 0;
 
@@ -231,8 +231,7 @@ public class Utils {
     public static void executePut(byte[] hash, Node node, VCubeProtocol protocol) {
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
         int time = CommonState.getIntTime();
-        EDSimulator.add(1, new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);  
-        Utils.countPutSend++;
+        EDSimulator.add(1, new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);          
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);        
     }
 

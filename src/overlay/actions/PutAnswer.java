@@ -41,6 +41,7 @@ public class PutAnswer implements Action{
             long dif = CommonState.getIntTime() - startTime;
             Utils.sumTimePut += dif;
             Utils.countPuts++;
+            Utils.timeNewEvent = CommonState.getIntTime();
 
             if( (VCubeCreate.scenario == 1 || (VCubeCreate.scenario == 3 && Utils.timeDiagnostic > 0)) && Utils.countPuts >= Utils.nPuts) {                
                 Utils.finish(CommonState.getIntTime());
