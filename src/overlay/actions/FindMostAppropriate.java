@@ -43,7 +43,7 @@ public class FindMostAppropriate implements Action{
         int countBit = 0;
         short indexMostAppropriate = -1;
         
-        for(short i = 0; i < timestamp.length; i++){
+        for(short i = 0; i < timestamp.length; i++){            
             if(timestamp[i] % 2 != 0 && Utils.findResponsible(i, timestamp) == fuller) {
                 freeVertex.add(i);
                 int countBit2 = counterBit(i ^ fuller);
@@ -51,13 +51,13 @@ public class FindMostAppropriate implements Action{
                     countBit = countBit2;
                     indexMostAppropriate = i;
                 }
-            }            
+            }
         }
         
-        if(freeVertex.size() == 0) {
+        if(freeVertex.isEmpty()) {
             short newFuller = Utils.findFuller(timestamp.clone());
             if(newFuller >= 0) {                
-                EDSimulator.add(1, new FindMostAppropriate(this.root, this.startTime), Network.get(newFuller), Utils.pid);
+                EDSimulator.add(3, new FindMostAppropriate(this.root, this.startTime), Network.get(newFuller), Utils.pid);
                 Utils.countDelegateFindMostAppropriate++;
                 //System.out.println("Aqui 2");
                 //protocol.printTimestamp();
@@ -68,8 +68,7 @@ public class FindMostAppropriate implements Action{
             }
             
             return -1;
-        }
-        
+        }        
         return indexMostAppropriate;
     }
 

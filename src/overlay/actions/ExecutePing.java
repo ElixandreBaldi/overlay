@@ -29,6 +29,7 @@ public class ExecutePing implements Action{
     }
     @Override
     public void run(Node node, VCubeProtocol protocol) {
+        
         if(!protocol.getStatus()) return;
         
         Parameters p = protocol.getP();                
@@ -36,13 +37,14 @@ public class ExecutePing implements Action{
         
         ArrayList<Integer> targets = new ArrayList<>();        
         int nCluster = VCubeCreate.getnCluster();
-        
         for(int i = 1; i <= nCluster; i++) {
             Cis.getTargets(node.getIndex(), i, targets, timestamp.clone());        
         }
         
         int time = CommonState.getIntTime();
         for(int i = 0; i < targets.size(); i++) {
+            System.out.println("Target de "+protocol.getCurrentId()+"    =    "+targets.get(i)+"        enviando no tempo: "+(time+ i +1));
+            
             EDSimulator.add(i+1, new Ping(protocol.getCurrentId(), time+i), Network.get(targets.get(i)), Utils.pid);            
         }        
     }

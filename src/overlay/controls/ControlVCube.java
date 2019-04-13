@@ -25,7 +25,7 @@ public class ControlVCube implements Control {
     }        
     
     public boolean execute() {                
-        for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), pid);  
+        for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), Utils.pid);  
         Utils.countTestesVCube++;
         
         if((CommonState.getIntTime() - Utils.timeNewEvent ) > 100) {

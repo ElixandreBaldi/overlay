@@ -30,8 +30,8 @@ public class ControlUpNode implements Control{
         pid = Configuration.getPid(prefix + "." + PAR_PROT);                                 
     }        
     
-    public boolean execute() {        
-        if(Utils.countUpQueue < Network.size()) {
+    public boolean execute() {                
+        if(Utils.countUpQueue <= Network.size()) {
             Utils.countUpQueue++;
             int size = Network.size();
             Node target = null;
@@ -40,10 +40,9 @@ public class ControlUpNode implements Control{
                 Random r = new Random();  
                 target = Network.get(r.nextInt(size));                
                 protocol = (VCubeProtocol) target.getProtocol(Utils.pid);                                
-            } while (target == null || !protocol.getStatus());                     
-            EDSimulator.add(0, new FindEmptyVertex(), target, Utils.pid);
+            } while (target == null || !protocol.getStatus());        
+            EDSimulator.add(1, new FindEmptyVertex(), target, Utils.pid);
         }
-        
         return false;
     }
 }

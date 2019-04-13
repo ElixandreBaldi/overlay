@@ -115,17 +115,18 @@ public class VCubeProtocol implements EDProtocol {
     }
 
     public void setStatus(boolean status, int ativator) {
-        /*if(status && this.status) {            
+        if(status && this.status) {            
             //recebeu no tempo 1, e mandou no tempo 2
             EDSimulator.add(2, new FindEmptyVertex(), Network.get(this.currentId), Utils.pid);
-            System.out.println("To ativo by: "+this.currentId+"   "+CommonState.getIntTime());
+            //System.out.println("To ativo by: "+this.currentId+"   "+CommonState.getIntTime());
             Utils.countUpStatusTrue++;
-        } else {*/
+        } else {
             this.status = status;
+            
             if(status) {
                 int time = CommonState.getIntTime();
                 time++;
-                //System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);
+                System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);
                 if(Utils.networkFull() && VCubeCreate.scenario == 0) {
                     Utils.finish(time);
                 }                
@@ -139,12 +140,11 @@ public class VCubeProtocol implements EDProtocol {
                 Utils.countSumTimeUp++;
                 VCubeProtocol protocol = (VCubeProtocol) Network.get(ativator).getProtocol(Utils.pid);
                 this.setTimestamp(protocol.getTimestamp().clone());
-                //System.out.println("alguem entrou");
             }else {                
                 Utils.countExitNode++;
                 //System.out.println("alguem saiu");
             }
-        //}                
+        }                
     }
     
     public short[] getTimestamp() {
@@ -194,6 +194,18 @@ public class VCubeProtocol implements EDProtocol {
     
     public void setTimestamp(short[] timestamp) {
         this.timestamp = timestamp;
+        if(this.timestamp[(int)this.currentId] % 2 != 0){
+            this.timestamp[(int)this.currentId]++;
+        }
+    }
+    
+    public void setTimestampForce(short[] timestamp) {
+        this.timestamp = new short[timestamp.length];
+        for(int i = 0; i < this.timestamp.length; i++) {
+            System.out.print(timestamp[i]+", ");
+            this.timestamp[i] = timestamp[i];
+        }        
+        System.out.println("");
     }
 
     public void printTimestamp() {

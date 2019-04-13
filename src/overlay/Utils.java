@@ -167,6 +167,11 @@ public class Utils {
             z++;
             i = (short) (v^z);
         }
+/*        System.out.println("Encontrado "+i);
+        for(int j = 0; j < timestamp.length; j++){
+            System.out.print(timestamp[j]+", ");
+        }
+        System.out.println("");*/
         return i;
     }
     

@@ -34,6 +34,10 @@ public class Ping implements Action{
     public void run(Node node, VCubeProtocol protocol) {
         Action message = null;
         int scheduler = 1;
+        
+        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender+"  "+startTime+" "+CommonState.getIntTime());
+        
+        
         if(protocol.getStatus()){
             //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender+"  "+startTime+" "+CommonState.getIntTime());        
             message = new PongOk(protocol.getCurrentId(), protocol.getTimestamp().clone(), startTime);

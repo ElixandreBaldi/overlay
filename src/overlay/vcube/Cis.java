@@ -15,17 +15,17 @@ import peersim.core.Node;
  */
 public class Cis {
     
-    static private byte[] get(int i, int s) {   
+    static private short[] get(int i, int s) {   
         int k = (int) (Math.pow(2, s)/2);
-        byte[] indexCluster = new byte[k];
+        short[] indexCluster = new short[k];
         
         for(int x = 0; x < k; x++) {
             int p = (i ^ (int)Math.pow(2, s-1));
             
             if(x == 0) {
-                indexCluster[x] = (byte) p;
+                indexCluster[x] = (short) p;
             } else {
-                indexCluster[x] = (byte) (p^x);
+                indexCluster[x] = (short) (p^x);
             }
         }        
         return indexCluster;
@@ -34,7 +34,7 @@ public class Cis {
     public void print(int nLine, int nColumn) {
         for(int s = 0; s < nLine; s++) {
             for(int i = 0; i < nColumn; i++) {
-                byte[] index = get(i, s);
+                short[] index = get(i, s);
                 
                 System.out.print(" | ");
             }
@@ -51,7 +51,7 @@ public class Cis {
     }  
     
     static public int getIndexFirstNodeUp(int index, int s, short[] timestamp) {                        
-        byte[] cjs = get(index, s);        
+        short[] cjs = get(index, s);        
         for(int i = 0; i < cjs.length; i++) {
             /*if(cjs[i] < 0) {
                 System.out.println("moio");
@@ -64,13 +64,13 @@ public class Cis {
     }
     
     static public void getTargets(int indexI, int s, ArrayList<Integer> targets, short[] timestamp) {
-        byte[] cis = get(indexI, s);    
+        short[] cis = get(indexI, s);    
         int size = cis.length;
         for(int i = 0; i < size; i++) {
             int indexJ = cis[i];
             int indexFirstNodeUpJ = getIndexFirstNodeUp(indexJ, s, timestamp);
             if(indexFirstNodeUpJ == indexI){
-                targets.add(Network.get(indexJ & 0xff).getIndex());
+                targets.add(Network.get(indexJ).getIndex());
             }
         }
     }
