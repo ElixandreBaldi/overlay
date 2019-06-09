@@ -35,7 +35,7 @@ public class Ping implements Action{
         Action message = null;
         int scheduler = 1;
         
-        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender+"  "+startTime+" "+CommonState.getIntTime());
+        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Ping de nodo "+sender+"  "+startTime+" "+CommonState.getIntTime());
         
         
         if(protocol.getStatus()){

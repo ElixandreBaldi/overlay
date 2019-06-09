@@ -7,7 +7,10 @@ package overlay.actions;
 
 import overlay.Utils;
 import overlay.vcube.VCubeProtocol;
+import peersim.core.CommonState;
+import peersim.core.Network;
 import peersim.core.Node;
+import peersim.edsim.EDSimulator;
 
 /**
  *
@@ -24,8 +27,18 @@ public class ExecutePut implements Action{
     }
 
     @Override
-    public void run(Node node, VCubeProtocol protocol) {        
-        Utils.executePut(hash, node, protocol);
+    public void run(Node node, VCubeProtocol protocol) {    
+        if(protocol.getStatus()) {
+            Utils.executePut(hash, node, protocol);
+        } else {
+            int size = Network.size();
+            VCubeProtocol target = null;
+            do {                
+                target = (VCubeProtocol) Network.get(CommonState.r.nextInt(size)).getProtocol(Utils.pid);
+            } while (target == null || !target.getStatus());
+            
+            EDSimulator.add(0, new ExecutePut(hash), Network.get(target.getCurrentId()), Utils.pid);        
+        }
     }
     
     @Override

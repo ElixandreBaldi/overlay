@@ -53,7 +53,7 @@ public class Utils {
     
     public static boolean flagLookup = true;
 
-    public static final int nPuts = 900000;
+    public static int nPuts = 900000;
     
     public static long sumTimePut = 0;
     
@@ -76,6 +76,10 @@ public class Utils {
     public static int countLookupFault = 0;
 
     public static int countPutFault = 0;
+    
+    public static int countRePut = 0;
+    
+    public static int countReLookup = 0;
 
     public static int countExitNode = 0;
     
@@ -90,7 +94,15 @@ public class Utils {
     public static int countSumTimeUp = 0;
     
     public static int sumTimeUp = 0;
+    
+    public static int stepVCube = 0;
 
+    public static int getRepeatNextEvent() {
+        int now = CommonState.getIntTime();
+        int div = now % Utils.stepVCube;
+        
+        return Utils.stepVCube - div;              
+    }
     
     public static void finish(int time) {
         try(FileWriter fw = new FileWriter(VCubeCreate.pathOut, true);
@@ -98,38 +110,31 @@ public class Utils {
             PrintWriter out = new PrintWriter(bw))
         {            
             if(VCubeCreate.scenario == 0) {
-                out.println(countTestesVCube+";"+time+";");
-            } else if(VCubeCreate.scenario == 1) {
+                out.println(countTestesVCube+";"+countUpStatusTrue+";"+countDelegateFindMostAppropriate+";"+countViewFull+";"+time+";");
+            } else if(VCubeCreate.scenario == 1 || VCubeCreate.scenario == 2) {
                 long countPutsTrue = countPuts - countPutFault;
-                long mediaPuts = sumTimePut/countPutsTrue;
-                out.println(countTestesVCube+";"+sumTimePut+";"+countPutsTrue+";"+mediaPuts+";"+time);
-            } else if(VCubeCreate.scenario == 2) {
+                long mediaPuts = countPutsTrue/sumTimePut;
+                out.println(countTestesVCube+";"+sumTimePut+";"+countPutsTrue+";"+mediaPuts+";"+countRePut+";"+time);
+            } else if(VCubeCreate.scenario == 3 || VCubeCreate.scenario == 4) {
                 long countLookUpTrue = countLookup - countLookupFault;
-                long mediaLookup = sumTimeLookup/countLookUpTrue;
-                out.println(countTestesVCube+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+time);
-            } else if(VCubeCreate.scenario == 3) {
-                long countPutsTrue = countPuts - countPutFault;
-                long mediaPut = sumTimePut/countPutsTrue;
-                out.println(countTestesVCube+";"+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+timeDiagnostic+";"+time);
-            } else if(VCubeCreate.scenario == 4) {
-                long countLookUpTrue = countLookup - countLookupFault;
-                long mediaLookup = sumTimeLookup/countLookUpTrue;
-                out.println(countTestesVCube+";"+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+timeDiagnostic+";"+time);
+                long mediaLookup = sumTimeLookup/countLookUpTrue;                
+                out.println(countTestesVCube+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countReLookup+";"+time);
             } else if(VCubeCreate.scenario == 5) {
                 long countPutsTrue = countPuts - countPutFault;
-                long mediaPut = sumTimePut/countPutsTrue;
-                int mediaTimeUp = sumTimeUp;
-                if(countSumTimeUp > 0) mediaTimeUp /= countSumTimeUp;
-                
-                out.println(countTestesVCube+";"+hitsPut+";"+sumTimePut+";"+countPutsTrue+";"+mediaPut+";"+countStartNode+";"+countExitNode+";"+mediaTimeUp+";"+time);
+                long mediaPuts = sumTimePut/countPutsTrue;                
+                out.println(countTestesVCube+";"+sumTimePut+";"+countPutsTrue+";"+mediaPuts+";"+countRePut+";"+countUpStatusTrue+";"+timeDiagnostic+";"+time);
             } else if(VCubeCreate.scenario == 6) {
                 long countLookUpTrue = countLookup - countLookupFault;
-                long mediaLookup = sumTimeLookup/countLookUpTrue;
-                
-                int mediaTimeUp = sumTimeUp;
-                if(countSumTimeUp > 0) mediaTimeUp /= countSumTimeUp;
-                System.out.println("full: "+countViewFull);
-                out.println(countTestesVCube+";"+hitsLookup+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countStartNode+";"+countExitNode+";"+mediaTimeUp+";"+time);
+                long mediaLookup = sumTimeLookup/countLookUpTrue;                
+                out.println(countTestesVCube+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countReLookup+";"+countUpStatusTrue+";"+timeDiagnostic+";"+time);
+            } else if(VCubeCreate.scenario == 7) {
+                long countPutsTrue = countPuts - countPutFault;
+                long mediaPuts = sumTimePut/countPutsTrue;                
+                out.println(countTestesVCube+";"+sumTimePut+";"+countPutsTrue+";"+mediaPuts+";"+countRePut+";"+countUpStatusTrue+";"+countStartNode+";"+countExitNode+";"+time);
+            } else if(VCubeCreate.scenario == 8) {
+                long countLookUpTrue = countLookup - countLookupFault;
+                long mediaLookup = sumTimeLookup/countLookUpTrue;                
+                out.println(countTestesVCube+";"+sumTimeLookup+";"+countLookUpTrue+";"+mediaLookup+";"+countReLookup+";"+countUpStatusTrue+";"+timeDiagnostic+";"+countStartNode+";"+countExitNode+";"+time);
             }
         } catch (IOException e) {
             //exception handling left as an exercise for the reader            
@@ -147,13 +152,11 @@ public class Utils {
         for(int i = 0; i < timestampLocal.length; i++) {
             if(timestampLocal[i] < timestampSender[i] && i != indexLocal) {
                 timestampLocal[i] = timestampSender[i];
-                Utils.countDiagnostic++;                
-                if(Network.size() == (Utils.countDiagnostic + 1)) {
+                if(timestampLocal[i] % 2 != 0) {
+                    //System.out.println("Diagnóstico "+indexLocal);
                     Utils.timeDiagnostic = CommonState.getIntTime();
-                    if( (VCubeCreate.scenario == 3 || VCubeCreate.scenario == 4) && (Utils.countPuts >= Utils.nPuts || Utils.countLookup == Utils.nLookups)) {
-                        Utils.finish(CommonState.getIntTime());
-                    }
-                }  
+                }
+                
             }                            
         }
         if(timestampLocal[indexSender] % 2 != 0) timestampLocal[indexSender]++;            
@@ -228,17 +231,28 @@ public class Utils {
         return new String(array, Charset.forName("UTF-8"));        
     }
 
-    public static void executeLookup(byte[] hash, Node node, VCubeProtocol protocol) {        
+    public static void executeLookup(byte[] hash, Node node, VCubeProtocol protocol){
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
         int time = CommonState.getIntTime();
         EDSimulator.add(1, new LookUp(node.getIndex(), hash, time), Network.get(p), Utils.pid);    
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando lookup para "+p);
     }
-    
+    public static void executeReLookup(byte[] hash, Node node, VCubeProtocol protocol){
+        short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
+        int time = CommonState.getIntTime();
+        EDSimulator.add(Utils.getRepeatNextEvent(), new LookUp(node.getIndex(), hash, time), Network.get(p), Utils.pid);    
+        //System.out.println("Nodo "+protocol.getCurrentId()+" reenviando lookup para "+p+"    time: "+time);
+    }
     public static void executePut(byte[] hash, Node node, VCubeProtocol protocol) {
         short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
         int time = CommonState.getIntTime();
         EDSimulator.add(1, new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);          
+        //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);        
+    }
+    public static void executeRePut(byte[] hash, Node node, VCubeProtocol protocol) {
+        short p = Utils.responsibleKey(hash, protocol.getTimestamp().clone());        
+        int time = CommonState.getIntTime();
+        EDSimulator.add(Utils.getRepeatNextEvent(), new Put(node.getIndex(), hash, time), Network.get(p), Utils.pid);          
         //System.out.println("Nodo "+protocol.getCurrentId()+" enviando put para "+p);        
     }
 
@@ -299,12 +313,13 @@ public class Utils {
 
     public static boolean canDown() {
         int count = 0;
-        for(int i = 0; i < Network.size(); i++) {
+        int size = Network.size();
+        for(int i = 0; i < size; i++) {
             VCubeProtocol protocol = (VCubeProtocol) Network.get(i).getProtocol(Utils.pid);
             if(protocol.getStatus()) count++;
         }
-        //System.out.println(""+count);
-        if(count > 2) return true;
+        //System.out.println("can Down: "+count);
+        if(count >= size * 0.3) return true;
         
         return false;
     }

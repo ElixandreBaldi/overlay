@@ -25,17 +25,13 @@ public class FindEmptyVertex implements Action{
     public void run(Node node, VCubeProtocol protocol) {
         
         short fuller = Utils.findFuller(protocol.getTimestamp().clone());
-        //System.out.println("aslçd" + fuller);
         if(fuller >= 0) {
             //System.out.println("Nodo "+protocol.getCurrentId()+"    encontrou o nodo mais sobrecarregado: "+fuller+"      "+CommonState.getIntTime());
             EDSimulator.add(1, new FindMostAppropriate(protocol.getCurrentId(), CommonState.getIntTime()), Network.get(fuller), Utils.pid);            
         }
         else {
-  //          System.out.println("Aqui");
-  //          protocol.printTimestamp();
             Utils.countViewFull++;
             //o nodo enxerga a rede como cheia.
-            //protocol.printTimestamp();
         }
     }
     

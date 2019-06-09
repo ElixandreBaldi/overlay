@@ -32,13 +32,19 @@ public class ControlExecutePut implements Control {
         if(!Utils.flagPut) return false;
         Utils.flagPut = false;
         
-        int countPutToEach = (int) ((Utils.nPuts / Network.size()) + 1);
-        
-        for(int j = 0; j < countPutToEach; j++) {
-            for(int i = 0; i < Network.size(); i++) {
-                byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");                
-                EDSimulator.add(j, new ExecutePut(hash), Network.get(i), pid);                
+        if(Utils.nPuts > 1) {
+            int countPutToEach = (int) ((Utils.nPuts / Network.size()) + 1);
+
+            for(int j = 0; j < countPutToEach; j++) {
+                for(int i = 0; i < Network.size(); i++) {
+                    byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");                
+                    EDSimulator.add(j, new ExecutePut(hash), Network.get(i), Utils.pid);                
+                }
             }
+        } else {
+            byte[] hash = Utils.generateHash("put "+UUID.randomUUID().toString(), "SHA-256");              
+            EDSimulator.add(0, new ExecutePut(hash), Network.get(0), Utils.pid);      
+            
         }
               
         return false;

@@ -43,17 +43,18 @@ public class LockupAnswer implements Action{
             Utils.countLookup++;
             Utils.timeNewEvent = CommonState.getIntTime();
             
-            if( (VCubeCreate.scenario == 2 || (VCubeCreate.scenario == 4 && Utils.timeDiagnostic > 0)) && Utils.countLookup >= Utils.nLookups) {
+            if( (VCubeCreate.scenario == 2 || VCubeCreate.scenario == 3) && Utils.countLookup >= Utils.nLookups) {
                 Utils.finish(CommonState.getIntTime());
             }
             
-            int limit = (int) (Utils.nLookups * 0.9);            
-            if(VCubeCreate.scenario == 6 && Utils.countLookup >= limit) {
+            int limit = (int) (Utils.nLookups * 0.9);
+            if((VCubeCreate.scenario == 6 || VCubeCreate.scenario == 8) && Utils.countLookup >= limit) {
                 Utils.finish(CommonState.getIntTime());
             }
             
         } else {
-            Utils.executeLookup(hash, node, protocol);
+            Utils.countReLookup++;
+            Utils.executeReLookup(hash, node, protocol);
         }   
         
         

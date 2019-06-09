@@ -54,16 +54,17 @@ public class FindMostAppropriate implements Action{
             }
         }
         
+        
         if(freeVertex.isEmpty()) {
             short newFuller = Utils.findFuller(timestamp.clone());
             if(newFuller >= 0) {                
-                EDSimulator.add(3, new FindMostAppropriate(this.root, this.startTime), Network.get(newFuller), Utils.pid);
+                EDSimulator.add(Utils.getRepeatNextEvent(), new FindMostAppropriate(this.root, this.startTime), Network.get(newFuller), Utils.pid);
                 Utils.countDelegateFindMostAppropriate++;
-                //System.out.println("Aqui 2");
-                //protocol.printTimestamp();
+                //System.out.println("Delegado");
             } else {
-                //Utils.countViewFull++;                
-                EDSimulator.add(1, new FindEmptyVertex(), Network.get(this.root), Utils.pid);
+                Utils.countViewFull++;
+                //System.out.println("Vista como cheia");
+                EDSimulator.add(Utils.getRepeatNextEvent(), new FindEmptyVertex(), Network.get(this.root), Utils.pid);
                 //o nodo enxerga a rede como cheia.
             }
             
@@ -76,7 +77,7 @@ public class FindMostAppropriate implements Action{
     public void run(Node node, VCubeProtocol protocol) {        
         
         int indexMostAppropriate = findMostAppropriate(protocol.getTimestamp().clone(), protocol.getCurrentId(), protocol);
-        
+        //System.out.println("Nodo "+protocol.getCurrentId()+" definiu o index mais apropriado: "+indexMostAppropriate);
         if(indexMostAppropriate >= 0) {
             VCubeProtocol target = (VCubeProtocol) Network.get(indexMostAppropriate).getProtocol(Utils.pid);
             target.setStatus(true, protocol.getCurrentId());

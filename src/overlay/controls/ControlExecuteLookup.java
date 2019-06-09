@@ -31,14 +31,18 @@ public class ControlExecuteLookup implements Control {
         
         if(!Utils.flagLookup) return false;
         Utils.flagLookup = false;
-        
-        int countLookUpToEach = (int) ((Utils.nLookups / Network.size()) + 1);
-        
-        for(int j = 0; j < countLookUpToEach; j++) {
-            for(int i = 0; i < Network.size(); i++) {
-                byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
-                EDSimulator.add(j, new ExecuteLookup(hash), Network.get(i), Utils.pid);        
+        if(Utils.nLookups > 1) {
+            int countLookUpToEach = (int) ((Utils.nLookups / Network.size()) + 1);
+
+            for(int j = 0; j < countLookUpToEach; j++) {
+                for(int i = 0; i < Network.size(); i++) {
+                    byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
+                    EDSimulator.add(j, new ExecuteLookup(hash), Network.get(i), Utils.pid);        
+                }
             }
+        } else {
+            byte[] hash = Utils.generateHash("lookup "+UUID.randomUUID().toString(), "SHA-256");                
+            EDSimulator.add(0, new ExecuteLookup(hash), Network.get(0), Utils.pid);          
         }
         
         return false;

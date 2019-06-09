@@ -34,16 +34,9 @@ public class PongError implements Action{
         if(Utils.isPair(protocol.getTimestamp()[sender])){
             protocol.getTimestamp()[sender]++;            
             Utils.countDiagnostic++;
-            
-            if(Network.size() == (Utils.countDiagnostic + 1)) {
-                Utils.timeDiagnostic = CommonState.getIntTime(); 
-                if( (VCubeCreate.scenario == 3 || VCubeCreate.scenario == 4) && (Utils.countPuts >= Utils.nPuts || Utils.countLookup == Utils.nLookups)){
-                    Utils.finish(CommonState.getIntTime());
-                }
-            }                        
+            //System.out.println("Diagnosticado "+protocol.getCurrentId());
+            Utils.timeDiagnostic = CommonState.getIntTime();            
         }
-        
-        
         
         //protocol.printTimestamp();
     }

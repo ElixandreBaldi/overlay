@@ -53,14 +53,14 @@ public class VCubeProtocol implements EDProtocol {
     public VCubeProtocol(String prefix) {
         this.prefix = prefix;        
         this.p = new Parameters();
-        this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);        
+        this.p.tid = Configuration.getPid(this.prefix + "." + PAR_TRANSPORT);              
     }   
     
     public void processEvent(Node node, int pid, Object o) {
         Ping foo = new Ping();        
         if(this.status || o.getClass().equals(foo.getClass())) {
             Action event = (Action) o;
-            event.run(node, (VCubeProtocol) this);        
+            event.run(node, (VCubeProtocol) this);
         } else {
             LookUp fooL = new LookUp();
             Put fooP = new Put();
@@ -85,11 +85,15 @@ public class VCubeProtocol implements EDProtocol {
                 
                 Utils.hitsPut++;
             } else if(o.getClass().equals(exL.getClass())) {                
-                byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
-                EDSimulator.add(0, new ExecuteLookup(hash), Utils.getRandomNode(), Utils.pid);        
+                //byte[] hash = Utils.generateHash("lookup"+UUID.randomUUID().toString(), "SHA-256");        
+                //EDSimulator.add(0, new ExecuteLookup(hash), Utils.getRandomNode(), Utils.pid);
+                Action event = (Action) o;
+                event.run(node, (VCubeProtocol) this);
             } else if(o.getClass().equals(exP.getClass())) {
-                byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");        
-                EDSimulator.add(0, new ExecutePut(hash), Utils.getRandomNode(), Utils.pid); 
+                //byte[] hash = Utils.generateHash("put"+UUID.randomUUID().toString(), "SHA-256");        
+                //EDSimulator.add(0, new ExecutePut(hash), Utils.getRandomNode(), Utils.pid);
+                Action event = (Action) o;
+                event.run(node, (VCubeProtocol) this);
             }  else if(o.getClass().equals(exLE.getClass())) {                
                 Action event = (Action) o;
                 event.run(node, this);
@@ -126,12 +130,12 @@ public class VCubeProtocol implements EDProtocol {
             if(status) {
                 int time = CommonState.getIntTime();
                 time++;
-                System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);
+                //System.out.println("Nodo  "+ativator+"   ativou o nodo "+this.currentId+"      "+time);
                 if(Utils.networkFull() && VCubeCreate.scenario == 0) {
                     Utils.finish(time);
-                }                
+                }
                 
-                if(VCubeCreate.scenario == 5 || VCubeCreate.scenario == 6) {
+                if(VCubeCreate.scenario == 7 || VCubeCreate.scenario == 8) {
                     Utils.countUpQueue--;
                 } 
                 Utils.countStartNode++;
@@ -142,7 +146,7 @@ public class VCubeProtocol implements EDProtocol {
                 this.setTimestamp(protocol.getTimestamp().clone());
             }else {                
                 Utils.countExitNode++;
-                //System.out.println("alguem saiu");
+                //System.out.println("alguem saiu "+this.currentId);
             }
         }                
     }
@@ -173,7 +177,7 @@ public class VCubeProtocol implements EDProtocol {
         } else if(VCubeCreate.nodosOk == 0) {
             if(!(this.currentId < Network.size() / 2)) this.status = false;
         }
-        
+
         //System.out.println(this.status);
         
     }
@@ -181,13 +185,7 @@ public class VCubeProtocol implements EDProtocol {
     public void setTimestamp(int size) {
         this.timestamp = new short[size];
         if(VCubeCreate.scenario == 0) Arrays.fill(this.timestamp, (short) 1);
-        else if(VCubeCreate.scenario < 5) Arrays.fill(this.timestamp, (short) 2);
-        else if(VCubeCreate.scenario < 7) {
-            for(int i = 0; i < size; i++) {
-                if(i < size/2) this.timestamp[i] = 2;
-                else this.timestamp[i] = 1;
-            }
-        }
+        else Arrays.fill(this.timestamp, (short) 0);
         
         this.timestamp[currentId] = 0;
     }        

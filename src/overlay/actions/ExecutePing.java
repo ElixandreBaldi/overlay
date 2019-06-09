@@ -43,7 +43,7 @@ public class ExecutePing implements Action{
         
         int time = CommonState.getIntTime();
         for(int i = 0; i < targets.size(); i++) {
-            System.out.println("Target de "+protocol.getCurrentId()+"    =    "+targets.get(i)+"        enviando no tempo: "+(time+ i +1));
+            //System.out.println("Target de "+protocol.getCurrentId()+"    =    "+targets.get(i)+"        enviando no tempo: "+(time+ i +1));
             
             EDSimulator.add(i+1, new Ping(protocol.getCurrentId(), time+i), Network.get(targets.get(i)), Utils.pid);            
         }        

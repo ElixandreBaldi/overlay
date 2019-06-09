@@ -43,17 +43,18 @@ public class PutAnswer implements Action{
             Utils.countPuts++;
             Utils.timeNewEvent = CommonState.getIntTime();
 
-            if( (VCubeCreate.scenario == 1 || (VCubeCreate.scenario == 3 && Utils.timeDiagnostic > 0)) && Utils.countPuts >= Utils.nPuts) {                
+            if((VCubeCreate.scenario == 1 || VCubeCreate.scenario == 2)  && Utils.countPuts >= Utils.nPuts) {                
                 Utils.finish(CommonState.getIntTime());
             }
                         
-            int limit = (int) (Utils.nPuts*0.9);
             //System.out.println(Utils.countPutSend+"    "+Utils.countPuts+"  "+limit);
-            if(VCubeCreate.scenario == 5 && Utils.countPuts >= limit ) {
+            int limit = (int) (Utils.nPuts * 0.9);
+            if((VCubeCreate.scenario == 5 || VCubeCreate.scenario == 7) && Utils.countPuts >= limit ) {
                 Utils.finish(CommonState.getIntTime());
             }
         } else {
-            Utils.executePut(hash, node, protocol);
+            Utils.countRePut++;
+            Utils.executeRePut(hash, node, protocol);
         }
     }
     

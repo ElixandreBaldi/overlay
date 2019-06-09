@@ -27,7 +27,7 @@ public class ControlDownNode implements Control{
     }        
     
     public boolean execute() {
-        if(VCubeCreate.scenario == 3 || VCubeCreate.scenario == 4) {
+        if(VCubeCreate.scenario == 5 || VCubeCreate.scenario == 6) {
             if(!Utils.flagDown) return false;
             int index = Network.size() / 2;
             VCubeProtocol target = (VCubeProtocol) Network.get(index).getProtocol(pid);

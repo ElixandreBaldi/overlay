@@ -30,7 +30,7 @@ public class PongOk implements Action{
     @Override
     public void run(Node node, VCubeProtocol protocol) {
         //System.out.println(protocol.getCurrentId()+";"+sender+";"+startTime+";"+time+";"+dif);                
-        System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Pong de nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());        
+        //System.out.println("Nodo: "+protocol.getCurrentId()+" recebeu Pong de nodo "+sender+"       no start: "+startTime+"      no tempo: "+CommonState.getIntTime());        
         Utils.updateTimestampLocal(protocol.getTimestamp(), this.timestampSender, protocol.getCurrentId(), this.sender);
         //protocol.printTimestamp();
     }

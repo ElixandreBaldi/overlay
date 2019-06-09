@@ -28,9 +28,12 @@ public class ControlVCube implements Control {
         for(int i = 0; i < Network.size(); i++) EDSimulator.add(0, new ExecutePing(), Network.get(i), Utils.pid);  
         Utils.countTestesVCube++;
         
-        if((CommonState.getIntTime() - Utils.timeNewEvent ) > 100) {
-            Utils.finish(CommonState.getIntTime() - 100);            
-        }
+        //if((CommonState.getIntTime() - Utils.timeNewEvent ) > 100) {
+            //System.out.println("Ta errado");
+            //Utils.finish(CommonState.getIntTime() - 100);            
+        //}
+        //if(Utils.countLookup > 7000000 && Utils.countLookup % 1000 == 0) System.out.println("cout LOOKUP: "+Utils.countLookup);
+        //if(CommonState.getIntTime() > 7000000) System.out.println("cout LOOKUP: "+Utils.countLookup+"     hits: "+Utils.hitsLookup);
         
         //System.out.println("hits put: "+Utils.hitsPut);
         //System.out.println("hits lookup: "+Utils.hitsLookup);

@@ -32,9 +32,10 @@ public class ControlEventNode implements Control{
     public boolean execute() {
         Random r = new Random();
         double range = r.nextDouble();
-        
+        //System.out.println("sorteio: "+range);
         //Utils.printNetwork();        
         if(range > 0.5) { // UP
+            //boolean teste = Utils.canDown();
             if(Utils.countUpQueue < Utils.countNodesOff()) {
                 Utils.countUpQueue++;
                 int size = Network.size();

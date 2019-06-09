@@ -46,6 +46,9 @@ public class VCubeCreate implements Control {
         this.nodosOk = Configuration.getInt(prefix + ".nodosOk");
         this.scenario = Configuration.getInt(prefix + ".scenario");
         this.pathOut = Configuration.getString(prefix + ".pathOut");
+        Utils.nPuts = Configuration.getInt(prefix + ".nPuts");
+        Utils.nLookups = Configuration.getInt(prefix + ".nLookups");
+        Utils.stepVCube = Configuration.getInt(prefix + ".stepVCube");
     }
     
     static public int getnCluster() {

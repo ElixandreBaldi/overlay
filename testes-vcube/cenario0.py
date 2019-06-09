@@ -1,6 +1,6 @@
-miport os
+import os
 
-prefix = "java -cp lib/peersim-1.0.5.jar:lib/djep-1.0.0.jar:lib/jep-2.3.0.jar:vcube.jar overlay.Overlay -Xmx8g"
+prefix = "java -cp lib/peersim-1.0.5.jar:lib/djep-1.0.0.jar:lib/jep-2.3.0.jar:overlay-vcube.jar overlay.Overlay -Xmx8g"
 
 for i in range(3, 16):
     tam = 2 ** i;
